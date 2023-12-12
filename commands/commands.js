@@ -11,7 +11,7 @@ function loadCommands(folder) {
 
     for (const file of commandFiles) {
         const command = require(path.join(__dirname, folder, file));
-        logToConsole(`\tCommand Found: ${file}`, `info`); 
+        logToConsole(`\tCommand Found: ${file}`, `success`); 
         commands.push(command.data.toJSON());
     }
 

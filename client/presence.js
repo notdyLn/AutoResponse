@@ -16,7 +16,7 @@ const updatePresence = (client) => {
     try {
         logToConsole(`Setting client presence...`, `info`);
         client.user.setPresence(presenceData);
-        logToConsole(`Client presence set`, `info`);
+        logToConsole(`Client presence set`, `success`);
     } catch (error) {
         logToConsole(`Setting presence: ${error}`, `error`);
     }

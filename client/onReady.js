@@ -5,7 +5,7 @@ const refreshCommands = require('../commands/refreshCommands');
 
 module.exports = (client) => {
     refreshCommands(client);
-    logToConsole(`Commands Updated`, `info`);
+    logToConsole(`Commands Updated`, `success`);
     updatePresence(client);
-    logToConsole(`Logged in as ${client.user.tag}`, `info`);
+    logToConsole(`Logged in as ${client.user.tag}`, `success`);
 };

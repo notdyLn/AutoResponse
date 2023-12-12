@@ -86,7 +86,7 @@ function fetchChannelChances(client) {
             const settingsData = JSON.parse(fs.readFileSync(settingsFilePath, 'utf8'));
             const channelChances = settingsData.channelChances || {};
 
-            logToConsole(`Fetching current channel chances for the server "${guild.name}"...`, 'info');
+            logToConsole(`${guild.name}`, 'info');
 
             guild.channels.cache.forEach((channel) => {
                 if (channel.type === 'GUILD_TEXT') {
@@ -117,7 +117,7 @@ function getRandomPhrase(serverId) {
     return null;
 }
 
-function updateLeaderboard(serverId, author) {
+function updateLeaderboard(author) {
     const leaderboardFilePath = path.join(__dirname, '../data/leaderboard.json');
 
     try {
@@ -138,9 +138,9 @@ function updateLeaderboard(serverId, author) {
 
             fs.writeFileSync(leaderboardFilePath, JSON.stringify(leaderboard, null, 2), 'utf8');
 
-            logToConsole(`Leaderboard updated`, 'info');
+            logToConsole(`Leaderboard updated`, 'success');
         } else {
-            logToConsole(`Error updating leaderboard: Invalid or undefined message author`, 'error');
+            logToConsole(`Error updating leaderboard: Invalid or undefined message author`, 'warn');
         }
     } catch (error) {
         logToConsole(`Error updating leaderboard: ${error}`, 'error');
@@ -157,7 +157,7 @@ function resetChance(directoryPath, channelId) {
             const stats = fs.statSync(filePath);
 
             if (stats.isDirectory()) {
-                logToConsole(`Error: ${filePath} is a directory. Expected a file.`, 'error');
+                logToConsole(`Error: ${filePath} is a directory. Expected a file.`, 'warn');
                 return;
             }
 
@@ -170,9 +170,9 @@ function resetChance(directoryPath, channelId) {
                 settingsData.channelChances = channelChances;
                 saveSettings(filePath, settingsData);
 
-                logToConsole(`Chance reset for ${channelId}.`, 'info');
+                logToConsole(`Chance reset for ${channelId}.`, 'success');
             } else {
-                logToConsole(`Channel ID is not provided. Skipping chance reset.`, 'info');
+                logToConsole(`Channel ID is not provided. Skipping chance reset.`, 'warn');
             }
         } catch (error) {
             logToConsole(`Error reading or updating settings: ${error.message}`, 'error');

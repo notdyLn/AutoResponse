@@ -28,7 +28,7 @@ const verifyData = async (client) => {
         ensureFileExists(optedInUsersPath, '[]');
         try {
             JSON.parse(fs.readFileSync(optedInUsersPath, 'utf8'));
-            logToConsole(`Found ${optedInUsersPath}`, 'info');
+            logToConsole(`Found ${optedInUsersPath}`, 'success');
         } catch (error) {
             logToConsole(`Invalid JSON format in optedInUsers.json for server "${serverId}"`, 'warn');
         }
@@ -69,7 +69,7 @@ const verifyData = async (client) => {
                             });
 
                             logToConsole(`\tReply Channels:`, 'info');
-                            logToConsole(`\t\t#${replyChannels.join(', #')}`);
+                            logToConsole(`\t\t#${replyChannels.join('\n\t\t\t\t\t\t\t\t\t#')}`);
                         }
                     } else {
                         logToConsole(`Server "${serverId}" does not exist`, 'warn');
@@ -83,7 +83,7 @@ const verifyData = async (client) => {
         const leaderboardFilePath = path.join(__dirname, 'leaderboard.json');
         ensureFileExists(leaderboardFilePath);
 
-        logToConsole(`Data verified`, 'info');
+        logToConsole(`Data verified`, 'success');
     });
 };
 
