@@ -5,7 +5,7 @@ const colors = require('colors');
 const output = require('../../console/output');
 const getSettings = require('../../verifyFiles/getSettings');
 const replyToUser = require('../../reply/reply');
-const optOutFilePath = path.join(__dirname, '..', '..', '..', 'data', 'optout.json');
+const optOutFilePath = path.join(__dirname, '..', '..', '..', 'data', 'blacklist.json');
 
 const replyChances = new Map();
 
