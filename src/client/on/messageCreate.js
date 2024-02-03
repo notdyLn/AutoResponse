@@ -54,13 +54,10 @@ module.exports = async (message) => {
     fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'data', serverName, 'settings.json'), JSON.stringify(settings, null, 2));
 
     output.message(`${colors.green(`${chance}%`)} - ${colors.cyan(serverName)} - ${colors.cyan(`#${channelName}`)} - ${colors.cyan(userTag)}: ${colors.white(cleanedContent)}`);
-    output.debug(`Chance updated to: ${chance}`);
 
     if (Math.random() * 100 < chance) {
-      output.debug(`Resetting chance to 6 after replying`);
       await replyToUser(message, userTag);
 
-      // Reset the chance immediately after replying
       replyChannel.chance = 6;
       settings.replyChannels = replyChannels;
       fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'data', serverName, 'settings.json'), JSON.stringify(settings, null, 2));
