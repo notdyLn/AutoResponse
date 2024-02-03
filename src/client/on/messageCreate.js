@@ -7,8 +7,6 @@ const getSettings = require('../../verifyFiles/getSettings');
 const replyToUser = require('../../reply/reply');
 const optOutFilePath = path.join(__dirname, '..', '..', '..', 'data', 'blacklist.json');
 
-const replyChances = new Map();
-
 function getOptOutList() {
   try {
       if (fs.existsSync(optOutFilePath)) {
@@ -49,20 +47,23 @@ module.exports = async (message) => {
       return;
     }
 
-    let chance = replyChances.get(userTag) || replyChannel.chance || 6;
+    let chance = replyChannel.chance || 6;
     chance += 1;
-    replyChances.set(userTag, chance);
-
     replyChannel.chance = chance;
     settings.replyChannels = replyChannels;
     fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'data', serverName, 'settings.json'), JSON.stringify(settings, null, 2));
 
     output.message(`${colors.green(`${chance}%`)} - ${colors.cyan(serverName)} - ${colors.cyan(`#${channelName}`)} - ${colors.cyan(userTag)}: ${colors.white(cleanedContent)}`);
+    output.debug(`Chance updated to: ${chance}`);
 
     if (Math.random() * 100 < chance) {
-      replyChances.set(userTag, 6);
-
+      output.debug(`Resetting chance to 6 after replying`);
       await replyToUser(message, userTag);
+
+      // Reset the chance immediately after replying
+      replyChannel.chance = 6;
+      settings.replyChannels = replyChannels;
+      fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'data', serverName, 'settings.json'), JSON.stringify(settings, null, 2));
     }
 
     if (attachments.size > 0) {
