@@ -10,7 +10,7 @@ module.exports = {
         return embed;
     },
 
-    done: (title, description ) => {
+    done: (title, description) => {
         const embed = new EmbedBuilder()
             .setTitle(title)
             .setDescription(description)
@@ -19,11 +19,20 @@ module.exports = {
         return embed;
     },
 
-    error: (title, description ) => {
+    error: (title, description) => {
         const embed = new EmbedBuilder()
             .setTitle(title)
             .setDescription(description)
             .setColor('#FF0000');
+
+        return embed;
+    },
+
+    leaderboard: (title, fields) => {
+        const embed = new EmbedBuilder()
+            .setTitle(title)
+            .setColor('#3498db')
+            .addFields(fields);
 
         return embed;
     },

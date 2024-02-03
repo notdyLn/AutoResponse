@@ -21,36 +21,45 @@ module.exports = {
         try {
             const season = interaction.options.getString('season');
             const leaderboard = loadLeaderboard(season);
-
+            const helpers = loadHelpers();
+            const owners = loadOwner();
+            const previousWinners = loadPreviousWinners();
+    
             output.debug(`Running command...`);
-
+    
             if (leaderboard.length === 0) {
                 const emptyEmbed = EmbedBuilder.warn(`AutoResponse - Warn`, `Leaderboard is empty.`);
-
+    
                 return interaction.reply({ embeds: [emptyEmbed], ephemeral: true });
             }
-
+    
             const sortedLeaderboard = leaderboard.sort((a, b) => b.replies - a.replies);
             const topEntries = sortedLeaderboard.slice(0, 10);
-
-            const leaderboardString = topEntries.map((entry, index) => {
-                const medals = ["🥇", "🥈", "🥉"];
+    
+            const leaderboardFields = topEntries.map((entry, index) => {
+                const medals = ["1st", "2nd", "3rd"];
                 const medal = index < 3 ? medals[index] : `**${index + 1}th**`;
-
-                return `${medal} ${entry.username}: ${entry.replies} replies`;
-            })
-            .join('\n');
-
-            const leaderboardEmbed = EmbedBuilder.done(`AutoResponse - Leaderboard`, leaderboardString);
+                const owner = owners.includes(entry.username) ? "<:Programmer:1203392650015936522>" : "";
+                const helper = helpers.includes(entry.username) ? "<:Helper:1203391198170189874>" : "";
+                const prevwinner = previousWinners.includes(entry.username) ? "<:Season1Winner:1203384448515842119>" : "";
+    
+                return {
+                    name: `${medal} - ${entry.username} ${owner} ${helper} ${prevwinner}`,
+                    value: `**${entry.replies}** replies`,
+                    inline: false,
+                };
+            });
+    
+            const leaderboardEmbed = EmbedBuilder.leaderboard(`AutoResponse - Leaderboard - Season 2`, leaderboardFields);
             output.debug(`Sending embed...`);
-
+    
             await interaction.reply({ embeds: [leaderboardEmbed], ephemeral: true });
         } catch (error) {
-            output.error(`Error executing command /addphrase: ${error.message}`);
+            output.error(`Error executing command /leaderboard: ${error.message}`);
             const errorEmbed = EmbedBuilder.error('AutoResponse - Error', `${error.message}`);
             await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
         }
-    },
+    }        
 };
     
 function loadLeaderboard(season) {
@@ -81,6 +90,46 @@ function loadLeaderboard(season) {
         return [];
     } catch (error) {
         output.error(`Loading leaderboard: ${error}`, 'error');
+        return [];
+    }
+}
+
+function loadHelpers() {
+    try {
+        const filePath = path.join(__dirname, '../../config/settings.json');
+
+        const settingsData = fs.readFileSync(filePath, 'utf8');
+        const settings = JSON.parse(settingsData);
+
+        return settings.helpers || [];
+    } catch (error) {
+        output.error(`Loading starred users: ${error}`, 'error');
+        return [];
+    }
+}
+
+function loadPreviousWinners() {
+    try {
+        const settingsFilePath = path.join(__dirname, '../../config/settings.json');
+        const settingsData = fs.readFileSync(settingsFilePath, 'utf8');
+        const settings = JSON.parse(settingsData);
+
+        return settings.previousWinners || [];
+    } catch (error) {
+        output.error(`Loading previous winners: ${error}`, 'error');
+        return [];
+    }
+}
+
+function loadOwner() {
+    try {
+        const settingsFilePath = path.join(__dirname, '../../config/settings.json');
+        const settingsData = fs.readFileSync(settingsFilePath, 'utf8');
+        const settings = JSON.parse(settingsData);
+
+        return settings.owner || [];
+    } catch (error) {
+        output.error(`Loading owner: ${error}`, 'error');
         return [];
     }
 }
