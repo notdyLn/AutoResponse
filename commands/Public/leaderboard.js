@@ -51,7 +51,7 @@ module.exports = {
                 };
             });
     
-            const leaderboardEmbed = EmbedBuilder.leaderboard(`AutoResponse - Leaderboard - Season 2`, leaderboardFields);
+            const leaderboardEmbed = EmbedBuilder.leaderboard(`AutoResponse - Leaderboard - ${season}`, leaderboardFields);
             output.debug(`Sending embed...`);
     
             await interaction.reply({ embeds: [leaderboardEmbed], ephemeral: true });

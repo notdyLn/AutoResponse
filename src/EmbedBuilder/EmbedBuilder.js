@@ -29,8 +29,15 @@ module.exports = {
     },
 
     leaderboard: (title, fields) => {
+        const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+    
+        const formattedTitle = title
+            .split(' ')
+            .map(word => capitalize(word))
+            .join(' ');
+
         const embed = new EmbedBuilder()
-            .setTitle(title)
+            .setTitle(formattedTitle)
             .setColor('#3498db')
             .addFields(fields);
 
