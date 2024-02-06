@@ -39,9 +39,10 @@ module.exports = {
             const leaderboardFields = topEntries.map((entry, index) => {
                 const medals = ["1st", "2nd", "3rd"];
                 const medal = index < 3 ? medals[index] : `**${index + 1}th**`;
-                const owner = owners.includes(entry.username) ? "<:Programmer:1203392650015936522>" : "";
-                const helper = helpers.includes(entry.username) ? "<:Helper:1203391198170189874>" : "";
-                const prevwinner = previousWinners.includes(entry.username) ? "<:Season1Winner:1203384448515842119>" : "";
+
+                const owner = owners.includes(entry.username) ? " <:Owner:1203392650015936522> " : "";
+                const helper = helpers.includes(entry.username) ? " <:Helper:1203391198170189874> " : "";
+                const prevwinner = previousWinners.includes(entry.username) ? " <:Season1Winner:1203384448515842119> " : "";
     
                 return {
                     name: `${medal} - ${entry.username} ${owner} ${helper} ${prevwinner}`,
