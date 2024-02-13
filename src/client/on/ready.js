@@ -76,7 +76,7 @@ function updateBot(client) {
 module.exports = async (client) => {
     updateBot(client);
 
-    cron.schedule('*/60 * * * *', async () => {
+    cron.schedule('*/5 * * * *', async () => {
         output.clear();
         updateBot(client);
     });
