@@ -1,12 +1,26 @@
 const fs = require('fs');
 const path = require('path');
-const presenceFile = path.join(__dirname, '../../../config/presence.json');
 const output = require('../../console/output');
 
 module.exports = (client) => {
     try {
         output.debug(`Updating presence...`);
-        const presenceData = JSON.parse(fs.readFileSync(presenceFile, 'utf-8'));
+
+        const leaderboardFilePath = path.join(__dirname, '../../../data/leaderboards/current.json');
+        const leaderboardData = JSON.parse(fs.readFileSync(leaderboardFilePath, 'utf-8'));
+        const totalReplies = Object.values(leaderboardData).reduce((acc, replies) => acc + replies, 0);
+
+        const presenceData = {
+            status: 'online',
+            activities: [
+                {
+                "name": `v1.2 • Sent ${totalReplies} replies`,
+                "type": 4,
+                "url": `Change this if the type is "Streaming"`
+                }
+            ]
+        };
+
         client.user.setPresence(presenceData);
         output.debug(`Presence updated`);
     } catch (error) {
