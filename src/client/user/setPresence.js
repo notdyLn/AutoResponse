@@ -10,13 +10,15 @@ module.exports = (client) => {
         const leaderboardData = JSON.parse(fs.readFileSync(leaderboardFilePath, 'utf-8'));
         const totalReplies = Object.values(leaderboardData).reduce((acc, replies) => acc + replies, 0);
 
+        output.debug(totalReplies);
+
         const presenceData = {
             status: 'online',
             activities: [
                 {
-                "name": `v1.2 • Sent ${totalReplies} replies`,
+                "name": `Replied ${totalReplies} times`,
                 "type": 4,
-                "url": `Change this if the type is "Streaming"`
+                "url": `https://twitch.tv/not_dyLn"`
                 }
             ]
         };
