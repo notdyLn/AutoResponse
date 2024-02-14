@@ -2,6 +2,7 @@ const colors = require('colors');
 const output = require('../console/output');
 const getSettings = require('../../src/verifyFiles/getSettings');
 const updateLeaderboard = require('../leaderboards/updateLeaderboard');
+const setPresence = require('../client/user/setPresence');
 
 module.exports = async (message) => {
     try {
@@ -18,6 +19,7 @@ module.exports = async (message) => {
             output.info(`Sent phrase ${colors.cyan(randomPhrase)} to ${colors.cyan(userTag)}`);
 
             updateLeaderboard(userTag);
+            setPresence(message.client);
 
             await message.reply({ content: randomPhrase, allowedMentions: { repliedUser: false } });
         } else {
