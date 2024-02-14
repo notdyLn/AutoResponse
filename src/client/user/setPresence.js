@@ -14,7 +14,7 @@ module.exports = (client) => {
             status: 'online',
             activities: [
                 {
-                "name": `Replied ${totalReplies} times`,
+                "name": `${totalReplies} replies and counting`,
                 "type": 4,
                 "url": `https://twitch.tv/not_dyLn"`
                 }
