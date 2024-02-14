@@ -36,7 +36,7 @@ module.exports = {
             settings.trustedRoles = settings.trustedRoles || [];
 
             if (settings.trustedRoles.includes(roleToAdd.id)) {
-                const alreadyAddedEmbed = EmbedBuilder.error('AutoResponse - Already Added', `<@&${roleToAdd.id}> is already in the list of trusted roles.`);
+                const alreadyAddedEmbed = EmbedBuilder.info('AutoResponse - Already Added', `<@&${roleToAdd.id}> is already in the list of trusted roles.`);
                 output.warn(`${colors.cyan(roleToAdd.name)} is already in the list`);
                 return await interaction.reply({ embeds: [alreadyAddedEmbed], ephemeral: true });
             }
@@ -46,7 +46,7 @@ module.exports = {
             const settingsFilePath = path.join(__dirname, '..', '..', 'data', serverName, 'settings.json');
             fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
 
-            const successEmbed = EmbedBuilder.done('AutoResponse - Done', `<@&${roleToAdd.id}> has been added to the list of trusted roles.`);
+            const successEmbed = EmbedBuilder.info('AutoResponse - Done', `<@&${roleToAdd.id}> has been added to the list of trusted roles.`);
             output.info(`${colors.cyan(interaction.user.username)} added ${colors.cyan(`@${roleToAdd.name}`)}`);
             await interaction.reply({ embeds: [successEmbed], ephemeral: true });
 

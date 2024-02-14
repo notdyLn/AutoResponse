@@ -33,7 +33,7 @@ module.exports = {
             const trustedRolesCount = settings.trustedRoles ? settings.trustedRoles.length : 0;
             const trustedRolesList = settings.trustedRoles ? settings.trustedRoles.map(roleId => `<@&${roleId}>`).join(`\n`) : 'None';
 
-            const infoEmbed = EmbedBuilder.done(
+            const infoEmbed = EmbedBuilder.info(
                 `AutoResponse - Server Information`,
                 `**Server Name**: ${serverName}\n` +
                 `**Phrases**: ${phrasesCount}\n` +

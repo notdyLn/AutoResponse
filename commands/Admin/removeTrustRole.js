@@ -37,7 +37,7 @@ module.exports = {
             settings.trustedRoles = settings.trustedRoles || [];
 
             if (!settings.trustedRoles.includes(roleToRemove.id)) {
-                const notFoundEmbed = EmbedBuilder.warn('AutoResponse - Warning', `<@&${roleToRemove.id}> is not in the list of trusted roles.`);
+                const notFoundEmbed = EmbedBuilder.info('AutoResponse - Warning', `<@&${roleToRemove.id}> is not in the list of trusted roles.`);
                 output.warn(`${colors.cyan(roleToRemove.name)} is not in the list`);
                 return await interaction.reply({ embeds: [notFoundEmbed], ephemeral: true });
             }
@@ -47,7 +47,7 @@ module.exports = {
             const settingsFilePath = path.join(__dirname, '..', '..', 'data', serverName, 'settings.json');
             fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
 
-            const successEmbed = EmbedBuilder.done('AutoResponse - Done', `<@&${roleToRemove.id}> has been removed from the list of trusted roles.`);
+            const successEmbed = EmbedBuilder.info('AutoResponse - Done', `<@&${roleToRemove.id}> has been removed from the list of trusted roles.`);
             output.info(`${colors.cyan(interaction.user.username)} removed ${colors.cyan(`@${roleToRemove.name}`)}`);
             await interaction.reply({ embeds: [successEmbed], ephemeral: true });
 

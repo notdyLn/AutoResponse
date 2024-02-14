@@ -61,7 +61,7 @@ module.exports = {
 
             output.debug(`Sending embed...`);
 
-            const helpEmbed = EmbedBuilder.done(title, description);
+            const helpEmbed = EmbedBuilder.info(title, description);
             await interaction.reply({ embeds: [helpEmbed], ephemeral: true });
 
         } catch (error) {

@@ -32,6 +32,16 @@ module.exports = {
         return embed;
     },
 
+    info: (title, description) => {
+        const embed = new EmbedBuilder()
+            .setColor('#999999')
+            .setAuthor({ name: title, iconURL: avatarURL })
+            .setDescription(description)
+            .setTimestamp();
+            
+        return embed;
+    },
+
     leaderboard: (title, fields) => {
         const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     
