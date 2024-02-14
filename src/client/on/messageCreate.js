@@ -6,6 +6,7 @@ const output = require('../../console/output');
 const getSettings = require('../../verifyFiles/getSettings');
 const replyToUser = require('../../reply/reply');
 const optOutFilePath = path.join(__dirname, '..', '..', '..', 'data', 'blacklist.json');
+const leaderboardFilePath = path.join(__dirname, '..', '..', '..', 'data', 'leaderboards', 'current.json');
 
 function getOptOutList() {
   try {
@@ -56,7 +57,18 @@ module.exports = async (message) => {
     output.message(`${colors.green(`${chance}%`)} - ${colors.cyan(serverName)} - ${colors.cyan(`#${channelName}`)} - ${colors.cyan(userTag)}: ${colors.white(cleanedContent)}`);
 
     if (Math.random() * 100 < chance) {
-      await replyToUser(message, userTag);
+      const leaderboardData = fs.existsSync(leaderboardFilePath)
+        ? JSON.parse(fs.readFileSync(leaderboardFilePath, 'utf8'))
+        : {};
+
+      const sortedLeaderboard = Object.entries(leaderboardData).sort((a, b) => b[1] - a[1]);
+      const [firstPlaceUser, secondPlaceUser] = sortedLeaderboard.slice(0, 2);
+
+      if (firstPlaceUser && secondPlaceUser && firstPlaceUser[1] - secondPlaceUser[1] >= 5) {
+        output.debug(`Skipping reply to ${userTag}`);
+      } else {
+        await replyToUser(message, userTag);
+      }
 
       replyChannel.chance = 6;
       settings.replyChannels = replyChannels;

@@ -48,7 +48,7 @@ module.exports = {
 
         } catch (error) {
             output.error(`Error executing command /info: ${error.message}`);
-            const errorEmbed = EmbedBuilder.error('Error', `${error.message}`);
+            const errorEmbed = EmbedBuilder.error('AutoResponse - Error', `${error.message}`);
             await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
         }
     },
