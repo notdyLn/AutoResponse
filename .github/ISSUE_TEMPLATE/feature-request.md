@@ -2,8 +2,8 @@
 name: Feature Request
 about: Suggest an idea for this project
 title: Feature Request -
-labels: ''
-assignees: ''
+labels: Feature Request
+assignees: notdyLn
 
 ---
 
