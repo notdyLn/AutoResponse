@@ -64,7 +64,10 @@ module.exports = async (message) => {
       const sortedLeaderboard = Object.entries(leaderboardData).sort((a, b) => b[1] - a[1]);
       const [firstPlaceUser, secondPlaceUser] = sortedLeaderboard.slice(0, 2);
 
-      if (firstPlaceUser && secondPlaceUser && firstPlaceUser[1] - secondPlaceUser[1] >= 5) {
+      output.debug(firstPlaceUser);
+      output.debug(secondPlaceUser);
+
+      if (firstPlaceUser && secondPlaceUser && (firstPlaceUser[1] - secondPlaceUser[1]) >= 5 && userTag !== firstPlaceUser[0] && userTag !== secondPlaceUser[0]) {
         output.debug(`Skipping reply to ${userTag}`);
       } else {
         await replyToUser(message, userTag);
