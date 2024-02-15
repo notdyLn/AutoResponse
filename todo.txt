@@ -1,8 +1,0 @@
-# Commands
-    Admin
-        /info
-
-    Public
-        /leaderboard {season}
-        /optin
-        /optout
