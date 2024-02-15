@@ -2,8 +2,8 @@
 name: Bug report
 about: Create a report to help me improve the bot
 title: 'Bug - '
-labels: ''
-assignees: ''
+labels: Bug Report
+assignees: notdyLn
 
 ---
 
