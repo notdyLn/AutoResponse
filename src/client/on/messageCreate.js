@@ -67,7 +67,7 @@ module.exports = async (message) => {
       output.debug(firstPlaceUser);
       output.debug(secondPlaceUser);
 
-      if (firstPlaceUser && secondPlaceUser && (firstPlaceUser[1] - secondPlaceUser[1]) >= 5 && userTag !== firstPlaceUser[0] && userTag !== secondPlaceUser[0]) {
+      if (firstPlaceUser && secondPlaceUser && firstPlaceUser[1] - secondPlaceUser[1] >= 5) {
         output.debug(`Skipping reply to ${userTag}`);
       } else {
         await replyToUser(message, userTag);
