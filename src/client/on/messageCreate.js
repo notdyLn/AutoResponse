@@ -68,10 +68,18 @@ module.exports = async (message) => {
       output.debug(secondPlaceUser);
 
       if (firstPlaceUser && secondPlaceUser && firstPlaceUser[1] - secondPlaceUser[1] >= 5) {
-        output.debug(`Skipping reply to ${userTag}`);
+        const userPosition = sortedLeaderboard.findIndex(user => user[0] === userTag);
+
+        if (userPosition === 0 && firstPlaceUser[1] - secondPlaceUser[1] >= 5) {
+          output.debug(`Skipping reply to ${userTag}`);
+          return;
+        } else {
+          await replyToUser(message, userTag);
+        }
       } else {
         await replyToUser(message, userTag);
       }
+
 
       replyChannel.chance = 6;
       settings.replyChannels = replyChannels;
