@@ -2,6 +2,17 @@ const { EmbedBuilder } = require('discord.js');
 const avatarURL = 'https://cdn.discordapp.com/avatars/1141116585742966794/533dd2f3d456954259d6f9f99c5c8eae.webp?size=lossless';
 
 module.exports = {
+    poll: (title, topic, optionFields) => {
+        const embed = new EmbedBuilder()
+            .setColor('#00aa00')
+            .setAuthor({ name: title, iconURL: avatarURL })
+            .setDescription(`## ${topic}`)
+            .addFields(optionFields)
+            .setTimestamp();
+
+        return embed;
+    },
+    
     warn: (title, description) => {
         const embed = new EmbedBuilder()
             .setColor('#FFFF00')
