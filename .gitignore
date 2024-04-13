@@ -1,0 +1,10 @@
+logs
+data
+config
+assets
+
+node_modules
+
+package-lock.json
+
+package.json
