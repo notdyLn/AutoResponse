@@ -1,16 +1,18 @@
 const { autoModerationRuleUpdate } = require('../../utils/logging');
 
 module.exports = {
-    name: 'autoModerationRuleUpdate',
-    execute(oldRule, newRule) {
+    name: 'autoModerationRuleDelete',
+    execute(oldAutoModerationRule, newAutoModerationRule) {
         const changes = [];
 
-        if (oldRule.name !== newRule.name) {
-            changes.push(`Rule name updated: ${oldRule.name} => ${newRule.name}`);
+        if (oldAutoModerationRule.name !== newAutoModerationRule.name) {
+            changes.push(`Name changed from "${oldAutoModerationRule.name}" to "${newAutoModerationRule.name}"`);
+        }
+        
+        if (oldAutoModerationRule.enabled !== newAutoModerationRule.enabled) {
+            changes.push(`Enabled status changed from "${oldAutoModerationRule.enabled}" to "${newAutoModerationRule.enabled}"`);
         }
 
-        if (changes.length > 0) {
-            autoModerationRuleUpdate(`${changes.join(', ')}`);
-        }
+        autoModerationRuleUpdate(`Changes in auto-moderation rule:\n${changes.join('\n')}`);
     }
 };

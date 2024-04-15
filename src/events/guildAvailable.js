@@ -1,8 +1,8 @@
-const { Valid } = require('../../utils/logging');
+const { guildAvailable } = require('../../utils/logging');
 
 module.exports = {
     name: 'guildAvailable',
     execute(guild) {
-        Valid(guild.name);
+        guildAvailable(`Available\t${guild.name}`);
     }
 };

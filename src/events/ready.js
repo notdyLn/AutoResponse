@@ -68,9 +68,9 @@ module.exports = {
         } catch (e) {
             Error(`Failed to update commands: ${e.message}`);
         } finally {
-            Valid(`Ready as ${client.user.tag}`);
+            ready(`Ready as ${client.user.tag}`);
 
-            cron.schedule('*/30 * * * * *', async () => {
+            cron.schedule('*/15 * * * * *', async () => {
                 updatePresence(client);
             });
         }

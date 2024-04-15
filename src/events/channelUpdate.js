@@ -6,11 +6,19 @@ module.exports = {
         const changes = [];
 
         if (oldChannel.name !== newChannel.name) {
-            changes.push(`Channel name updated: ${oldChannel.name} => ${newChannel.name}`);
+            changes.push(`#${oldChannel.name} => #${newChannel.name}`);
+        }
+
+        if (oldChannel.nsfw !== newChannel.nsfw) {
+            changes.push(`${oldChannel.nsfw} => ${newChannel.nsfw}`);
+        }
+
+        if (oldChannel.position !== newChannel.position) {
+            changes.push(`#${oldChannel.name} is now in position ${newChannel.position}`);
         }
 
         if (changes.length > 0) {
-            channelUpdate(`Channel ${newChannel.name} (${newChannel.id}) updated: ${changes.join(', ')}`);
+            channelUpdate(`${oldChannel.guild} - ${changes.join(', ')}`);
         }
     }
 };

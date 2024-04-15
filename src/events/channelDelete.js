@@ -3,6 +3,6 @@ const { channelDelete } = require('../../utils/logging');
 module.exports = {
     name: 'channelDelete',
     execute(channel) {
-        channelDelete(`Channel deleted: ${channel.name} (${channel.id})`);
+        channelDelete(`${channel.guild} - #${channel.name} Deleted`);
     }
 };

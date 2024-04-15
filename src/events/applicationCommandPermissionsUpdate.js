@@ -2,16 +2,12 @@ const { applicationCommandPermissionsUpdate } = require('../../utils/logging');
 
 module.exports = {
     name: 'applicationCommandPermissionsUpdate',
-    execute(command, oldPermissions, newPermissions) {
-        const commandName = command.name;
-        const changes = [];
+    execute(data) {
+        const applicationId = data.applicationId;
+        const guildId = data.guildId;
+        const id = data.id;
+        const permissions = data.permissions;
 
-        if (JSON.stringify(oldPermissions) !== JSON.stringify(newPermissions)) {
-            changes.push(`Permissions for command '${commandName}' have been updated.`);
-        }
-
-        if (changes.length > 0) {
-            applicationCommandPermissionsUpdate(`${changes.join(', ')}`);
-        }
+        applicationCommandPermissionsUpdate(`${guildId} - ${applicationId} - ${id} -  ${permissions}`);
     }
 };

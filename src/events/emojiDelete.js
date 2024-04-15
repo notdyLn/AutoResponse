@@ -1,8 +1,16 @@
-const { emojiDelete } = require('../../utils/logging');
+const { emojiCreate } = require('../../utils/logging');
 
 module.exports = {
-    name: 'emojiDelete',
+    name: 'emojiCreate',
     execute(emoji) {
-        emojiDelete(`Emoji deleted: ${emoji.name} (${emoji.id})`);
+        let animated;
+
+        if (emoji.animated) {
+            animated = 'Animated Emoji';
+        } else {
+            animated = 'Static Emoji';
+        }
+        
+        emojiCreate(`${emoji.guild} - ${emoji.author} - ${emoji.name} Deleted (${animated})`);
     }
 };
