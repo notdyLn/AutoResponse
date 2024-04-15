@@ -57,6 +57,10 @@ module.exports.Invalid = function(message) {
     debug(message, colors.red);
 };
 
+module.exports.DiscordJS = function(message) {
+    debug(message, colors.cyan);
+};
+
 // Discord Events
 
 module.exports.applicationCommandPermissionsUpdate = function(message) {
@@ -248,7 +252,7 @@ module.exports.presenceUpdate = function(message) {
 };
 
 module.exports.ready = function(message) {
-    debug(message, colors.red);
+    debug(message, colors.green);
     fileOutput(message);
 };
 

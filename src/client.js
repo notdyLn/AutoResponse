@@ -1,7 +1,9 @@
 const { INTENTS } = require('./intents');
-const { Invalid, Valid, Error } = require('../utils/logging');
+const { DiscordJS, Invalid, Valid, Error } = require('../utils/logging');
 
 const Discord = require('discord.js');
+const { version: DJSVersion } = Discord;
+
 const fs = require('fs');
 const path = require('path');
 
@@ -33,6 +35,7 @@ for (const file of eventFiles) {
     }
 }
 
+DiscordJS(`Running DiscordJS v${DJSVersion}`);
 client.login(config.token);
 
 Valid(verifiedEvents.join('\n'));
