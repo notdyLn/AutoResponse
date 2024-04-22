@@ -1,15 +1,16 @@
 const { EmbedBuilder } = require('discord.js');
-const { BLOCK, COLORS, ICONS } = require('./constants');
+const { codeblock } = require('./markdown');
+const { format } = require('./ansi');
+const { COLORS, ICONS, TEXT } = require('./constants');
 
 const botName = 'AutoResponse';
 
-module.exports.PingEmbed = function(message, color) {
+module.exports.PingEmbed = function(rest, ws, wscolor) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setTitle(`${ICONS.ping} Pong!`)
-        .setDescription(`\`\`\`ansi\n${color}${message} ${BLOCK.reset}Latency\`\`\``)
+        .setDescription(`${ICONS.network} **Pong!**\n` + codeblock("ansi", [`rest\t\t${format(`${rest}ms`, "m")}`, `websocket   ${format(`${ws}ms`, wscolor)}`]))
         .setFooter({
-            text: botName,
+            text: TEXT.botname,
             iconURL: ICONS.avatarURL
         })
 
@@ -30,7 +31,7 @@ module.exports.Leaderboard = function(title, description, fields) {
         .setDescription(description)
         .addFields(fields)
         .setFooter({
-            text: botName,
+            text: TEXT.botname,
             iconURL: ICONS.avatarURL
         })
 
@@ -40,9 +41,9 @@ module.exports.Leaderboard = function(title, description, fields) {
 module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.server} **Server Count:** ${serverCount}\n${ICONS.shard} **Shard Count:** ${shardCount}\n${ICONS.createdAt} **Uptime:** ${uptime}`)
+        .setDescription(`${ICONS.server} **Server Count:** ${serverCount}\n${ICONS.shard} **Shard Count:** ${shardCount}\n${ICONS.clock} **Uptime:** ${uptime}`)
         .setFooter({
-            text: botName,
+            text: TEXT.botname,
             iconURL: ICONS.avatarURL
         })
 
@@ -52,7 +53,7 @@ module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
 module.exports.RestartEmbed = function(message) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setTitle(`${ICONS.restarting} ${message}`)
+        .setDescription(`${ICONS.loading} **${message}**`)
 
     return embed;
 };
@@ -60,24 +61,14 @@ module.exports.RestartEmbed = function(message) {
 module.exports.LoadingEmbed = function(title) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setTitle(`${ICONS.loading} ${title}`)
-        .setFooter({
-            text: botName,
-            iconURL: ICONS.avatarURL
-        })
+        .setDescription(`${ICONS.loading} **${title}**`)
 
     return embed;
 };
-
-module.exports.SuccessEmbed = function(title, message) {
+module.exports.SuccessEmbed = function(message) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setTitle(`${ICONS.check} ${title}`)
-        .setDescription(message)
-        .setFooter({
-            text: botName,
-            iconURL: ICONS.avatarURL
-        })
+        .setDescription(`${ICONS.checkmark} **${message}**`)
 
     return embed;
 };
@@ -85,10 +76,9 @@ module.exports.SuccessEmbed = function(title, message) {
 module.exports.ErrorEmbed = function(title, message) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.error)
-        .setTitle(`${ICONS.error} ${title}`)
-        .setDescription(`${message}`)
+        .setDescription(`${ICONS.xmark} **${title}**\n` + `\`\`\`${message}\`\`\``)
         .setFooter({
-            text: botName,
+            text: TEXT.botname,
             iconURL: ICONS.avatarURL
         })
 

@@ -43,7 +43,7 @@ module.exports = {
                 optOutList.push(userTag);
                 updateOptOutList(optOutList);
 
-                const successEmbed = SuccessEmbed('Done', `You have opted out of receiving replies.\n` + `Use **/optin** to start receiving replies again.`);
+                const successEmbed = SuccessEmbed(`You have opted out of receiving replies.\n` + `Use **/optin** to start receiving replies again.`);
                 await interaction.reply({ embeds: [successEmbed], ephemeral: true });
             } else {
                 const errorEmbed = ErrorEmbed('Error', `You are already opted out of receiving replies.\n` + `Use **/optin** to start receiving replies again.`);

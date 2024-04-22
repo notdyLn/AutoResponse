@@ -36,7 +36,7 @@ module.exports = {
             const settingsFilePath = path.join(__dirname, '..', 'data', serverName, 'settings.json');
             fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
 
-            const successEmbed = SuccessEmbed('Done', `**${phraseToRemove}** is no longer a phrase.`);
+            const successEmbed = SuccessEmbed(`**${phraseToRemove}** is no longer a phrase.`);
             await interaction.reply({ embeds: [successEmbed], ephemeral: true });
 
         } catch (error) {

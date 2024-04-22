@@ -15,18 +15,19 @@ module.exports = async (client) => {
             `${totalReplies} replies`,
             `${members} members`
         ]
-        const presenceData = {
-            "status": "online",
-            "activities": [
-                {
-                    "name": activities[activityIndex],
-                    "type": 4,
-                    "url": `https://twitch.tv/not_dyLn`
-                }
-            ]
-        };
 
-        client.user.setPresence(presenceData);
+        client.user.setPresence({
+            activities: [
+                {
+                    name: activities[activityIndex],
+                    state: activities[activityIndex],
+                    type: 4,
+                    url: 'https://twitch.tv/not_dyLn'
+                }
+            ],
+            status: "online"
+        });
+
         activityIndex = (activityIndex + 1) % activities.length;
     } catch (e) {
         Error(`Error updating presence: ${e.message}`);

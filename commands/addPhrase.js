@@ -38,7 +38,7 @@ module.exports = {
             fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
 
             Info(`${interaction.user.username.cyan} added the phrase "${phrase.cyan}"`);
-            const successEmbed = SuccessEmbed('Added', `**${phrase}** has been added as a phrase.`);
+            const successEmbed = SuccessEmbed(`**${phrase}** has been added as a phrase.`);
             await interaction.reply({ embeds: [successEmbed], ephemeral: true });
 
         } catch (error) {

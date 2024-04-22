@@ -7,7 +7,7 @@ module.exports = {
         const channel = message.channel.name;
         const globalUsername = message.author.tag;
         const messageContent = message.content.replace(/[\r\n]+/g, ' ');
-
-        messageDelete(`${server.cyan} - ${'#'.cyan + channel.cyan} - ${globalUsername.cyan} - ${messageContent.red} (Deleted)`);
+        
+        messageDelete(`${server.cyan} - ${('#' + channel).cyan} - ${globalUsername.cyan} - ${messageContent.red} (Deleted)`);
     }
 };

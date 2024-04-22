@@ -17,7 +17,7 @@ module.exports = {
             const allowedUserId = config.ownerId;
             const userMessage = interaction.options.getString('message');
             const loadingEmbed = LoadingEmbed(`Loading`, `Sending message...`);
-            const doneEmbed = SuccessEmbed(`Done`, `AutoResponse sent your message`);
+            const doneEmbed = SuccessEmbed(`AutoResponse sent your message`);
 
             await interaction.reply({ embeds: [loadingEmbed], ephemeral: true });
 

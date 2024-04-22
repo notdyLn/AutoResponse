@@ -47,7 +47,7 @@ module.exports = {
             const updatedOptOutList = optOutList.filter(tag => tag !== userTag);
             updateOptOutList(updatedOptOutList);
 
-            const successEmbed = SuccessEmbed('Done', `You have opted in to receive replies.\n` + `Use **/optout** to stop receiving replies.`
+            const successEmbed = SuccessEmbed(`You have opted in to receive replies.\n` + `Use **/optout** to stop receiving replies.`
             );
             await interaction.reply({ embeds: [successEmbed], ephemeral: true });
 

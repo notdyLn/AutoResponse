@@ -6,7 +6,7 @@ module.exports = {
         const server = guild.name;
         const actionType = auditLogEntry.actionType;
         const executor = auditLogEntry.executor.username;
-        const target = auditLogEntry.target ? auditLogEntry.target.username : auditLogEntry.target.user.username;
+        const target = auditLogEntry.target ? auditLogEntry.target.username : null;
         const targetType = auditLogEntry.targetType;
 
         guildAuditLogEntryCreate(`${server} - ${executor} - ${actionType} ${targetType} -> ${target} [Audit Log Entry]`);

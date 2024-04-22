@@ -31,7 +31,7 @@ module.exports = {
                 const settingsFilePath = path.join(__dirname, '..', 'data', interaction.guild.name, 'settings.json');
                 fs.writeFileSync(settingsFilePath, JSON.stringify(serverSettings, null, 2));
 
-                const successEmbed = SuccessEmbed('Done', `<#${selectedChannel.id}> has been added as a reply channel.`);
+                const successEmbed = SuccessEmbed(`<#${selectedChannel.id}> has been added as a reply channel.`);
                 await interaction.reply({ embeds: [successEmbed], ephemeral: true  });
             } else {
                 const errorEmbed = ErrorEmbed('Error', `<#${selectedChannel.id}> is already a reply channel.`);

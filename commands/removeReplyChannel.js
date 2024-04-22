@@ -35,7 +35,7 @@ module.exports = {
             const settingsFilePath = path.join(__dirname, '..', 'data', serverName, 'settings.json');
             fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
 
-            const successEmbed = SuccessEmbed('Done', `${channelToRemove.name} has been removed as a reply channel.`);
+            const successEmbed = SuccessEmbed(`${channelToRemove.name} has been removed as a reply channel.`);
             await interaction.reply({ embeds: [successEmbed], ephemeral: true });
 
         } catch (error) {

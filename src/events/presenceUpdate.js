@@ -2,9 +2,33 @@ const { presenceUpdate, Error, Info } = require('../../utils/logging');
 
 const lastStatus = new Map();
 
+function activitiesAreEqual(oldActivities, newActivities) {
+    if (!oldActivities || !newActivities || oldActivities.length !== newActivities.length) {
+        return false;
+    }
+
+    for (let i = 0; i < oldActivities.length; i++) {
+        const oldActivity = oldActivities[i];
+        const newActivity = newActivities[i];
+
+        if (oldActivity.type !== newActivity.type ||
+            oldActivity.name !== newActivity.name ||
+            oldActivity.details !== newActivity.details ||
+            oldActivity.state !== newActivity.state) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 module.exports = {
     name: 'presenceUpdate',
     execute(oldPresence, newPresence) {
+        if (newPresence.user.bot) {
+            return;
+        }
+
         const userId = newPresence.userID;
         const oldStatus = oldPresence ? oldPresence.status : undefined;
         const newStatus = newPresence.status;
@@ -43,26 +67,41 @@ module.exports = {
 
                 lastStatus.set(userId, newStatus);
             } 
-        } else if (JSON.stringify(oldActivity) !== JSON.stringify(newActivity)) {
+        } else if (!activitiesAreEqual(oldActivity, newActivity)) {
             const user = newPresence.user.username;
 
             if (newActivity && newActivity.length > 0) {
-                let primaryActivityName = '';
+                let activityName = '';
+                let activityDetails = '';
+                let activityState = '';
+
                 for (const activity of newActivity) {
-                    if (activity.type === 4) {
-                        primaryActivityName = activity.state;
+                    if (activity.type !== 4) {
+                        if (activity.name) {
+                            activityName = `- ${activity.name} `;
+                        }
+                        
+                        if (activity.details) {
+                            activityDetails = `- ${activity.details} ` || '';
+                        }
+
+                        if (activity.state) {
+                            activityState = `- ${activity.state}` || '';
+                        }
+                        
                         break;
                     } else {
-                        primaryActivityName = activity.name;
-                        break;
+                        activityState = `- ${activity.state}` || '';
                     }
                 }
 
-                if (!lastStatus.has(userId) || lastStatus.get(userId) !== primaryActivityName) {
-                    presenceUpdate(`${user} - ${primaryActivityName}`);
+                const activityText = `${activityName}${activityDetails}${activityState}`.trim();
 
-                    lastStatus.set(userId, primaryActivityName);
-                } 
+                if (activityText && (!lastStatus.has(userId) || lastStatus.get(userId) !== activityText)) {
+                    presenceUpdate(`${user} ${activityText}`);
+
+                    lastStatus.set(userId, activityText);
+                }  
             }
         }
     }

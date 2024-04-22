@@ -8,6 +8,6 @@ module.exports = {
         const globalUsername = newMessage.author.tag;
         const messageContent = newMessage.content.replace(/[\r\n]+/g, ' ');
 
-        messageUpdate(`${server.cyan} - ${'#'.cyan + channel.cyan} - ${globalUsername.cyan} - ${messageContent.yellow} (Edited)`);
+        messageUpdate(`${server.cyan} - ${('#' + channel).cyan} - ${globalUsername.cyan} - ${messageContent.yellow} (Edited)`);
     }
 };
