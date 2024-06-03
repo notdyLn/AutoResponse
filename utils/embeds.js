@@ -5,14 +5,10 @@ const { COLORS, ICONS, TEXT } = require('./constants');
 
 const botName = 'AutoResponse';
 
-module.exports.PingEmbed = function(rest, ws, wscolor) {
+module.exports.PingEmbed = function(ws, rest, wscolor) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(`${ICONS.network} **Pong!**\n` + codeblock("ansi", [`rest\t\t${format(`${rest}ms`, "m")}`, `websocket   ${format(`${ws}ms`, wscolor)}`]))
-        .setFooter({
-            text: TEXT.botname,
-            iconURL: ICONS.avatarURL
-        })
 
     return embed;
 };
@@ -30,10 +26,6 @@ module.exports.Leaderboard = function(title, description, fields) {
         .setTitle(`${ICONS.trophy} ${formattedTitle}`)
         .setDescription(description)
         .addFields(fields)
-        .setFooter({
-            text: TEXT.botname,
-            iconURL: ICONS.avatarURL
-        })
 
     return embed;
 };
@@ -42,10 +34,6 @@ module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(`${ICONS.server} **Server Count:** ${serverCount}\n${ICONS.shard} **Shard Count:** ${shardCount}\n${ICONS.clock} **Uptime:** ${uptime}`)
-        .setFooter({
-            text: TEXT.botname,
-            iconURL: ICONS.avatarURL
-        })
 
     return embed;
 };
@@ -65,10 +53,10 @@ module.exports.LoadingEmbed = function(title) {
 
     return embed;
 };
-module.exports.SuccessEmbed = function(message) {
+module.exports.SuccessEmbed = function(title, message) {
     const embed = new EmbedBuilder()
-        .setColor(COLORS.default)
-        .setDescription(`${ICONS.checkmark} **${message}**`)
+        .setColor(COLORS.done)
+        .setDescription(`${ICONS.checkmark} **${title}**\n` + `${message}`)
 
     return embed;
 };
@@ -76,11 +64,7 @@ module.exports.SuccessEmbed = function(message) {
 module.exports.ErrorEmbed = function(title, message) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.error)
-        .setDescription(`${ICONS.xmark} **${title}**\n` + `\`\`\`${message}\`\`\``)
-        .setFooter({
-            text: TEXT.botname,
-            iconURL: ICONS.avatarURL
-        })
+        .setDescription(`${ICONS.xmark} **${title}**\n` + `${message}`)
 
     return embed;
 };

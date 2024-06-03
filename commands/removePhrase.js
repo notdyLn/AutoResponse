@@ -1,52 +1,87 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { ErrorEmbed, SuccessEmbed } = require('../utils/embeds');
-const { Error, Info } = require('../utils/logging');
-const fs = require('fs');
-const path = require('path');
-const getSettings = require('../utils/getSettings');
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { ErrorEmbed, SuccessEmbed } = require("../utils/embeds");
+const { Error, Info } = require("../utils/logging");
+const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
+
+function initializeDatabase(serverId) {
+    const dbFilePath = path.join(__dirname, "..", "data", `${serverId}.db`);
+    const db = new sqlite3.Database(dbFilePath);
+
+    db.serialize(() => {
+        db.run(`CREATE TABLE IF NOT EXISTS phrases (
+            phrase TEXT PRIMARY KEY
+        )`);
+    });
+
+    return db;
+}
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('removephrase')
-        .setDescription('Remove a phrase')
-        .addStringOption(option => option
-            .setName('phrase')
-            .setDescription('The phrase to remove')
-            .setRequired(true)
+        .setName("removephrase")
+        .setDescription("Remove a phrase")
+        .addStringOption((option) =>
+            option
+                .setName("phrase")
+                .setDescription("The phrase to remove")
+                .setRequired(true)
         )
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
         try {
-            const phraseToRemove = interaction.options.getString('phrase');
+            const phraseToRemove = interaction.options.getString("phrase");
+            const serverId = interaction.guild.id;
+            const db = initializeDatabase(serverId);
 
-            const serverName = interaction.guild.name;
-            const settings = getSettings(serverName);
+            const deletePhraseQuery = `DELETE FROM phrases WHERE phrase = ?`;
 
-            settings.phrases = settings.phrases || [];
+            db.run(deletePhraseQuery, [phraseToRemove], function (err) {
+                if (err) {
+                    Error(
+                        `Error removing phrase for server ${serverId}: ${err.message}`
+                    );
+                    const errorEmbed = ErrorEmbed(
+                        "Error",
+                        "Failed to remove the phrase from the database."
+                    );
+                    interaction.reply({
+                        embeds: [errorEmbed],
+                        ephemeral: true,
+                    });
+                    return;
+                }
 
-            const indexOfPhrase = settings.phrases.indexOf(phraseToRemove);
-            if (indexOfPhrase === -1) {
-                const notFoundEmbed = ErrorEmbed('Error', `**${phraseToRemove}** is not a phrase.`);
-                return await interaction.reply({ embeds: [notFoundEmbed], ephemeral: true });
-            }
-
-            settings.phrases.splice(indexOfPhrase, 1);
-
-            const settingsFilePath = path.join(__dirname, '..', 'data', serverName, 'settings.json');
-            fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
-
-            const successEmbed = SuccessEmbed(`**${phraseToRemove}** is no longer a phrase.`);
-            await interaction.reply({ embeds: [successEmbed], ephemeral: true });
-
+                Info(
+                    `${interaction.user.username.cyan} removed the phrase "${phraseToRemove.cyan}"`
+                );
+                const successEmbed = SuccessEmbed(
+                    "Removed Phrase Successfully",
+                    `\`\`\`"${phraseToRemove}" has been removed as a phrase.\`\`\``
+                );
+                interaction.reply({
+                    embeds: [successEmbed],
+                    ephemeral: true,
+                });
+            });
         } catch (error) {
-            const errorEmbed = ErrorEmbed('Error executing /removePhrase: ', error.message);
+            const errorEmbed = ErrorEmbed(
+                "Error executing /removePhrase: ",
+                error.message
+            );
             Error(`Error executing /removePhrase: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
-                await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+                await interaction.editReply({
+                    embeds: [errorEmbed],
+                    ephemeral: true,
+                });
             } else {
-                await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+                await interaction.reply({
+                    embeds: [errorEmbed],
+                    ephemeral: true,
+                });
             }
         }
     },

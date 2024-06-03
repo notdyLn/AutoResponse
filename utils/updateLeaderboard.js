@@ -1,17 +1,80 @@
-const fs = require('fs');
-const path = require('path');
-const { Error } = require('./logging');
+const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
+const { Error } = require("./logging");
 
-function updateLeaderboard(userTag) {
+function updateLeaderboard(userTag, userID) {
     try {
-        const leaderboardFilePath = path.join(__dirname, '..', 'data', 'leaderboards', `current.json`);
-        const leaderboardData = fs.existsSync(leaderboardFilePath)
-            ? JSON.parse(fs.readFileSync(leaderboardFilePath, 'utf8'))
-            : {};
+        const dbPath = path.join(__dirname, "..", "data", "leaderboards.db");
+        const db = new sqlite3.Database(dbPath, (err) => {
+            if (err) {
+                Error(`Error opening SQLite database: ${err.message}`);
+                return;
+            }
 
-        leaderboardData[userTag] = (leaderboardData[userTag] || 0) + 1;
+            db.serialize(() => {
+                db.run(
+                    `CREATE TABLE IF NOT EXISTS current (
+                        username TEXT,
+                        userID TEXT PRIMARY KEY,
+                        replies INTEGER DEFAULT 0,
+                        groups TEXT
+                    )`,
+                    (createErr) => {
+                        if (createErr) {
+                            Error(`Error creating table: ${createErr.message}`);
+                            db.close();
+                            return;
+                        }
 
-        fs.writeFileSync(leaderboardFilePath, JSON.stringify(leaderboardData, null, 2));
+                        // Check if the user exists
+                        db.get(
+                            `SELECT userID FROM current WHERE userID = ?`,
+                            [userID],
+                            (selectErr, row) => {
+                                if (selectErr) {
+                                    Error(
+                                        `Error selecting user from leaderboard: ${selectErr.message}`
+                                    );
+                                    db.close();
+                                    return;
+                                }
+
+                                if (row) {
+                                    // User exists, update replies count
+                                    db.run(
+                                        `UPDATE current SET replies = replies + 1 WHERE userID = ?`,
+                                        [userID],
+                                        (updateErr) => {
+                                            if (updateErr) {
+                                                Error(
+                                                    `Error updating leaderboard: ${updateErr.message}`
+                                                );
+                                            }
+                                            db.close();
+                                        }
+                                    );
+                                } else {
+                                    // User doesn't exist, insert new record
+                                    db.run(
+                                        `INSERT INTO current (username, userID, replies)
+                                        VALUES (?, ?, 1)`,
+                                        [userTag, userID],
+                                        (insertErr) => {
+                                            if (insertErr) {
+                                                Error(
+                                                    `Error inserting into leaderboard: ${insertErr.message}`
+                                                );
+                                            }
+                                            db.close();
+                                        }
+                                    );
+                                }
+                            }
+                        );
+                    }
+                );
+            });
+        });
     } catch (error) {
         Error(`Error updating leaderboard: ${error.message}`);
     }

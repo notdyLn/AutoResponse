@@ -8,7 +8,9 @@ module.exports = {
         .setName('ping')
         .setDescription('Check latency')
         .setDMPermission(true),
-    async execute(interaction) {        
+    async execute(interaction) {    
+        const start = Date.now();
+
         try {
             const loadingEmbed = LoadingEmbed('Loading latency...');
             await interaction.reply({ embeds: [loadingEmbed], ephemeral: true });
@@ -21,18 +23,19 @@ module.exports = {
             } else {
                 let color;
                 
-                if (wsping < 60) {
-                    color = BLOCK.green;
+                if (wsping < 75) {
+                    color = 'green';
                 } else {
-                    color = BLOCK.red;
+                    color = 'red';
                 }
 
-                const pingEmbed = PingEmbed(`${wsping}ms`, color);
+                const restPing = Date.now() - start;
+                const pingEmbed = PingEmbed(wsping, restPing, color);
                 await interaction.editReply({ embeds: [pingEmbed], ephemeral: true });
             }
         } catch (error) {
-            const errorEmbed = ErrorEmbed('Error executing /ping', error.message);
-            Error(`Error executing /ping: ${error.message}`);
+            const errorEmbed = ErrorEmbed('Error executing /ping', error);
+            Error(`Error executing /ping: ${error}`);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });

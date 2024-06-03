@@ -1,42 +1,82 @@
-const colors = require('colors');
-const fs = require('fs');
-const { debug, Error } = require('../utils/logging');
-const path = require('path');
+const colors = require("colors");
+const { debug, Error } = require("../utils/logging");
+const path = require("path");
+const sqlite3 = require("sqlite3").verbose();
 
-function getSettings(serverName) {
-  try {
-    const settingsFilePath = path.join(__dirname, '..', 'data', serverName, 'settings.json');
+function initializeDatabase(serverId) {
+    const dbFilePath = path.join(__dirname, "..", "data", `${serverId}.db`);
+    const db = new sqlite3.Database(dbFilePath);
 
-    if (fs.existsSync(settingsFilePath)) {
-      const settingsData = fs.readFileSync(settingsFilePath, 'utf8');
-      const parsedSettings = JSON.parse(settingsData);
+    db.serialize(() => {
+        db.run(`CREATE TABLE IF NOT EXISTS replyChannels (
+      id TEXT PRIMARY KEY,
+      chance INTEGER
+    )`);
+        db.run(`CREATE TABLE IF NOT EXISTS trustedRoles (
+      id TEXT PRIMARY KEY
+    )`);
+        db.run(`CREATE TABLE IF NOT EXISTS phrases (
+      phrase TEXT PRIMARY KEY
+    )`);
+    });
 
-      parsedSettings.replyChannels = parsedSettings.replyChannels || [];
-      parsedSettings.trustedRoles = parsedSettings.trustedRoles || [];
-      parsedSettings.phrases = parsedSettings.phrases || [];
+    return db;
+}
 
-      return parsedSettings;
-    } else {
-      const dataFolderPath = path.join(__dirname, '..', 'data', serverName);
-      if (!fs.existsSync(dataFolderPath)) {
-        fs.mkdirSync(dataFolderPath);
-      }
+function getSettings(serverId) {
+    return new Promise((resolve, reject) => {
+        const db = initializeDatabase(serverId);
 
-      const defaultSettings = {
-        replyChannels: [],
-        trustedRoles: [],
-        phrases: [],
-      };
+        const settings = {
+            replyChannels: [],
+            trustedRoles: [],
+            phrases: [],
+        };
 
-      fs.writeFileSync(settingsFilePath, JSON.stringify(defaultSettings, null, 2));
+        db.all(`SELECT * FROM replyChannels`, [], (err, rows) => {
+            if (err) {
+                Error(
+                    `Error retrieving replyChannels for server ${serverId}: ${err.message}`
+                );
+                reject(err);
+                return;
+            }
+            settings.replyChannels = rows;
+        });
 
-      debug(`Settings file created for server ${colors.cyan(serverName)}`);
-      return defaultSettings;
-    }
-  } catch (error) {
-    Error(`Error handling getSettings: ${error.message}`);
-    return null;
-  }
+        db.all(`SELECT * FROM trustedRoles`, [], (err, rows) => {
+            if (err) {
+                Error(
+                    `Error retrieving trustedRoles for server ${serverId}: ${err.message}`
+                );
+                reject(err);
+                return;
+            }
+            settings.trustedRoles = rows.map((row) => row.id);
+        });
+
+        db.all(`SELECT * FROM phrases`, [], (err, rows) => {
+            if (err) {
+                Error(
+                    `Error retrieving phrases for server ${serverId}: ${err.message}`
+                );
+                reject(err);
+                return;
+            }
+            settings.phrases = rows.map((row) => row.phrase);
+        });
+
+        db.close((err) => {
+            if (err) {
+                Error(
+                    `Error closing database for server ${serverId}: ${err.message}`
+                );
+                reject(err);
+                return;
+            }
+            resolve(settings);
+        });
+    });
 }
 
 module.exports = getSettings;

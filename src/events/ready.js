@@ -1,15 +1,15 @@
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v10');
-const { ready, Error, Valid } = require('../../utils/logging');
+const { REST } = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v10");
+const { Done, ready, Error, debug } = require("../../utils/logging");
 
-const cron = require('node-cron');
-const fs = require('fs');
-const path = require('path');
+const cron = require("node-cron");
+const fs = require("fs");
+const path = require("path");
 
-const getLeaderboards = require('../../utils/getLeaderboards');
-const getSettings = require('../../utils/getSettings');
+const getLeaderboards = require("../../utils/getLeaderboards");
+const getSettings = require("../../utils/getSettings");
 
-const setPresence = require('../../utils/setPresence');
+const setPresence = require("../../utils/setPresence");
 
 function updatePresence(client) {
     try {
@@ -22,8 +22,10 @@ function updatePresence(client) {
 function updateCommands() {
     const commands = [];
 
-    const commandFolder = path.join(__dirname, '..', '..', 'commands');
-    const commandFiles = fs.readdirSync(commandFolder).filter(file => file.endsWith('.js'));
+    const commandFolder = path.join(__dirname, "..", "..", "commands");
+    const commandFiles = fs
+        .readdirSync(commandFolder)
+        .filter((file) => file.endsWith(".js"));
 
     for (const file of commandFiles) {
         const commandPath = path.join(commandFolder, file);
@@ -34,45 +36,44 @@ function updateCommands() {
             execute: command.execute,
         });
 
-        Valid(`/${command.data.name}`);
+        debug(`/${command.data.name}`);
     }
 
     return commands;
 }
 
 module.exports = {
-    name: 'ready',
+    name: "ready",
     async execute(client) {
         try {
             updatePresence(client);
 
-            client.guilds.cache.forEach(guild => {
-                getSettings(guild.name);
+            client.guilds.cache.forEach((guild) => {
+                getSettings(guild.id);
             });
 
             getLeaderboards();
 
             const commands = updateCommands(client);
-            const rest = new REST({ version: '10' }).setToken(client.token);
+            const rest = new REST({ version: "10" }).setToken(client.token);
 
             try {
-                await rest.put(
-                    Routes.applicationCommands(client.user.id),
-                    { body: commands },
-                );
+                await rest.put(Routes.applicationCommands(client.user.id), {
+                    body: commands,
+                });
             } catch (e) {
                 Error(`Failed to update commands: ${e.message}`);
             } finally {
-                Valid(`Updated commands`);
+                Done(`Updated commands`);
             }
         } catch (e) {
             Error(`Failed to update commands: ${e.message}`);
         } finally {
             ready(`Ready as ${client.user.tag}`);
 
-            cron.schedule('*/15 * * * * *', async () => {
+            cron.schedule("*/15 * * * * *", async () => {
                 updatePresence(client);
             });
         }
-    }
+    },
 };

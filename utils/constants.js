@@ -1,5 +1,5 @@
 module.exports.TEXT = Object.freeze({
-    botname: 'Sentinel',
+    botname: 'AutoResponse',
     ownerid: '458854676557856790'
 });
 
@@ -8,9 +8,10 @@ module.exports.PATHS = Object.freeze({
     banner: 'assets/banner.png'
 });
 
+// node_modules/@discordjs/ws/dist/index.js
 module.exports.DEVICE = Object.freeze({
     mobile: 'Discord iOS',
-    desktop: '@discordjs/ws 1.0.2',
+    desktop: '@discordjs/ws 1.1.0',
     default: 'Discord iOS'
 });
 
@@ -43,7 +44,7 @@ module.exports.ICONS = Object.freeze({
     tails:          "<:tails:1230751224769417226>",
     shard:          '<:shard:1232060187993444375>',
 
-    avatarURL: 'https://cdn.discordapp.com/avatars/1141116585742966794/a_b277a9052e72d5c2c015e9823f352f01.gif?size=256'
+    avatarURL:      'https://cdn.discordapp.com/avatars/1141116585742966794/a_b277a9052e72d5c2c015e9823f352f01.gif?size=256'
 });
 
 module.exports.COLORS = Object.freeze({
@@ -54,9 +55,11 @@ module.exports.COLORS = Object.freeze({
 });
 
 module.exports.RANKS = Object.freeze({
-    helper:         '<:helper:1228012253794664531>',
-    owner:          '<:programmer:1228012253068918876>',
-    s1:             '<:season1winner:1228012252238450780>'
+    owner:          '<:crown:1230166190526038026>',
+    helper:         '<:helper:1246903898833293412>',
+    programmer:     '<:developer:1230166255479291924>',
+    s1:             '<:season1winner:1246903062237413499>',
+    s2:             '<:season2winner:1246902870377496596>'
 });
 
 module.exports.BLOCK = Object.freeze({

@@ -63,7 +63,7 @@ module.exports = {
             let presenceDetails = `${statusSymbol[statusColor]}`;
 
             if (!lastStatus.has(userId) || lastStatus.get(userId) !== newStatus) {
-                presenceUpdate(`${presenceDetails} ${user}`);
+                presenceUpdate(`${presenceDetails} ${user.grey}`);
 
                 lastStatus.set(userId, newStatus);
             } 

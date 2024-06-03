@@ -1,10 +1,6 @@
-logs
+.env
 data
-config
-assets
-
 node_modules
-
 package-lock.json
-
 package.json
+run.bat

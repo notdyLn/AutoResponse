@@ -1,5 +1,5 @@
 const { INTENTS } = require('./intents');
-const { DiscordJS, Invalid, Valid, Error } = require('../utils/logging');
+const { Debug, DiscordJS, Valid, Invalid, Error, debug } = require('../utils/logging');
 
 const Discord = require('discord.js');
 const { version: DJSVersion } = Discord;
@@ -7,8 +7,7 @@ const { version: DJSVersion } = Discord;
 const fs = require('fs');
 const path = require('path');
 
-const configPath = path.resolve(__dirname, '..', 'config', 'client.json');
-const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+require('dotenv').config();
 
 const client = new Discord.Client({ intents: INTENTS });
 client.commands = new Discord.Collection();
@@ -27,16 +26,15 @@ for (const file of eventFiles) {
             client.on(event.name, (...args) => event.execute(...args));
         } else {
             invalidEvents.push(file);
-            Error(`Failed to load event ${file}: ${error.message}`);
         }
     } catch (error) {
+        Error(error.message);
         missingEvents.push(file);
-        Error(`Failed to load event ${file}: ${error.message}`);
     }
 }
 
-DiscordJS(`Running DiscordJS v${DJSVersion}`);
-client.login(config.token);
+DiscordJS(`DiscordJS v${DJSVersion}`);
+client.login(process.env.TOKEN);
 
 Valid(verifiedEvents.join('\n'));
 

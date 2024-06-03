@@ -1,17 +1,25 @@
 const { Error, typingStart } = require('../../utils/logging');
+const getSettings = require("../../utils/getSettings");
 
 module.exports = {
     name: 'typingStart',
-    execute(typing) {
-        const guild = typing.guild.name;
-        const channel = typing.channel.name;
-        const user = typing.user.tag;
-        const message = 'Typing...'
+    async execute(typing) {
+        const serverId = typing.guild.id;
+        const guildName = typing.guild.name;
+        const channelName = typing.channel.name;
+        const userTag = typing.user.tag;
+        const message = 'Typing...';
+        const settings = await getSettings(serverId);
+        const replyChannels = settings.replyChannels || [];
+        const replyChannel = replyChannels.find(
+            (channel) => channel.id === typing.channel.id
+        );
+        let chance = replyChannel ? replyChannel.chance || 6 : 6;
 
         try {
-            typingStart(`${guild.cyan} - ${'#'.cyan + channel.cyan} - ${user.cyan} - ${message.grey}`);
+            typingStart(`${(chance + "%").yellow} - ${guildName.cyan} - ${'#'.cyan + channelName.cyan} - ${userTag.cyan} - ${message.grey}`);
         } catch (error) {
-            Error(error);
+            Error(error.message);
         }
     }
 };
