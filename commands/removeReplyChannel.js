@@ -5,9 +5,29 @@ const {
 } = require("discord.js");
 const { ErrorEmbed, SuccessEmbed } = require("../utils/embeds");
 const { Error, Info } = require("../utils/logging");
-const fs = require("fs");
-const path = require("path");
 const getSettings = require("../utils/getSettings");
+const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
+
+function initializeDatabase(serverId) {
+    const dbFilePath = path.join(__dirname, "..", "data", `${serverId}.db`);
+    const db = new sqlite3.Database(dbFilePath);
+
+    db.serialize(() => {
+        db.run(`CREATE TABLE IF NOT EXISTS replyChannels (
+            id TEXT PRIMARY KEY,
+            chance INTEGER
+        )`);
+        db.run(`CREATE TABLE IF NOT EXISTS trustedRoles (
+            id TEXT PRIMARY KEY
+        )`);
+        db.run(`CREATE TABLE IF NOT EXISTS phrases (
+            phrase TEXT PRIMARY KEY
+        )`);
+    });
+
+    return db;
+}
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -24,53 +44,65 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
         try {
-            const settings = getSettings(interaction.guild.name);
-            const channelToRemove = interaction.options.getChannel("channel");
+            const serverId = interaction.guild.id;
+            const serverSettings = await getSettings(serverId);
+            const selectedChannel = interaction.options.getChannel("channel");
+            const selectedChannelId = selectedChannel.id;
 
-            settings.replyChannels = settings.replyChannels || [];
+            const db = initializeDatabase(serverId);
 
-            const indexToRemove = settings.replyChannels.findIndex(
-                (channel) => channel.id === channelToRemove.id
+            const indexToRemove = serverSettings.replyChannels.findIndex(
+                (channel) => channel.id === selectedChannelId
             );
-            if (indexToRemove === -1) {
-                const notFoundEmbed = ErrorEmbed(
-                    "Error",
-                    `<#${channelToRemove.id}> is not a reply channel.`
+
+            if (indexToRemove !== -1) {
+                serverSettings.replyChannels.splice(indexToRemove, 1);
+
+                db.run(
+                    `DELETE FROM replyChannels WHERE id = ?`,
+                    [selectedChannelId],
+                    function (err) {
+                        if (err) {
+                            const errorEmbed = ErrorEmbed(
+                                "Error",
+                                "Failed to update the database."
+                            );
+                            Error(
+                                `Error updating database for server ${serverId}: ${err.message}`
+                            );
+                            interaction.reply({
+                                embeds: [errorEmbed],
+                                ephemeral: true,
+                            });
+                            return;
+                        }
+
+                        const successEmbed = SuccessEmbed(
+                            "Removed Reply Channel Successfully",
+                            `<#${selectedChannel.id}> has been removed as a reply channel.`
+                        );
+                        interaction.reply({
+                            embeds: [successEmbed],
+                            ephemeral: true,
+                        });
+                    }
                 );
-                return await interaction.reply({
-                    embeds: [notFoundEmbed],
+            } else {
+                const errorEmbed = ErrorEmbed(
+                    "Error",
+                    `<#${selectedChannel.id}> is not a reply channel.`
+                );
+                await interaction.reply({
+                    embeds: [errorEmbed],
                     ephemeral: true,
                 });
             }
-
-            settings.replyChannels.splice(indexToRemove, 1);
-
-            const settingsFilePath = path.join(
-                __dirname,
-                "..",
-                "data",
-                serverName,
-                "settings.json"
-            );
-            fs.writeFileSync(
-                settingsFilePath,
-                JSON.stringify(settings, null, 2)
-            );
-
-            const successEmbed = SuccessEmbed(
-                "Removed Channel Successfully",
-                `${channelToRemove.name} has been removed as a reply channel.`
-            );
-            await interaction.reply({
-                embeds: [successEmbed],
-                ephemeral: true,
-            });
         } catch (error) {
             const errorEmbed = ErrorEmbed(
-                "Error executing /addReplyChannel: ",
+                "Error executing /removereplychannel: ",
                 error.message
             );
-            Error(`Error executing /addReplyChannel: ${error.message}`);
+            Error(`Error executing /removereplychannel: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({

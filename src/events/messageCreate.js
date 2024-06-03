@@ -96,7 +96,7 @@ module.exports = {
 
         if (optOutList.includes(globalUsername)) {
             messageCreate(
-                `${`0%`.red} - ${serverName.cyan} - ${
+                `${`OOL`.red} - ${serverName.cyan} - ${
                     "#".cyan + channelName.cyan
                 } - ${globalUsername.cyan} - ${messageContent.white}`
             );
