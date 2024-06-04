@@ -14,7 +14,7 @@ module.exports = {
         const replyChannel = replyChannels.find(
             (channel) => channel.id === typing.channel.id
         );
-        let chance = replyChannel.chance || 0;
+        let chance = replyChannel && replyChannel.chance || 0;
 
         try {
             typingStart(`${(chance + "%").yellow} - ${guildName.cyan} - ${'#'.cyan + channelName.cyan} - ${userTag.cyan} - ${message.grey}`);

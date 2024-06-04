@@ -213,19 +213,19 @@ module.exports.guildIntegrationsUpdate = function(m) {
 
 module.exports.guildMemberAdd = function(m) {
     const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    console.log(`${time.grey}\t${m.green}`);
     dbOutput('Member Joined', m);
 };
 
 module.exports.guildMemberAvailable = function(m) {
     const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    console.log(`${time.grey}\t${m.green}`);
     dbOutput('Member Available', m);
 };
 
 module.exports.guildMemberRemove = function(m) {
     const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    console.log(`${time.grey}\t${m.red}`);
     dbOutput('Member Removed', m);
 };
 
