@@ -120,7 +120,7 @@ module.exports.autoModerationRuleUpdate = function(m) {
 
 module.exports.cacheSweep = function(m) {
     const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    console.log(`${time.grey}\t${m.green}`);
     dbOutput('Cache Sweep', m);
 };
 

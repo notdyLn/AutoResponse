@@ -103,7 +103,7 @@ module.exports = {
             return;
         }
 
-        let chance = replyChannel.chance || 6;
+        let chance = replyChannel.chance || 0;
         chance += 1;
         replyChannel.chance = chance;
         settings.replyChannels = replyChannels;
