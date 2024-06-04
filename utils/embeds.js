@@ -3,12 +3,26 @@ const { codeblock } = require('./markdown');
 const { format } = require('./ansi');
 const { COLORS, ICONS, TEXT } = require('./constants');
 
-const botName = 'AutoResponse';
-
 module.exports.PingEmbed = function(ws, rest, wscolor) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(`${ICONS.network} **Pong!**\n` + codeblock("ansi", [`rest\t\t${format(`${rest}ms`, "m")}`, `websocket   ${format(`${ws}ms`, wscolor)}`]))
+
+    return embed;
+};
+
+module.exports.CoinflipEmbed = function(result) {
+    let emoji;
+
+    if (result === 'Heads') {
+        emoji = ICONS.heads;
+    } else if (result === 'Tails') {
+        emoji = ICONS.tails;
+    }
+
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`# ${emoji} ${result}`)
 
     return embed;
 };
