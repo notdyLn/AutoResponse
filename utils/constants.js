@@ -1,11 +1,5 @@
 module.exports.TEXT = Object.freeze({
-    botname: 'AutoResponse',
-    ownerid: '458854676557856790'
-});
-
-module.exports.PATHS = Object.freeze({
-    avatar: 'assets/avatar.gif',
-    banner: 'assets/banner.png'
+    footer: 'AutoResponse'
 });
 
 // node_modules/@discordjs/ws/dist/index.js
@@ -16,41 +10,43 @@ module.exports.DEVICE = Object.freeze({
 });
 
 module.exports.ICONS = Object.freeze({
-    sun:                    '<:sun:1230166192313073714>',
-    moon:                   '<:moon:1230166195806928908>',
-    crown:                  '<:crown:1230166190526038026>',
-    loading:                '<:loading:1230166191398715543>',
-    bot:                    '<:bot:1230166193026105466>',
-    trophy:                 '<:trophy:1230166194212835439>',
-    annoucement:            '<:annoucement:1230166195089707018>',
+    sun:                    '<:ico_sun:1248154936181784617>',
+    moon:                   '<:ico_moon:1248154956817629335>',
+    crown:                  '<:ico_crown:1248154976748830761>',
+    loading:                '<:ico_loading:1248155020042571797>',
+    bot:                    '<:ico_bot:1248155256240607324>',
+    trophy:                 '<:ico_trophy:1248155287416733767>',
+    megaphone:              '<:ico_megaphone:1248155318337273866>',
     member:                 '<:member:1230166252228710552>',
     members:                '<:members:1230166288077291652>',
     xmark:                  '<:xmark:1230166253071630377>',
-    checkmark:              '<:checkmark:1230166253570883585>',
-    network:                '<:network:1230166254724321360>',
-    developer:              '<:developer:1230166255479291924>',
-    information:            '<:information:1230166256062300223>',
-    server:                 '<:server:1230166257198694490>',
-    speaker:                '<:speaker:1230166289192980531>',
-    shield:                 '<:shield:1230166290111402045>',
-    boost:                  '<:boost:1230166290925359284>',
-    calendar:               '<:calendar:1230166291546112102>',
-    cloud:                  '<:cloud:1230170963748847709>',
-    thermometer:            '<:thermometer:1230171742128046162>',
-    clock:                  '<:clock:1230174034075975680>',
-    water:                  '<:water:1230174687695343678>',
-    wind:                   '<:wind:1230177063240073387>',
+    checkmark:              '<:ico_checkmark:1248155801269305424>',
+    globe:                  '<:ico_globe:1248155957456932965>',
+    developer:              '<:ico_developer:1248156057839206410>',
+    information:            '<:ico_information:1248156153540771930>',
+    home:                   '<:ico_home:1248156421053485136>',
+    speaker:                '<:ico_speaker:1248156542365073439>',
+    shield:                 '<:ico_shield:1248156648741015572>',
+    boost:                  '<:ico_boost:1248156810024714251>',
+    calendar:               '<:ico_calendar:1248156919978397747>',
+    cloud:                  '<:ico_cloud:1248157004866781256>',
+    thermometer:            '<:ico_thermometer:1248157392449830983>',
+    clock:                  '<:ico_clock:1248157518195331072>',
     heads:                  '<:heads:1230751223800659991>',
     tails:                  '<:tails:1230751224769417226>',
-    shard:                  '<:shard:1232060187993444375>',
-    nitro_icon:             '<:nitro_icon:1248067775960846439>',
-    active_developer:       '<:active_developer:1248068632244781147>',
-    hypesquad_brilliance:   '<:hypesquad_brilliance:1248069555297976362>',
-    hypesquad_bravery:      '<:hypesquad_bravery:1248069552546512917>',
-    hypesquad_balance:      '<:hypesquad_balance:1248069554018586724>',
-    verified:               '<:verified:1248077509543723111>',
+    shard:                  '<:ico_shard:1248158311787003944>',
+    nitro:                  '<:Nitro:1248161646115946556>',
+    nitro_icon:             '<:ico_nitro:1248160171059052544>',
+    active_developer:       '<:ActiveDeveloper:1248161155881373861>',
+    active_developer_icon:  '<:ico_activedeveloper:1248159894838706257>',
+    hypesquad_brilliance:   '<:HypesquadBrilliance:1248161153687879801>',
+    hypesquad_bravery:      '<:HypesquadBravery:1248161155407544444>',
+    hypesquad_balance:      '<:HypesquadBalance:1248161154614956092>',
+    trusted:                '<:ico_trusted:1248164167567933450>',
+    github:                 '<:ico_github:1248167583627083867>',
+    restart:                '<:ico_restart:1248167875416555580>',
 
-    avatarURL:          'https://cdn.discordapp.com/avatars/1141116585742966794/a_b277a9052e72d5c2c015e9823f352f01.gif?size=256'
+    avatarURL:              'https://cdn.discordapp.com/avatars/1141116585742966794/a_b277a9052e72d5c2c015e9823f352f01.gif?size=256'
 });
 
 module.exports.COLORS = Object.freeze({
@@ -61,11 +57,11 @@ module.exports.COLORS = Object.freeze({
 });
 
 module.exports.RANKS = Object.freeze({
-    owner:          '<:crown:1230166190526038026>',
-    helper:         '<:helper:1246903898833293412>',
-    programmer:     '<:developer:1230166255479291924>',
-    s1:             '<:season1winner:1246903062237413499>',
-    s2:             '<:season2winner:1246902870377496596>'
+    owner:              '<:ico_crown:1248154976748830761>',
+    helper:             '<:ico_helper:1248167000753176587>',
+    programmer:         '<:ico_developer:1248156057839206410>',
+    s1:                 '<:season1winner:1246903062237413499>',
+    s2:                 '<:season2winner:1246902870377496596>'
 });
 
 module.exports.BLOCK = Object.freeze({

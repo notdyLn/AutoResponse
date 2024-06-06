@@ -7,7 +7,7 @@ module.exports.DetailsEmbed = function(userTag, userId, guildName, highestRole, 
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(
-            `${ICONS.member} **@${userTag}** \` ${userId} \`\n`
+            `${ICONS.member} **@${userTag}**\n\` ${userId} \`\n`
         )
         .addFields(
             {
@@ -32,7 +32,7 @@ module.exports.DetailsEmbed = function(userTag, userId, guildName, highestRole, 
         .setImage(bannerURL)
         .setFooter({
             iconURL: ICONS.avatarURL,
-            text: TEXT.botname
+            text: TEXT.footer
         })
 
     return embed;
@@ -44,16 +44,8 @@ module.exports.MediaEmbed = function(URL) {
         .setImage(URL)
         .setFooter({
             iconURL: ICONS.avatarURL,
-            text: TEXT.botname
+            text: TEXT.footer
         })
-
-    return embed;
-};
-
-module.exports.RedeployEmbed = function(message, commands, events) {
-    const embed = new EmbedBuilder()
-        .setColor(COLORS.done)
-        .setDescription(`${ICONS.checkmark} **${message}**\n` + `${commands}\n` + `${events} events`)
 
     return embed;
 };
@@ -61,7 +53,7 @@ module.exports.RedeployEmbed = function(message, commands, events) {
 module.exports.PingEmbed = function(ws, rest, wscolor) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.network} **Pong!**\n` + codeblock("ansi", [`rest\t\t${format(`${rest}ms`, "m")}`, `websocket   ${format(`${ws}ms`, wscolor)}`]))
+        .setDescription(`${ICONS.globe} **Pong!**\n` + codeblock("ansi", [`rest\t\t${format(`${rest}ms`, "m")}`, `websocket   ${format(`${ws}ms`, wscolor)}`]))
 
     return embed;
 };
@@ -102,7 +94,12 @@ module.exports.Leaderboard = function(title, description, fields) {
 module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.server} **Server Count:** ${serverCount}\n${ICONS.shard} **Shard Count:** ${shardCount}\n${ICONS.clock} **Uptime:** ${uptime}`)
+        .setDescription(
+            `${ICONS.home} **Server Count**: \` ${serverCount} \`\n` +
+            `${ICONS.shard} **Shard Count**: \` ${shardCount} \`\n` +
+            `${ICONS.clock} **Uptime**: \` ${uptime} \`\n` +
+            `${ICONS.github} **Version**: \` 96bab0c \``
+        )
 
     return embed;
 };
@@ -110,7 +107,7 @@ module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
 module.exports.RestartEmbed = function(message) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.loading} **${message}**`)
+        .setDescription(`${ICONS.restart} **${message}**`)
 
     return embed;
 };

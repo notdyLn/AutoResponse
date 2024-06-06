@@ -1,15 +1,22 @@
-const { ContextMenuCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { DetailsEmbed, ErrorEmbed } = require("../utils/embeds");
 const { Error, Debug } = require("../utils/logging");
 const { ICONS } = require("../utils/constants");
 
 module.exports = {
-    data: new ContextMenuCommandBuilder()
-        .setName("View User Details")
-        .setType(2),
+    data: new SlashCommandBuilder()
+        .setName("user")
+        .setDescription("View details of a user")
+        .addUserOption( option => option
+            .setName('target')
+            .setDescription('The user to view details of')
+            .setRequired(true)
+        )
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction) {
         try {
-            const targetUser = await interaction.client.users.fetch(interaction.targetId, { force: true });
+            const targetUser = interaction.options.getUser('target');
             const guildName = interaction.guild.name;
             const guildMember = await interaction.guild.members.fetch(targetUser.id);
 

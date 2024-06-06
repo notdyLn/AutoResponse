@@ -27,7 +27,7 @@ module.exports = {
                 await channel.bulkDelete(fetched, true);
             } while (fetched.size >= 2);
 
-            const successEmbed = SuccessEmbed('Cleared Message', 'All messages cleared successfully.');
+            const successEmbed = SuccessEmbed('Cleared Messages', 'All messages cleared successfully.');
             await interaction.editReply({ embeds: [successEmbed], ephemeral: true });
         } catch (error) {
             const errorEmbed = ErrorEmbed('Error executing /clearmessages', error);
