@@ -3,6 +3,61 @@ const { codeblock } = require('./markdown');
 const { format } = require('./ansi');
 const { COLORS, ICONS, TEXT } = require('./constants');
 
+module.exports.DetailsEmbed = function(userTag, userId, guildName, highestRole, badges, createdTimestamp, joinedTimestamp, avatarURL, bannerURL) {
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(
+            `${ICONS.member} **@${userTag}** \` ${userId} \`\n`
+        )
+        .addFields(
+            {
+                name: `${ICONS.calendar} **Dates**`,
+                value: `**Joined Discord**: ${createdTimestamp}\n` + `**Joined ${guildName}**: ${joinedTimestamp}\n`
+            },
+        )
+        .addFields(
+            {
+                name: `${ICONS.members} **Highest Role**`,
+                value: `\` ${highestRole} \``,
+                inline: true
+            },
+
+            {
+                name: `${ICONS.members} **Badges**`,
+                value: badges,
+                inline: true
+            },
+        )
+        .setThumbnail(avatarURL)
+        .setImage(bannerURL)
+        .setFooter({
+            iconURL: ICONS.avatarURL,
+            text: TEXT.botname
+        })
+
+    return embed;
+};
+
+module.exports.MediaEmbed = function(URL) {
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setImage(URL)
+        .setFooter({
+            iconURL: ICONS.avatarURL,
+            text: TEXT.botname
+        })
+
+    return embed;
+};
+
+module.exports.RedeployEmbed = function(message, commands, events) {
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.done)
+        .setDescription(`${ICONS.checkmark} **${message}**\n` + `${commands}\n` + `${events} events`)
+
+    return embed;
+};
+
 module.exports.PingEmbed = function(ws, rest, wscolor) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
@@ -67,6 +122,7 @@ module.exports.LoadingEmbed = function(title) {
 
     return embed;
 };
+
 module.exports.SuccessEmbed = function(title, message) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.done)

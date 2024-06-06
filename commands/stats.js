@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder } = require('discord.js');
 const { StatsEmbed, ErrorEmbed } = require('../utils/embeds');
 const { End, Error, Info } = require('../utils/logging');
 
@@ -6,7 +6,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('stats')
         .setDescription('Get information about AutoResponse')
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {
         try {
             const { client } = interaction;

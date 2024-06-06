@@ -1,4 +1,4 @@
-const { attachmentDownload, messageCreate, Debug, Error, Done } = require("../../utils/logging");
+const { attachmentDownload, messageCreate, Error } = require("../../utils/logging");
 const fs = require("fs");
 const path = require("path");
 const getSettings = require("../../utils/getSettings");

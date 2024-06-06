@@ -18,6 +18,33 @@ module.exports = {
             case 'Left':
                 actionColor = 'red';
                 break;
+            case 'Unmuted':
+                actionColor = 'green';
+                break;
+            case 'Muted':
+                actionColor = 'red';
+                break;
+            case 'Undeafened':
+                actionColor = 'green';
+                break;
+            case 'Deafened':
+                actionColor = 'red';
+                break;
+            case 'Turned on camera':
+                actionColor = 'green';
+                break;
+            case 'Turned off camera':
+                actionColor = 'red';
+                break;
+            case 'Starting streaming':
+                actionColor = 'green';
+                break;
+            case 'Stopped streaming':
+                actionColor = 'red';
+                break;
+            case 'unknown':
+                actionColor = 'white';
+                break;
             default:
                 actionColor = 'white';
                 break;

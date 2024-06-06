@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const { ErrorEmbed, LoadingEmbed, SuccessEmbed } = require("../utils/embeds");
 const { Error } = require("../utils/logging");
 
@@ -12,7 +12,8 @@ module.exports = {
                 .setDescription("The message to send")
                 .setRequired(true)
         )
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
         try {
             const allowedUserId = process.env.OWNER_ID;

@@ -36,6 +36,12 @@ function dbOutput(t, m) {
     });
 }
 
+module.exports.Feedback = function(a, m) {
+    const time = new Date().toLocaleTimeString();
+    console.log(`${time.grey}\t${a.cyan} sent feedback: ${m.black.bgGreen}`);
+    dbOutput('Feedback', a + ' - ' + m);
+};
+
 module.exports.attachmentDownload = function(m) {
     const time = new Date().toLocaleTimeString();
     console.log(`${time.grey}\t${m.green}`);
@@ -53,7 +59,7 @@ module.exports.Info = function(m) {
 };
 
 module.exports.Debug = function(m) {
-    console.log(m.grey);
+    console.log(m);
 };
 
 module.exports.Valid = function(m) {
@@ -323,6 +329,18 @@ module.exports.messageDeleteBulk = function(m) {
     const time = new Date().toLocaleTimeString();
     console.log(`${time.grey}\t${m.red}`);
     dbOutput('Multiple Messages Deleted', m);
+};
+
+module.exports.messagePollVoteAdd = function(m) {
+    const time = new Date().toLocaleTimeString();
+    console.log(`${time.grey}\t${m.green}`);
+    dbOutput('Poll Vote Added', m);
+};
+
+module.exports.messagePollVoteRemove = function(m) {
+    const time = new Date().toLocaleTimeString();
+    console.log(`${time.grey}\t${m.red}`);
+    dbOutput('Poll Vote Removed', m);
 };
 
 module.exports.messageReactionAdd = function(m) {

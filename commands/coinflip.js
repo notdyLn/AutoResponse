@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder } = require('discord.js');
 const { ErrorEmbed, CoinflipEmbed, LoadingEmbed } = require('../utils/embeds');
 const { Error } = require('../utils/logging');
 const { TEXT } = require('../utils/constants');
@@ -7,7 +7,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('coinflip')
         .setDescription(`Flip a coin`)
-        .setDMPermission(true),
+        .setDMPermission(true)
+        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {
         try {
             const result = Math.random() < 0.5 ? 'Heads' : 'Tails';

@@ -22,8 +22,8 @@ module.exports = {
         const replyChannel = replyChannels.find(
             (channel) => channel.id === reaction.message.channel.id
         );
-        let chance = replyChannel.chance || 0;
+        let chance = replyChannel ? replyChannel.chance || 0 : 0;
 
-        messageReactionRemove(`${(chance + "%").yellow} - ${guildName.cyan} - ${('#' + channelName).cyan} - ${username.cyan} - ${(`Removed their reaction to ${(messageAuthor + `'s`).cyan}`).green}` + (` message ("`).green + messageContent.cyan + `${(`") with ` + emoji.cyan).green}`);
+        messageReactionRemove(`${(chance + "%").yellow} - ${guildName.cyan} - ${('#' + channelName).cyan} - ${username.cyan} - ${(`Removed their reaction to ${(messageAuthor + `'s`).cyan}`).red}` + (` message `).red + messageContent.cyan + `${(` that was ` + emoji.cyan).red}`);
     }
 };

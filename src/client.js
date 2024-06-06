@@ -10,6 +10,10 @@ const path = require('path');
 require('dotenv').config();
 
 const client = new Discord.Client({ intents: INTENTS });
+
+DiscordJS(`DiscordJS v${DJSVersion}`);
+client.login(process.env.TOKEN);
+
 client.commands = new Discord.Collection();
 
 const eventFiles = fs.readdirSync(path.resolve(__dirname, 'events')).filter(file => file.endsWith('.js'));
@@ -23,7 +27,13 @@ for (const file of eventFiles) {
         const event = require(`./events/${file}`);
         if (event.name && typeof event.execute === 'function') {
             verifiedEvents.push(event.name);
-            client.on(event.name, (...args) => event.execute(...args));
+            client.on(event.name, async (...args) => {
+                try {
+                    await event.execute(...args);
+                } catch (error) {
+                    Error(`Error executing event ${event.name}: ${error.message}`);
+                }
+            });
         } else {
             invalidEvents.push(file);
         }
@@ -32,9 +42,6 @@ for (const file of eventFiles) {
         missingEvents.push(file);
     }
 }
-
-DiscordJS(`DiscordJS v${DJSVersion}`);
-client.login(process.env.TOKEN);
 
 Valid(verifiedEvents.join('\n'));
 

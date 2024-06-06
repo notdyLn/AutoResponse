@@ -26,7 +26,7 @@ module.exports = {
         }
 
         if (changes.length > 0) {
-            userUpdate(`${changes.join(', ')}`);
+            userUpdate(`${(changes.join(', ')).green}`);
         }
     }
 };

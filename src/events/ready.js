@@ -31,12 +31,10 @@ function updateCommands() {
         const commandPath = path.join(commandFolder, file);
         const command = require(commandPath);
 
-        commands.push({
-            ...command.data.toJSON(),
-            execute: command.execute,
-        });
-
-        debug(`/${command.data.name}`);
+        if (command.data && command.execute) {
+            commands.push(command.data.toJSON());
+            debug(`${command.data.name}`);
+        }
     }
 
     return commands;
@@ -54,7 +52,7 @@ module.exports = {
 
             getLeaderboards();
 
-            const commands = updateCommands(client);
+            const commands = updateCommands();
             const rest = new REST({ version: "10" }).setToken(client.token);
 
             try {
