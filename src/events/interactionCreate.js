@@ -5,9 +5,10 @@ const path = require('path');
 module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {
-        const server = interaction.guild.name;
-        const channel = interaction.channel.name;
-        const displayName = interaction.member.displayName;
+        const isDM = !interaction.inGuild();
+        const server = isDM ? 'DM' : interaction.guild.name;
+        const channel = isDM ? 'DM' : interaction.channel.name;
+        const username = interaction.user.username;
 
         if (interaction.isCommand()) {
             const commandName = interaction.commandName;
@@ -18,7 +19,7 @@ module.exports = {
 
             try {
                 const command = require(commandFilePath);
-                interactionCreate(`${server.cyan} - ${('#' + channel).cyan} - ${displayName.cyan} - ${commandName.magenta} ${commandContent.magenta}`);
+                interactionCreate(`${server.cyan} - ${('#' + channel).cyan} - ${username.cyan} - ${commandName.magenta} ${commandContent.magenta}`);
                 await command.execute(interaction);
             } catch (e) {
                 Error(`Error executing /${commandName}: ${e.message}`);
@@ -35,7 +36,7 @@ module.exports = {
 
             try {
                 const command = require(commandFilePath);
-                interactionCreate(`${server.cyan} - ${('#' + channel).cyan} - ${globalUsername.cyan} - Context Menu: ${commandName}`);
+                interactionCreate(`${server.cyan} - ${('#' + channel).cyan} - ${username.cyan} - Context Menu: ${commandName}`);
                 await command.execute(interaction);
             } catch (e) {
                 Error(`Error executing context menu command ${commandName}: ${e.message}`);
@@ -51,7 +52,7 @@ module.exports = {
                 const feedback = interaction.fields.getTextInputValue('feedbackInput');
                 
                 try {
-                    Feedback(displayName, feedback);
+                    Feedback(username, feedback);
 
                     const successEmbed = SuccessEmbed('Feedback submitted successfully', 'Thank you for your feedback!');
                     await interaction.reply({ embeds: [successEmbed], ephemeral: true });

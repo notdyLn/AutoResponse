@@ -1,11 +1,13 @@
-const { ContextMenuCommandBuilder } = require("@discordjs/builders");
+const { ContextMenuCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { MediaEmbed, ErrorEmbed } = require("../utils/embeds");
 const { Debug, Error } = require("../utils/logging");
 
 module.exports = {
     data: new ContextMenuCommandBuilder()
         .setName("View User Banner")
-        .setType(2),
+        .setType(2)
+        .setDMPermission(true)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction) {
         try {
             const targetUser = await interaction.client.users.fetch(

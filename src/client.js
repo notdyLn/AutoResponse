@@ -1,4 +1,5 @@
 const { INTENTS } = require('./intents');
+const { PARTIALS } = require('./partials');
 const { Debug, DiscordJS, Valid, Invalid, Error, debug } = require('../utils/logging');
 
 const Discord = require('discord.js');
@@ -9,7 +10,10 @@ const path = require('path');
 
 require('dotenv').config();
 
-const client = new Discord.Client({ intents: INTENTS });
+const client = new Discord.Client({
+    intents: INTENTS,
+    partials: PARTIALS,
+});
 
 DiscordJS(`DiscordJS v${DJSVersion}`);
 client.login(process.env.TOKEN);
@@ -43,7 +47,26 @@ for (const file of eventFiles) {
     }
 }
 
-Valid(verifiedEvents.join('\n'));
+const allClientEvents = Object.keys(Discord.Client.prototype.constructor.name ? Discord.Client.prototype : Discord.Client);
+const implementedEvents = new Set(verifiedEvents);
+
+const missingClientEvents = allClientEvents.filter(event => !implementedEvents.has(event));
+
+// Valid(verifiedEvents.join('\n'));
+// Valid(INTENTS.join('\n'));
+// Valid(PARTIALS.join('\n'));
+
+if (missingEvents.length > 0) {
+    Invalid(missingEvents.join('\n'));
+}
+
+if (invalidEvents.length > 0) {
+    Invalid(invalidEvents.join('\n'));
+}
+
+if (missingClientEvents.length > 0) {
+    Invalid(missingClientEvents.join('\n'));
+}
 
 if (missingEvents.length > 0) {
     missingEvents.forEach(file => Invalid(file));

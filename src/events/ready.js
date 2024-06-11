@@ -33,7 +33,7 @@ function updateCommands() {
 
         if (command.data && command.execute) {
             commands.push(command.data.toJSON());
-            debug(`${command.data.name}`);
+            // Debug(`${command.data.name}`);
         }
     }
 

@@ -35,6 +35,10 @@ module.exports = {
             // Highest role
             const highestRole = guildMember.roles.highest.name;
 
+            // Get URLs
+            const avatarURL = targetUser.avatarURL({ size: 4096 }) || null;
+            const bannerURL = targetUser.bannerURL({ size: 4096 }) || null; // Banner not supported for some reason
+
             // Badges
             let badges = '';
             const userFlags = await targetUser.fetchFlags();
@@ -43,16 +47,16 @@ module.exports = {
                 if (flag === 'HypeSquadOnlineHouse1') { badges += ICONS.hypesquad_bravery; }
                 if (flag === 'HypeSquadOnlineHouse2') { badges += ICONS.hypesquad_brilliance; }
                 if (flag === 'HypeSquadOnlineHouse3') { badges += ICONS.hypesquad_balance; }
-                if (flag === 'VerifiedBot') { badges += ICONS.verified; }
+                if (flag === 'VerifiedBot') { badges += ICONS.verified_app; }
+                if (flag === 'BotHTTPInteractions') { badges += ICONS.http_interactions; }
+                if (flag === 'Staff') { badges += ICONS.discord_staff; }
             });
+
+            if (avatarURL.endsWith('.gif') || bannerURL) { badges += ICONS.nitro }
 
             if (!badges) {
                 badges = '\` None \`';
             }
-
-            // Get URLs
-            const avatarURL = targetUser.avatarURL({ size: 4096 }) || null;
-            const bannerURL = targetUser.bannerURL({ size: 4096 }) || null;
 
             const detailsEmbed = DetailsEmbed(userTag, userId, guildName, highestRole, badges, formattedDiscordTimestamp, formattedJoinedTimestamp, avatarURL, bannerURL);
             await interaction.reply({ embeds: [detailsEmbed] });

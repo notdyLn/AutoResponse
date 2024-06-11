@@ -16,17 +16,16 @@ module.exports = {
                 ephemeral: true,
             });
 
-            const allowedUserId = process.env.OWNER_ID;
+            const allowedUserId = process.env.OWNERID;
             if (interaction.user.id !== allowedUserId) {
                 const errorEmbed = ErrorEmbed(
                     "Error",
                     "You do not have permission to use this command."
                 );
-                await interaction.reply({
+                return await interaction.editReply({
                     embeds: [errorEmbed],
                     ephemeral: true,
                 });
-                return;
             } else {
                 const restartEmbed = RestartEmbed("Restarted");
                 await interaction.editReply({

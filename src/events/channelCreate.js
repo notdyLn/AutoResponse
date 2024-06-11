@@ -3,6 +3,9 @@ const { channelCreate } = require('../../utils/logging');
 module.exports = {
     name: 'channelCreate',
     execute(channel) {
-        channelCreate(`${channel.guild} - #${channel.name} Created`);
+        const guildName = channel.guild.name;
+        const channelName = channel.name;
+        
+        channelCreate(`${guildName.cyan} - ${('#' + channelName).cyan} Created`);
     }
 };

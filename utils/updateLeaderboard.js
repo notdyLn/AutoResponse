@@ -7,8 +7,7 @@ function updateLeaderboard(userTag, userID) {
         const dbPath = path.join(__dirname, "..", "data", "leaderboards.db");
         const db = new sqlite3.Database(dbPath, (err) => {
             if (err) {
-                Error(`Error opening SQLite database: ${err.message}`);
-                return;
+                return Error(`Error opening SQLite database: ${err.message}`);
             }
 
             db.serialize(() => {
@@ -26,7 +25,6 @@ function updateLeaderboard(userTag, userID) {
                             return;
                         }
 
-                        // Check if the user exists
                         db.get(
                             `SELECT userID FROM current WHERE userID = ?`,
                             [userID],
@@ -40,7 +38,6 @@ function updateLeaderboard(userTag, userID) {
                                 }
 
                                 if (row) {
-                                    // User exists, update replies count
                                     db.run(
                                         `UPDATE current SET replies = replies + 1 WHERE userID = ?`,
                                         [userID],
@@ -54,7 +51,6 @@ function updateLeaderboard(userTag, userID) {
                                         }
                                     );
                                 } else {
-                                    // User doesn't exist, insert new record
                                     db.run(
                                         `INSERT INTO current (username, userID, replies)
                                         VALUES (?, ?, 1)`,

@@ -10,7 +10,7 @@ module.exports = {
         }
 
         if (oldChannel.nsfw !== newChannel.nsfw) {
-            changes.push(`${oldChannel.nsfw} => ${newChannel.nsfw}`);
+            changes.push(`is now ${newChannel.nsfw ? 'NSFW'.red : 'NFW'.green}`);
         }
 
         if (oldChannel.position !== newChannel.position) {
@@ -18,7 +18,7 @@ module.exports = {
         }
 
         if (changes.length > 0) {
-            channelUpdate(`${oldChannel.guild} - ${changes.join(', ')}`);
+            channelUpdate(`${(oldChannel.guild.name).cyan} - ${('#' + oldChannel.name).cyan} ${changes.join(', ')}`);
         }
     }
 };

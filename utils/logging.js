@@ -36,6 +36,11 @@ function dbOutput(t, m) {
     });
 }
 
+function info(m, c) {
+    const time = new Date().toLocaleTimeString();
+    console.log(`${time.grey}\t${c(m)}`);
+}
+
 module.exports.Feedback = function(a, m) {
     const time = new Date().toLocaleTimeString();
     console.log(`${time.grey}\t${a.cyan} sent feedback: ${m.black.bgGreen}`);
@@ -95,62 +100,52 @@ module.exports.Presence = function(m) {
 // Discord Events
 
 module.exports.applicationCommandPermissionsUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Application Command Permissions Updated', m);
 };
 
 module.exports.autoModerationActionExecution = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.magenta);
     dbOutput('AutoMod', m);
 };
 
 module.exports.autoModerationRuleCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('AutoMod Rule Created', m);
 };
 
 module.exports.autoModerationRuleDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('AutoMod Rule Deleted', m);
 };
 
 module.exports.autoModerationRuleUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('AutoMod Rule Updated', m);
 };
 
 module.exports.cacheSweep = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
     dbOutput('Cache Sweep', m);
 };
 
 module.exports.channelCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Channel Created', m);
 };
 
 module.exports.channelDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Channel Deleted', m);
 };
 
 module.exports.channelPinsUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Channel Pins Updated', m);
 };
 
 module.exports.channelUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Channel Updated', m);
 };
 
@@ -159,372 +154,299 @@ module.exports.debug = function(m) {
 };
 
 module.exports.emojiCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Emoji Created', m);
 };
 
 module.exports.emojiDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Emoji Deleted', m);
 };
 
 module.exports.emojiUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Emoji Updated', m);
 };
 
 module.exports.guildAuditLogEntryCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.grey);
     dbOutput('Audit Log', m);
 };
 
 module.exports.guildAvailable = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
 };
 
 module.exports.guildBanAdd = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Guild Ban Added', m);
 };
 
 module.exports.guildBanRemove = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Guild Ban Removed', m);
 };
 
 module.exports.guildCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Guild Created', m);
 };
 
 module.exports.guildDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Guild Deleted', m);
 };
 
 module.exports.guildIntegrationsUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Guild Integrations Updated', m);
 };
 
 module.exports.guildMemberAdd = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
     dbOutput('Member Joined', m);
 };
 
 module.exports.guildMemberAvailable = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
     dbOutput('Member Available', m);
 };
 
 module.exports.guildMemberRemove = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Member Removed', m);
 };
 
 module.exports.guildMembersChunk = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.grey);
     dbOutput('Member Chunk', m);
 };
 
 module.exports.guildMemberUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Member Updated', m);
 };
 
 module.exports.guildScheduledEventCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Guild Event Created', m);
 };
 
 module.exports.guildScheduledEventDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Guild Event Deleted', m);
 };
 
 module.exports.guildScheduledEventUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Guild Event Updated', m);
 };
 
 module.exports.guildScheduledEventUserAdd = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Guild Event User Added', m);
 };
 
 module.exports.guildScheduledEventUserRemove = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Guild Event User Removed', m);
 };
 
 module.exports.guildUnavailable = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Guild Unavailable', m);
 };
 
 module.exports.guildUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Guild Updated', m);
 };
 
 module.exports.interactionCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.magenta);
     dbOutput('Interaction', m);
 };
 
-module.exports.invalidated = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
-    dbOutput('Invalidated', m);
-};
-
 module.exports.inviteCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Guild Invite Created', m);
 };
 
 module.exports.inviteDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Guild Invite Deleted', m);
 };
 
 module.exports.messageCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.blue}`);
+    info(m, colors.blue);
     dbOutput('Message Created', m);
 };
 
 module.exports.messageDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Message Deleted', m);
 };
 
 module.exports.messageDeleteBulk = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Multiple Messages Deleted', m);
 };
 
 module.exports.messagePollVoteAdd = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
     dbOutput('Poll Vote Added', m);
 };
 
 module.exports.messagePollVoteRemove = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Poll Vote Removed', m);
 };
 
 module.exports.messageReactionAdd = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
     dbOutput('Reaction Added', m);
 };
 
 module.exports.messageReactionRemove = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Reaction Removed', m);
 };
 
 module.exports.messageReactionRemoveAll = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('All Reactions Removed', m);
 };
 
 module.exports.messageReactionRemoveEmoji = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Emoji Reaction Removed', m);
 };
 
 module.exports.messageUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.yellow}`);
+    info(m, colors.yellow);
     dbOutput('Message Updated', m);
 };
 
 module.exports.presenceUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.grey}`);
+    info(m, colors.grey);
 };
 
 module.exports.ready = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
     dbOutput('Ready', m);
 };
 
 module.exports.roleCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
     dbOutput('Role Created', m);
 };
 
 module.exports.roleDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Role Deleted', m);
 };
 
 module.exports.roleUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.yellow}`);
+    info(m, colors.yellow);
     dbOutput('Role Updated', m);
 };
 
 module.exports.shardDisconnect = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
 };
 
 module.exports.shardError = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.red}`);
+    info(m, colors.red);
     dbOutput('Shard Error', m);
 };
 
 module.exports.shardReady = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
 };
 
 module.exports.shardReconnecting = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.yellow}`);
+    info(m, colors.yellow);
 };
 
 module.exports.shardResume = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.green}`);
+    info(m, colors.green);
 };
 
 module.exports.stageInstanceCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Stage Instance Created', m);
 };
 
 module.exports.stageInstanceDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Stage Instance Deleted', m);
 };
 
 module.exports.stageInstanceUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Stage Instance Updated', m);
 };
 
 module.exports.stickerCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Sticker Created', m);
 };
 
 module.exports.stickerDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Sticker Deleted', m);
 };
 
 module.exports.stickerUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Sticker Updated', m);
 };
 
 module.exports.threadCreate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Thread Created', m);
 };
 
 module.exports.threadDelete = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.red);
     dbOutput('Thread Deleted', m);
 };
 
 module.exports.threadListSync = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('Thread List Synced', m);
 };
 
 module.exports.threadMembersUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Thread Members Updated', m);
 };
 
 module.exports.threadMemberUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Thread Member Updated', m);
 };
 
 module.exports.typingStart = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.blue}`);
+    info(m, colors.grey);
 };
 
 module.exports.userUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.green);
     dbOutput('User Updated', m);
 };
 
 module.exports.voiceStateUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.blue);
     dbOutput('Voice State Updated', m);
 };
 
 module.exports.threadUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Thread Updated', m);
 };
 
 module.exports.webhooksUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
+    info(m, colors.yellow);
     dbOutput('Webhooks Updated', m);
-};
-
-module.exports.webhookUpdate = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m}`);
-    dbOutput('Webhook Updated', m);
 };

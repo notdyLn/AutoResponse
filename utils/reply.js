@@ -43,9 +43,7 @@ module.exports = async (message) => {
                 allowedMentions: { repliedUser: false },
             });
         } else {
-            Warn(
-                `No reply phrases found in the database for server ${serverName}`
-            );
+            Warn(`No reply phrases found in the database for server ${serverName}`);
         }
     } catch (error) {
         Error(`Error replying to user: ${error.message}`);

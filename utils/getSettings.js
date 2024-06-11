@@ -8,16 +8,9 @@ function initializeDatabase(serverId) {
     const db = new sqlite3.Database(dbFilePath);
 
     db.serialize(() => {
-        db.run(`CREATE TABLE IF NOT EXISTS replyChannels (
-      id TEXT PRIMARY KEY,
-      chance INTEGER
-    )`);
-        db.run(`CREATE TABLE IF NOT EXISTS trustedRoles (
-      id TEXT PRIMARY KEY
-    )`);
-        db.run(`CREATE TABLE IF NOT EXISTS phrases (
-      phrase TEXT PRIMARY KEY
-    )`);
+        db.run(`CREATE TABLE IF NOT EXISTS replyChannels ( id TEXT PRIMARY KEY, chance INTEGER )`);
+        db.run(`CREATE TABLE IF NOT EXISTS trustedRoles ( id TEXT PRIMARY KEY )`);
+        db.run(`CREATE TABLE IF NOT EXISTS phrases ( phrase TEXT PRIMARY KEY )`);
     });
 
     return db;
@@ -35,9 +28,7 @@ function getSettings(serverId) {
 
         db.all(`SELECT * FROM replyChannels`, [], (err, rows) => {
             if (err) {
-                Error(
-                    `Error retrieving replyChannels for server ${serverId}: ${err.message}`
-                );
+                Error(`Error retrieving replyChannels for server ${serverId}: ${err.message}`);
                 reject(err);
                 return;
             }
@@ -46,9 +37,7 @@ function getSettings(serverId) {
 
         db.all(`SELECT * FROM trustedRoles`, [], (err, rows) => {
             if (err) {
-                Error(
-                    `Error retrieving trustedRoles for server ${serverId}: ${err.message}`
-                );
+                Error(`Error retrieving trustedRoles for server ${serverId}: ${err.message}`);
                 reject(err);
                 return;
             }
@@ -57,9 +46,7 @@ function getSettings(serverId) {
 
         db.all(`SELECT * FROM phrases`, [], (err, rows) => {
             if (err) {
-                Error(
-                    `Error retrieving phrases for server ${serverId}: ${err.message}`
-                );
+                Error(`Error retrieving phrases for server ${serverId}: ${err.message}`);
                 reject(err);
                 return;
             }
@@ -68,9 +55,7 @@ function getSettings(serverId) {
 
         db.close((err) => {
             if (err) {
-                Error(
-                    `Error closing database for server ${serverId}: ${err.message}`
-                );
+                Error(`Error closing database for server ${serverId}: ${err.message}`);
                 reject(err);
                 return;
             }

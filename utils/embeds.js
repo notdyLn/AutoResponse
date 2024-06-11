@@ -31,7 +31,7 @@ module.exports.DetailsEmbed = function(userTag, userId, guildName, highestRole, 
         .setThumbnail(avatarURL)
         .setImage(bannerURL)
         .setFooter({
-            iconURL: ICONS.avatarURL,
+            iconURL: ICONS.brand_url,
             text: TEXT.footer
         })
 
@@ -43,7 +43,7 @@ module.exports.MediaEmbed = function(URL) {
         .setColor(COLORS.default)
         .setImage(URL)
         .setFooter({
-            iconURL: ICONS.avatarURL,
+            iconURL: ICONS.brand_url,
             text: TEXT.footer
         })
 
@@ -98,7 +98,7 @@ module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
             `${ICONS.home} **Server Count**: \` ${serverCount} \`\n` +
             `${ICONS.shard} **Shard Count**: \` ${shardCount} \`\n` +
             `${ICONS.clock} **Uptime**: \` ${uptime} \`\n` +
-            `${ICONS.github} **Version**: \` 96bab0c \``
+            `${ICONS.github} **Version**: \` 1cc1f05 \``
         )
 
     return embed;

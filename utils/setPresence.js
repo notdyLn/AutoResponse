@@ -17,8 +17,7 @@ module.exports = async (client) => {
         
         db.get(query, [], (err, row) => {
             if (err) {
-                Error(`Error querying database: ${err.message}`);
-                return;
+                return Error(`Error querying database: ${err.message}`);
             }
             
             if (row) {

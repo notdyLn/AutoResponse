@@ -9,8 +9,7 @@ function getLeaderboards() {
 
     const db = new sqlite3.Database(dbPath, (err) => {
         if (err) {
-            Error(`Error opening SQLite database: ${err.message}`);
-            return;
+            return Error(`Error opening SQLite database: ${err.message}`);
         }
 
         db.serialize(() => {
@@ -23,8 +22,7 @@ function getLeaderboards() {
                 )`,
                 (err) => {
                     if (err) {
-                        Error(`Error creating table: ${err.message}`);
-                        return;
+                        return Error(`Error creating table: ${err.message}`);
                     }
                 }
             );
@@ -33,10 +31,7 @@ function getLeaderboards() {
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='current'",
                 (err, tables) => {
                     if (err) {
-                        Error(
-                            `Error retrieving leaderboard tables: ${err.message}`
-                        );
-                        return;
+                        return Error(`Error retrieving leaderboard tables: ${err.message}`);
                     }
 
                     if (tables.length > 0) {

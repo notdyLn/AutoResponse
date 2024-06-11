@@ -1,5 +1,5 @@
 module.exports.TEXT = Object.freeze({
-    footer: 'AutoResponse'
+    footer: 'dyLcore',
 });
 
 // node_modules/@discordjs/ws/dist/index.js
@@ -10,6 +10,8 @@ module.exports.DEVICE = Object.freeze({
 });
 
 module.exports.ICONS = Object.freeze({
+    brand:                  '<:Brand:1248897159433158727>',
+    brand_url:              'https://cdn.discordapp.com/emojis/1248897159433158727.png?size=4096',
     sun:                    '<:ico_sun:1248154936181784617>',
     moon:                   '<:ico_moon:1248154956817629335>',
     crown:                  '<:ico_crown:1248154976748830761>',
@@ -35,13 +37,16 @@ module.exports.ICONS = Object.freeze({
     heads:                  '<:heads:1230751223800659991>',
     tails:                  '<:tails:1230751224769417226>',
     shard:                  '<:ico_shard:1248158311787003944>',
-    nitro:                  '<:Nitro:1248161646115946556>',
+    nitro:                  '<:Nitro:1248496636661993556>',
     nitro_icon:             '<:ico_nitro:1248160171059052544>',
     active_developer:       '<:ActiveDeveloper:1248161155881373861>',
     active_developer_icon:  '<:ico_activedeveloper:1248159894838706257>',
     hypesquad_brilliance:   '<:HypesquadBrilliance:1248161153687879801>',
     hypesquad_bravery:      '<:HypesquadBravery:1248161155407544444>',
     hypesquad_balance:      '<:HypesquadBalance:1248161154614956092>',
+    discord_staff:          '<:DiscordStaff:1248495809826259035>',
+    verified_app:           '<:VerifiedApp:1248497979296321606>',
+    http_interactions:      '<:HTTPInteractions:1248528086610219018>',
     trusted:                '<:ico_trusted:1248164167567933450>',
     github:                 '<:ico_github:1248167583627083867>',
     restart:                '<:ico_restart:1248167875416555580>',

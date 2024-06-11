@@ -1,5 +1,19 @@
 const { voiceStateUpdate } = require('../../utils/logging');
 
+function getAction(oldState, newState) {
+    if (!oldState.channel && newState.channel) { return 'Joined'; }
+    else if (oldState.channel && !newState.channel) { return 'Left'; }
+    else if (newState.selfMute && !oldState.selfMute && !newState.selfDeaf && !oldState.selfDeaf) { return 'Muted'; }
+    else if (!newState.selfMute && oldState.selfMute && !newState.selfDeaf && !oldState.selfDeaf) { return 'Unmuted'; }
+    else if (newState.selfDeaf && !oldState.selfDeaf) { return 'Deafened'; }
+    else if (!newState.selfDeaf && oldState.selfDeaf) { return 'Undeafened'; }
+    else if (newState.selfVideo && !oldState.selfVideo) { return 'Turned on camera'; }
+    else if (!newState.selfVideo && oldState.selfVideo) { return 'Turned off camera'; }
+    else if (newState.streaming && !oldState.streaming) { return 'Starting streaming'; }
+    else if (!newState.streaming && oldState.streaming) { return 'Stopped streaming'; }
+    else { return 'Changed Windows'; } // Couldn't find any other action
+}
+
 module.exports = {
     name: 'voiceStateUpdate',
     execute(oldState, newState) {
@@ -42,8 +56,8 @@ module.exports = {
             case 'Stopped streaming':
                 actionColor = 'red';
                 break;
-            case 'unknown':
-                actionColor = 'white';
+            case 'Changed Windows':
+                actionColor = 'yellow';
                 break;
             default:
                 actionColor = 'white';
@@ -53,17 +67,3 @@ module.exports = {
         voiceStateUpdate(`${server.cyan} - ${channel.cyan} - ${globalName.cyan} - ${action[actionColor]}`);
     }
 };
-
-function getAction(oldState, newState) {
-    if (!oldState.channel && newState.channel) { return 'Joined'; }
-    else if (oldState.channel && !newState.channel) { return 'Left'; }
-    else if (newState.selfMute && !oldState.selfMute && !newState.selfDeaf && !oldState.selfDeaf) { return 'Muted'; }
-    else if (!newState.selfMute && oldState.selfMute && !newState.selfDeaf && !oldState.selfDeaf) { return 'Unmuted'; }
-    else if (newState.selfDeaf && !oldState.selfDeaf) { return 'Deafened'; }
-    else if (!newState.selfDeaf && oldState.selfDeaf) { return 'Undeafened'; }
-    else if (newState.selfVideo && !oldState.selfVideo) { return 'Turned on camera'; }
-    else if (!newState.selfVideo && oldState.selfVideo) { return 'Turned off camera'; }
-    else if (newState.streaming && !oldState.streaming) { return 'Starting streaming'; }
-    else if (!newState.streaming && oldState.streaming) { return 'Stopped streaming'; }
-    else { return 'unknown'; }
-}

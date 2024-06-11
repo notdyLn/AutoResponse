@@ -16,7 +16,7 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
         try {
-            const allowedUserId = process.env.OWNER_ID;
+            const allowedUserId = process.env.OWNERID;
             const userMessage = interaction.options.getString("message");
             const loadingEmbed = LoadingEmbed(`Loading`, `Sending message...`);
             const doneEmbed = SuccessEmbed(`Sent Message Successfully`, `AutoResponse sent your message`);
