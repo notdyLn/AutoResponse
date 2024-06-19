@@ -9,9 +9,7 @@ function initializeDatabase(serverId) {
     const db = new sqlite3.Database(dbFilePath);
 
     db.serialize(() => {
-        db.run(`CREATE TABLE IF NOT EXISTS phrases (
-            phrase TEXT PRIMARY KEY
-        )`);
+        db.run(`CREATE TABLE IF NOT EXISTS phrases ( phrase TEXT PRIMARY KEY )`);
     });
 
     return db;
@@ -21,11 +19,10 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("addphrase")
         .setDescription("Add a phrase")
-        .addStringOption((option) =>
-            option
-                .setName("phrase")
-                .setDescription("The phrase to add")
-                .setRequired(true)
+        .addStringOption(option => option
+            .setName("phrase")
+            .setDescription("The phrase to add")
+            .setRequired(true)
         )
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
@@ -39,80 +36,39 @@ module.exports = {
 
             db.get(checkPhraseExistsQuery, [phrase], (err, row) => {
                 if (err) {
-                    Error(
-                        `Error checking if phrase exists for server ${serverId}: ${err.message}`
-                    );
-                    const errorEmbed = ErrorEmbed(
-                        "Error",
-                        "Failed to check the phrase in the database."
-                    );
-                    interaction.reply({
-                        embeds: [errorEmbed],
-                        ephemeral: true,
-                    });
-                    return;
+                    Error(`Error checking if phrase exists for server ${serverId}: ${err.message}`);
+                    const errorEmbed = ErrorEmbed("Error", "Failed to check the phrase in the database.");
+                    return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 }
 
                 if (row.count > 0) {
                     Info(`"${phrase.cyan}" already exists`);
-                    const alreadyAddedEmbed = ErrorEmbed(
-                        "Error",
-                        `\`\`\`"${phrase}" is already a phrase.\`\`\``
-                    );
-                    interaction.reply({
-                        embeds: [alreadyAddedEmbed],
-                        ephemeral: true,
-                    });
+                    const alreadyAddedEmbed = ErrorEmbed("Error", `\`\`\`"${phrase}" is already a phrase.\`\`\``);
+                    interaction.reply({ embeds: [alreadyAddedEmbed], ephemeral: true });
                 } else {
                     const insertPhraseQuery = `INSERT INTO phrases (phrase) VALUES (?)`;
 
                     db.run(insertPhraseQuery, [phrase], function (err) {
                         if (err) {
-                            Error(
-                                `Error adding phrase for server ${serverId}: ${err.message}`
-                            );
-                            const errorEmbed = ErrorEmbed(
-                                "Error",
-                                "Failed to add the phrase to the database."
-                            );
-                            interaction.reply({
-                                embeds: [errorEmbed],
-                                ephemeral: true,
-                            });
-                            return;
+                            Error(`Error adding phrase for server ${serverId}: ${err.message}`);
+                            const errorEmbed = ErrorEmbed("Error", "Failed to add the phrase to the database.");
+                            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         }
 
-                        Info(
-                            `${interaction.user.username.cyan} added the phrase "${phrase.cyan}"`
-                        );
-                        const successEmbed = SuccessEmbed(
-                            "Added Phrase Successfully",
-                            `\`\`\`"${phrase}" has been added as a phrase.\`\`\``
-                        );
-                        interaction.reply({
-                            embeds: [successEmbed],
-                            ephemeral: true,
-                        });
+                        Info(`${interaction.user.username.cyan} added the phrase "${phrase.cyan}"`);
+                        const successEmbed = SuccessEmbed("Added Phrase Successfully", `\`\`\`"${phrase}" has been added as a phrase.\`\`\``);
+                        interaction.reply({ embeds: [successEmbed], ephemeral: true });
                     });
                 }
             });
         } catch (error) {
-            const errorEmbed = ErrorEmbed(
-                "Error executing /addPhrase: ",
-                error.message
-            );
-            Error(`Error executing /addPhrase: ${error.message}`);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
-                await interaction.editReply({
-                    embeds: [errorEmbed],
-                    ephemeral: true,
-                });
+                await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {
-                await interaction.reply({
-                    embeds: [errorEmbed],
-                    ephemeral: true,
-                });
+                await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             }
         }
     },

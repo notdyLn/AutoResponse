@@ -33,7 +33,7 @@ module.exports = {
 
             messageDelete(`${chance + '%'} - ${serverName.cyan} - ${('#' + channelName).cyan} - ${authorUsername.cyan} - ${messageContent} ${'(Deleted)'.red}`);
         } catch (error) {
-            console.error(error);
+            Error(`Error executing ${module.exports.name} event: ${error.message}`);
         }
     }
 };

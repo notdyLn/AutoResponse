@@ -26,11 +26,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("resumereplies")
         .setDescription("Remove any cooldowns for the specified channel")
-        .addChannelOption(option => 
-            option.setName("channel")
-                .setDescription("The channel")
-                .setRequired(true)
-                .addChannelTypes(ChannelType.GuildText)
+        .addChannelOption(option => option
+            .setName("channel")
+            .setDescription("The channel")
+            .setRequired(true)
+            .addChannelTypes(ChannelType.GuildText)
         )
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
@@ -61,8 +61,8 @@ module.exports = {
                 }
             );
         } catch (error) {
-            const errorEmbed = ErrorEmbed('Error executing /unpausereplies', error);
-            Error(`Error executing /unpausereplies: ${error}`);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });

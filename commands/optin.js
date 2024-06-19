@@ -32,21 +32,6 @@ function getOptOutList(callback) {
     });
 }
 
-function updateOptOutList(userTag, callback) {
-    db.run(
-        `INSERT OR IGNORE INTO optOutList (userTag) VALUES (?)`,
-        [userTag],
-        (err) => {
-            if (err) {
-                Error(`Error updating opt-out list: ${err.message}`);
-                callback(false);
-            } else {
-                callback(true);
-            }
-        }
-    );
-}
-
 function removeUserFromOptOutList(userTag, callback) {
     db.run(
         `DELETE FROM optOutList WHERE userTag = ?`,
@@ -71,56 +56,31 @@ module.exports = {
     async execute(interaction) {
         try {
             const userTag = interaction.user.tag;
-            const globalName = interaction.user.tag;
 
             getOptOutList((optOutList) => {
                 if (!optOutList.includes(userTag)) {
-                    const errorEmbed = ErrorEmbed(
-                        "Error",
-                        `You are already opted in to receive replies.\nUse **/optout** to stop receiving replies.`
-                    );
-                    return interaction.reply({
-                        embeds: [errorEmbed],
-                        ephemeral: true,
-                    });
+                    const errorEmbed = ErrorEmbed("Error", `You are already opted in to receive replies.\nUse **/optout** to stop receiving replies.`);
+                    return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 }
 
                 removeUserFromOptOutList(userTag, (success) => {
                     if (success) {
-                        const successEmbed = SuccessEmbed(
-                            "Opted In Successfully",
-                            `You have opted in to receive replies.\nUse **/optout** to stop receiving replies.`
-                        );
-                        interaction.reply({
-                            embeds: [successEmbed],
-                            ephemeral: true,
-                        });
+                        const successEmbed = SuccessEmbed("Opted In Successfully", `You have opted in to receive replies.\nUse **/optout** to stop receiving replies.`);
+                        interaction.reply({ embeds: [successEmbed], ephemeral: true });
                     } else {
-                        const errorEmbed = ErrorEmbed(
-                            "Error",
-                            `Failed to opt in. Please try again later.`
-                        );
-                        interaction.reply({
-                            embeds: [errorEmbed],
-                            ephemeral: true,
-                        });
+                        const errorEmbed = ErrorEmbed("Error", `Failed to opt in. Please try again later.`);
+                        interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                     }
                 });
             });
         } catch (error) {
-            const errorEmbed = ErrorEmbed(
-                "Error executing /optin:",
-                error.message
-            );
-            Error(`Error executing /optin: ${error.message}`);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
-                interaction.editReply({
-                    embeds: [errorEmbed],
-                    ephemeral: true,
-                });
+                await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {
-                interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+                await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             }
         }
     },

@@ -65,41 +65,20 @@ module.exports = {
             if (!optOutList.includes(userId)) {
                 await addToOptOutList(userId, userTag);
 
-                const successEmbed = SuccessEmbed(
-                    "Opted Out Successfully",
-                    `You have opted out of receiving replies.\nUse **/optin** to start receiving replies again.`
-                );
-                await interaction.reply({
-                    embeds: [successEmbed],
-                    ephemeral: true,
-                });
+                const successEmbed = SuccessEmbed("Opted Out Successfully", `You have opted out of receiving replies.\nUse **/optin** to start receiving replies again.`);
+                await interaction.reply({ embeds: [successEmbed], ephemeral: true });
             } else {
-                const errorEmbed = ErrorEmbed(
-                    "Error",
-                    `You are already opted out of receiving replies.\nUse **/optin** to start receiving replies again.`
-                );
-                await interaction.reply({
-                    embeds: [errorEmbed],
-                    ephemeral: true,
-                });
+                const errorEmbed = ErrorEmbed("Error", `You are already opted out of receiving replies.\nUse **/optin** to start receiving replies again.`);
+                await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             }
         } catch (error) {
-            const errorEmbed = ErrorEmbed(
-                "Error executing /optout: ",
-                error.message
-            );
-            Error(`Error executing /optout: ${error.message}`);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
-                await interaction.editReply({
-                    embeds: [errorEmbed],
-                    ephemeral: true,
-                });
+                await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {
-                await interaction.reply({
-                    embeds: [errorEmbed],
-                    ephemeral: true,
-                });
+                await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             }
         }
     },

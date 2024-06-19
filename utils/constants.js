@@ -1,5 +1,6 @@
 module.exports.TEXT = Object.freeze({
     footer: 'dyLcore',
+    version: 'ba3e816',
 });
 
 // node_modules/@discordjs/ws/dist/index.js

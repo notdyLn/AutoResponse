@@ -1,6 +1,6 @@
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v10");
-const { Done, ready, Error, debug } = require("../../utils/logging");
+const { Done, ready, Error, Debug, Valid } = require("../../utils/logging");
 
 const cron = require("node-cron");
 const fs = require("fs");
@@ -33,7 +33,6 @@ function updateCommands() {
 
         if (command.data && command.execute) {
             commands.push(command.data.toJSON());
-            // Debug(`${command.data.name}`);
         }
     }
 
@@ -59,13 +58,13 @@ module.exports = {
                 await rest.put(Routes.applicationCommands(client.user.id), {
                     body: commands,
                 });
-            } catch (e) {
+            } catch (error) {
                 Error(`Failed to update commands: ${e.message}`);
             } finally {
                 Done(`Updated commands`);
             }
-        } catch (e) {
-            Error(`Failed to update commands: ${e.message}`);
+        } catch (error) {
+            Error(`Error executing ${module.exports.name} event: ${error.message}`);
         } finally {
             ready(`Ready as ${client.user.tag}`);
 

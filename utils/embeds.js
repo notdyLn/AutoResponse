@@ -98,7 +98,7 @@ module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
             `${ICONS.home} **Server Count**: \` ${serverCount} \`\n` +
             `${ICONS.shard} **Shard Count**: \` ${shardCount} \`\n` +
             `${ICONS.clock} **Uptime**: \` ${uptime} \`\n` +
-            `${ICONS.github} **Version**: \` 1cc1f05 \``
+            `${ICONS.github} **Version**: \` ${TEXT.version} \``
         )
 
     return embed;
@@ -124,6 +124,14 @@ module.exports.SuccessEmbed = function(title, message) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.done)
         .setDescription(`${ICONS.checkmark} **${title}**\n` + `${message}`)
+
+    return embed;
+};
+
+module.exports.InfoEmbed = function(fields) {
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(fields)
 
     return embed;
 };

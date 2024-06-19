@@ -1,4 +1,4 @@
-const { messageUpdate } = require('../../utils/logging');
+const { messageUpdate, Error } = require('../../utils/logging');
 
 module.exports = {
     name: 'messageUpdate',
@@ -15,7 +15,7 @@ module.exports = {
 
             messageUpdate(`${server.cyan} - ${('#' + channel).cyan} - ${globalUsername.cyan} - ${messageContent.yellow} (Updated)`);
         } catch (error) {
-            console.error(error);
+            Error(`Error executing ${module.exports.name} event: ${error.message}`);
         }
     }
 };

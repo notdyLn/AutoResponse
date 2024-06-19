@@ -43,8 +43,8 @@ module.exports = {
             const botInfoEmbed = StatsEmbed( serversCount, shardsCount, uptimeFormatted );
             await interaction.reply({ embeds: [botInfoEmbed], ephemeral: true });
         } catch (error) {
-            const errorEmbed = ErrorEmbed('Error retrieving bot info', error.message);
-            Error(`Error retrieving bot info: ${error.message}`);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });

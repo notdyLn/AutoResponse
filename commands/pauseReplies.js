@@ -26,16 +26,16 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("pausereplies")
         .setDescription("Add a cooldown to pause replies")
-        .addChannelOption(option => 
-            option.setName("channel")
-                .setDescription("The channel")
-                .setRequired(true)
-                .addChannelTypes(ChannelType.GuildText)
+        .addChannelOption(option => option
+            .setName("channel")
+            .setDescription("The channel")
+            .setRequired(true)
+            .addChannelTypes(ChannelType.GuildText)
         )
-        .addIntegerOption(option => 
-            option.setName("minutes")
-                .setDescription("The length of the cooldown in minutes")
-                .setRequired(true)
+        .addIntegerOption(option => option
+            .setName("minutes")
+            .setDescription("The length of the cooldown in minutes")
+            .setRequired(true)
         )
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
@@ -77,8 +77,8 @@ module.exports = {
                 }
             );
         } catch (error) {
-            const errorEmbed = ErrorEmbed('Error executing /pausereplies', error);
-            Error(`Error executing /pausereplies: ${error}`);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { ErrorEmbed, SuccessEmbed } = require("../utils/embeds");
+const { ErrorEmbed, SuccessEmbed, InfoEmbed } = require("../utils/embeds");
 const { Error, Info } = require("../utils/logging");
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
@@ -17,33 +17,34 @@ function initializeDatabase(serverId) {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("removephrase")
-        .setDescription("Remove a phrase")
-        .addStringOption(option => option
-            .setName("phrase")
-            .setDescription("The phrase to remove")
-            .setRequired(true)
-        )
+        .setName("listphrases")
+        .setDescription("List all phrases")
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
         try {
-            const phraseToRemove = interaction.options.getString("phrase");
             const serverId = interaction.guild.id;
             const db = initializeDatabase(serverId);
 
-            const deletePhraseQuery = `DELETE FROM phrases WHERE phrase = ?`;
+            const getPhrasesQuery = `SELECT phrase FROM phrases`;
 
-            db.run(deletePhraseQuery, [phraseToRemove], function (err) {
+            db.all(getPhrasesQuery, [], (err, rows) => {
                 if (err) {
-                    Error(`Error removing phrase for server ${serverId}: ${err.message}`);
-                    const errorEmbed = ErrorEmbed("Error", "Failed to remove the phrase from the database.");
+                    Error(`Error retrieving phrases for server ${serverId}: ${err.message}`);
+                    const errorEmbed = ErrorEmbed("Error", "Failed to retrieve phrases from the database.");
                     return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 }
 
-                Info(`${interaction.user.username.cyan} removed the phrase "${phraseToRemove.cyan}"`);
-                const successEmbed = SuccessEmbed("Removed Phrase Successfully", `\`\`\`"${phraseToRemove}" has been removed as a phrase.\`\`\``);
-                interaction.reply({ embeds: [successEmbed], ephemeral: true });
+                if (rows.length === 0) {
+                    Info(`No phrases found for server ${serverId}`);
+                    const noPhrasesEmbed = ErrorEmbed("No Phrases", "No phrases have been added yet.");
+                    return interaction.reply({ embeds: [noPhrasesEmbed], ephemeral: true });
+                }
+
+                const phrasesList = rows.map(row => row.phrase).join("\n- ");
+                Info(`Retrieved phrases for server ${serverId}`);
+                const infoEmbed = InfoEmbed(`- ${phrasesList}`);
+                interaction.reply({ embeds: [infoEmbed], ephemeral: true });
             });
         } catch (error) {
             const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);

@@ -1,6 +1,6 @@
 const { INTENTS } = require('./intents');
 const { PARTIALS } = require('./partials');
-const { Debug, DiscordJS, Valid, Invalid, Error, debug } = require('../utils/logging');
+const { DiscordJS, Invalid, Error } = require('../utils/logging');
 
 const Discord = require('discord.js');
 const { version: DJSVersion } = Discord;
