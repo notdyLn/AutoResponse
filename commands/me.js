@@ -17,7 +17,7 @@ module.exports = {
         try {
             const allowedUserId = process.env.OWNERID;
             const userMessage = interaction.options.getString("message");
-            const loadingEmbed = LoadingEmbed(`Loading`, `Sending message...`);
+            const loadingEmbed = LoadingEmbed(`Sending message...`);
 
             await interaction.reply({ embeds: [loadingEmbed], ephemeral: true });
 

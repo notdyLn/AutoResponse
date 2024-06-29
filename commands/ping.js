@@ -35,9 +35,9 @@ module.exports = {
                 await interaction.editReply({ embeds: [pingEmbed], ephemeral: true });
             }
         } catch (error) {
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
             Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

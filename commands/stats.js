@@ -40,12 +40,12 @@ module.exports = {
                 uptimeFormatted += `${uptimeSeconds.toFixed(0)}s`;
             }
 
-            const botInfoEmbed = StatsEmbed( serversCount, shardsCount, uptimeFormatted );
+            const botInfoEmbed = StatsEmbed(serversCount, shardsCount, uptimeFormatted);
             await interaction.reply({ embeds: [botInfoEmbed], ephemeral: true });
         } catch (error) {
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
             Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

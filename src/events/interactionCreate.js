@@ -48,6 +48,23 @@ module.exports = {
                         await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                     }
                 }
+            } else if (interaction.isButton()) {
+                const customId = interaction.customId;
+                interactionCreate(`${server.cyan} - ${('#' + channel).cyan} - ${username.cyan} - Button Interaction: ${customId}`);
+                
+                if (customId === 'deleteMessage') {
+                    try {
+                        await interaction.message.delete();
+                    } catch (e) {
+                        Error(`Error handling button interaction ${customId}: ${e.message}`);
+                        const errorEmbed = ErrorEmbed(`Error handling button interaction ${customId}`, e.message);
+                        if (interaction.deferred || interaction.replied) {
+                            await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+                        } else {
+                            await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+                        }
+                    }
+                }
             }
         } catch (error) {
             Error(`Error executing ${module.exports.name} event: ${error.message}`);

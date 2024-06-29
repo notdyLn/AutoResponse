@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { RANKS } = require("../utils/constants");
 const { ErrorEmbed, Leaderboard } = require("../utils/embeds");
 const { Error, Debug } = require("../utils/logging");
+const { RANKS } = require("../utils/constants");
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
@@ -43,10 +43,11 @@ module.exports = {
                 const owner = groups.includes("Owner") ? RANKS.owner : "";
                 const programmer = groups.includes("Programmer") ? RANKS.programmer : "";
                 const helper = groups.includes("Helper") ? RANKS.helper : "";
-                const prevwinner = groups.includes("Season 1 Winner") ? RANKS.s1 : "";
+                const s1winner = groups.includes("Season 1 Winner") ? RANKS.s1 : "";
+                const s2winner = groups.includes("Season 2 Winner") ? RANKS.s2 : "";
 
                 return {
-                    name: `${medal} - ${entry.username} ${owner} ${programmer} ${helper} ${prevwinner}`,
+                    name: `${medal} - ${entry.username} ${owner} ${programmer} ${helper} ${s1winner}`,
                     value: `**${entry.replies} replies**`,
                     inline: false,
                 };
@@ -63,9 +64,9 @@ module.exports = {
             const leaderboardEmbed = Leaderboard(`Leaderboard - ${season}`, description, leaderboardFields);
             await interaction.reply({ embeds: [leaderboardEmbed], ephemeral: true });
         } catch (error) {
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
             Error(`Error executing ${interaction.commandName}: ${error.message}`);
 
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

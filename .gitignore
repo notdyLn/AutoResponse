@@ -1,7 +1,9 @@
 .env
-todo
 data
 node_modules
 package-lock.json
-package.json
 .bat
+
+# commands
+commands/prune.js
+commands/notifyTest.js

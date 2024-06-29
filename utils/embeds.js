@@ -31,7 +31,37 @@ module.exports.DetailsEmbed = function(userTag, userId, guildName, highestRole, 
         .setThumbnail(avatarURL)
         .setImage(bannerURL)
         .setFooter({
-            iconURL: ICONS.brand_url,
+            iconURL: ICONS.avatarURL,
+            text: TEXT.footer
+        })
+
+    return embed;
+};
+
+module.exports.NotificationEmbed = function(title, message) {
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(
+            `${title}\n\n` +
+            message
+        )
+        .setFooter({
+            iconURL: ICONS.avatarURL,
+            text: 'AutoResponse'
+        })
+
+    return embed;
+};
+
+module.exports.PruneEmbed = function(title, users) {
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(
+            `**${title}**\n\n` +
+            users
+        )
+        .setFooter({
+            iconURL: ICONS.avatarURL,
             text: TEXT.footer
         })
 
@@ -43,7 +73,7 @@ module.exports.MediaEmbed = function(URL) {
         .setColor(COLORS.default)
         .setImage(URL)
         .setFooter({
-            iconURL: ICONS.brand_url,
+            iconURL: ICONS.avatarURL,
             text: TEXT.footer
         })
 

@@ -1,5 +1,5 @@
 module.exports.TEXT = Object.freeze({
-    footer: 'dyLcore',
+    footer: 'AutoResponse • dyLcore',
     version: 'ba3e816',
 });
 
@@ -11,6 +11,9 @@ module.exports.DEVICE = Object.freeze({
 });
 
 module.exports.ICONS = Object.freeze({
+    left:                   '<:ico_left:1252970550784167979>',
+    right:                  '<:ico_right:1252970551970889850>',
+
     brand:                  '<:Brand:1248897159433158727>',
     brand_url:              'https://cdn.discordapp.com/emojis/1248897159433158727.png?size=4096',
     sun:                    '<:ico_sun:1248154936181784617>',
@@ -66,8 +69,8 @@ module.exports.RANKS = Object.freeze({
     owner:              '<:ico_crown:1248154976748830761>',
     helper:             '<:ico_helper:1248167000753176587>',
     programmer:         '<:ico_developer:1248156057839206410>',
-    s1:                 '<:season1winner:1246903062237413499>',
-    s2:                 '<:season2winner:1246902870377496596>'
+    s1:                 '<:ico_trophy:1248155287416733767>',
+    s2:                 '<:ico_trophy:1248155287416733767>'
 });
 
 module.exports.BLOCK = Object.freeze({

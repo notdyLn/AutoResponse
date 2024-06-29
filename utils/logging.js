@@ -64,7 +64,7 @@ module.exports.Info = function(m) {
 };
 
 module.exports.Debug = function(m) {
-    console.log(m);
+    console.log(m.grey);
 };
 
 module.exports.Valid = function(m) {
