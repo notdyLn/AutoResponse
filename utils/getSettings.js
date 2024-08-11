@@ -1,5 +1,5 @@
-const colors = require("colors");
-const { debug, Error } = require("../utils/logging");
+const { Error } = require("../utils/logging");
+
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
@@ -16,8 +16,10 @@ function initializeDatabase(serverId) {
     return db;
 }
 
-function getSettings(serverId) {
+
+function getSettings(serverId, client) {
     return new Promise((resolve, reject) => {
+
         const db = initializeDatabase(serverId);
 
         const settings = {

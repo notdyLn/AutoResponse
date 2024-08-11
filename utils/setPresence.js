@@ -1,10 +1,17 @@
-const { Error, Info, Presence } = require('./logging');
-const colors = require('colors');
+const { Error } = require('./logging');
+const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
+
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 let activityIndex = 0;
 let countingReplies = true;
+
+// Discord iOS
+// Discord Android
+// null = Discord Desktop
+
+identifyProperties.browser = 'Discord iOS';
 
 module.exports = async (client) => {
     try {
@@ -52,7 +59,7 @@ module.exports = async (client) => {
             
             db.close();
         });
-    } catch (e) {
-        Error(`Error updating presence: ${e.message}`);
+    } catch (error) {
+        Error(`Error updating presence: ${error.message}`);
     }
 };

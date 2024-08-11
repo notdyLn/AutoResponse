@@ -11,16 +11,16 @@ module.exports.INTENTS = [
     GatewayIntentBits.GuildEmojisAndStickers,
     GatewayIntentBits.GuildIntegrations,
     GatewayIntentBits.GuildInvites,
-//  GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessagePolls,
     GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildMessageTyping,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildModeration,
-//  GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildPresences,
     GatewayIntentBits.GuildScheduledEvents,
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildWebhooks,
     GatewayIntentBits.Guilds,
-//  GatewayIntentBits.MessageContent
+    GatewayIntentBits.MessageContent
 ];

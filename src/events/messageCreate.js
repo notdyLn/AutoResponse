@@ -1,4 +1,6 @@
-const { attachmentDownload, messageCreate, Error, Debug, Info } = require("../../utils/logging");
+const { attachmentDownload, messageCreate, Error, interactionCreate, Info, Debug } = require("../../utils/logging");
+const { sendEmail } = require('../../utils/sendEmail');
+
 const fs = require("fs");
 const path = require("path");
 const getSettings = require("../../utils/getSettings");
@@ -28,33 +30,17 @@ const optOutDb = new sqlite3.Database(dbFilePath, (err) => {
 });
 
 function initializeDatabase(serverId) {
-    const dbFilePath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "data",
-        `${serverId}.db`
-    );
+    const dbFilePath = path.join(__dirname, "..", "..", "data", `${serverId}.db`);
     const db = new sqlite3.Database(dbFilePath);
     return db;
-}
-
-function getOptOutList() {
-    return new Promise((resolve, reject) => {
-        optOutDb.all(`SELECT * FROM OptOutList`, [], (err, rows) => {
-            if (err) {
-                Error(`Error getting opt-out list: ${err.message}`);
-                reject(err);
-            } else {
-                resolve(rows.map((row) => row.userTag));
-            }
-        });
-    });
 }
 
 async function downloadAttachment(url, filename) {
     const fetch = await import('node-fetch').then(mod => mod.default);
     const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+    }
     const arrayBuffer = await response.arrayBuffer();
     fs.writeFileSync(filename, Buffer.from(arrayBuffer));
 }
@@ -97,130 +83,173 @@ async function getCooldownTimeRemaining(serverId, channelId) {
     });
 }
 
+function getOptOutList() {
+    return new Promise((resolve, reject) => {
+        optOutDb.all(`SELECT * FROM OptOutList`, [], (err, rows) => {
+            if (err) {
+                Error(`Error getting opt-out list: ${err.message}`);
+                reject(err);
+            } else {
+                resolve(rows.map((row) => row.userTag));
+            }
+        });
+    });
+}
+
+function loadCommands(dir) {
+    const commands = new Map();
+    const commandFiles = fs.readdirSync(dir).filter(file => file.endsWith('.js'));
+
+    for (const file of commandFiles) {
+        const command = require(path.join(dir, file));
+        commands.set(command.name, command);
+    }
+
+    return commands;
+}
+
+const messageCommands = loadCommands(path.join(__dirname, '..', '..', 'commands', 'message'));
+
 module.exports = {
     name: "messageCreate",
     async execute(message) {
         try {
-            const serverId = message.guild ? message.guild.id : "Direct Message";
+            const serverId = message.guild ? message.guild.id : null;
             const serverName = message.guild ? message.guild.name : "Direct Message";
-
-            const channelId = message.channel ? message.channel.id : "Direct Message";
+            const channelId = message.channel ? message.channel.id : null;
             const channelName = message.channel && message.channel.name ? message.channel.name : "Direct Message";
+            const allowedUserId = process.env.OWNERID;
+            const commandPrefix = process.env.PREFIX;
 
             let authorFlags;
             if (message.author) {
                 authorFlags = await message.author.fetchFlags();
             }
 
-            const authorId = message.author ? message.author.id : 'Unknown user';
-            const authorUsername = message.author ? message.author.username : 'Unknown user';
-
+            let authorUsername = message.author ? message.author.username : "Unknown user";
             let messageContent = message.content.replace(/[\r\n]+/g, " ");
+
+            try {
+                if (message.author.id === allowedUserId) {
+                    if (messageContent.startsWith(commandPrefix)) {
+                        const commandName = messageContent.slice(commandPrefix.length).split(' ')[0];
+                        const command = messageCommands.get(commandName);
+                        interactionCreate(`${serverName.cyan} - ${('#' + channelName).cyan} - ${authorUsername.cyan} - ${messageContent.magenta}`);
+
+                        if (command) {
+                            return await command.execute(message);
+                        } else {
+                            message.react('❔');
+                        }
+                    } else if (messageContent === 'ar.restart') {
+                        await message.delete();
+                        await message.client.destroy();
+                        process.exit(0);
+                    }
+                }
+            } catch (error) {
+                Error(`Error processing owner commands:\n${error.stack}`);
+            }
+
+            if (!serverId || !channelId) {
+                Debug('Message received in a DM, skipping guild/channel-specific logic');
+                return;
+            }
+
+            const db = initializeDatabase(serverId);
+            const settings = await getSettings(serverId, message.client);
+            const replyChannels = settings.replyChannels || [];
+            const replyChannel = replyChannels.find(channel => channel.id === message.channel.id);
+            const optOutList = await getOptOutList();
+
+            if (optOutList.includes(authorUsername)) {
+                Debug('User is opted out');
+                return;
+            }
+
+            const cooldownTimeRemaining = await getCooldownTimeRemaining(serverId, channelId);
+            if (cooldownTimeRemaining > 0) {
+                Info(`Replies are paused for another ${Math.ceil(cooldownTimeRemaining / 60000)} minutes.`);
+            }
+
+            let chance = replyChannel ? replyChannel.chance : 0;
+            chance += 1;
+            if (replyChannel) replyChannel.chance = chance;
+
+            const updateChannels = `UPDATE replyChannels SET chance = ? WHERE id = ?`;
+            db.run(updateChannels, [chance, replyChannel ? replyChannel.id : null], function (err) {
+                if (err) {
+                    Error(`Error updating replyChannel chance for server ${serverId}: ${err.message}`);
+                }
+            });
 
             if (message.embeds.length > 0) {
                 messageContent += ' EMBED '.bgYellow.black;
             }
 
             if (message.poll) {
-                const pollQuestion = message.poll.question.text.replace(/[\r\n]+/g, " ");;
+                const pollQuestion = message.poll.question.text.replace(/[\r\n]+/g, " ");
                 const pollAnswers = message.poll.answers.map(answer => answer.text).join(', ');
 
                 messageContent += ' POLL '.bgMagenta.black + ` ${pollQuestion.cyan} - ${pollAnswers.cyan} `;
             }
 
             if (!message.inGuild()) {
-                return messageCreate( `${`DM`.magenta} - ${authorUsername.cyan} - ${messageContent.white}` );
+                messageCreate(`${`DM`.magenta} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            if (message.author.system) {
-                return messageCreate( `${` SYSTEM `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}` );
+            if (message.author && message.author.system) {
+                return messageCreate(`${` SYSTEM `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
+            }
+
+            if (message.author.bot && !authorFlags.has('VerifiedBot')) {
+                return messageCreate(`${` APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
             if (authorFlags && authorFlags.has('VerifiedBot')) {
-                return messageCreate( `${` ✓ APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}` );
+                return messageCreate(`${` ✓ APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            if (message.author.bot) {
-                return messageCreate( `${` APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}` );
+            if (message.webhookId) {
+                return messageCreate(`${` WEBHOOK `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            const db = initializeDatabase(serverId);
-            const settings = await getSettings(serverId);
-            const replyChannels = settings.replyChannels || [];
-            const replyChannel = replyChannels.find( (channel) => channel.id === message.channel.id );
-            const optOutList = await getOptOutList();
-
-            if (!replyChannel) {
-                return messageCreate( `${`0%`.red} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}` );
-            }
-
-            if (optOutList.includes(authorUsername)) {
-                return messageCreate( `${`OOL`.red} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}` );
-            }
-
-            const cooldownTimeRemaining = await getCooldownTimeRemaining(serverId, channelId);
-            if (cooldownTimeRemaining > 0) {
-                Info(`Replies are paused for another ${Math.ceil(cooldownTimeRemaining / 60000)} minutes.`);
-                return messageCreate( `${`PAUSED`.red} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}` );
-            }
-
-            let chance = replyChannel.chance || 0;
-            chance += 1;
-            replyChannel.chance = chance;
-            settings.replyChannels = replyChannels;
-
-            const updateChannels = `UPDATE replyChannels SET chance = ? WHERE id = ?`;
-            db.run(updateChannels, [chance, replyChannel.id], function (err) {
-                if (err) {
-                    Error(`Error updating replyChannel chance for server ${serverId}: ${err.message}`);
-                }
-            });
-
-            messageCreate(
-                `${(chance + "%").green} - ${serverName.cyan} - ${
-                    "#".cyan + channelName.cyan
-                } - ${authorUsername.cyan} - ${messageContent.white}`
-            );
-
-            if (message.attachments.size > 0) {
-                const mediaDirPath = path.join(__dirname, "..", "..", "data", "media");
-                if (!fs.existsSync(mediaDirPath)) {
-                    fs.mkdirSync(mediaDirPath, { recursive: true });
-                }
-
-                message.attachments.forEach(async (attachment) => {
-                    const fileExtension = path.extname(attachment.name);
-                    const fileName = `${authorUsername}-${new Date().toISOString().split('T')[0]}-${path.basename(attachment.name, fileExtension)}${fileExtension}`;
-                    const filePath = path.join(mediaDirPath, fileName);
-                    
-                    try {
-                        await downloadAttachment(attachment.url, filePath);
-                    } catch (err) {
-                        Error(`Error downloading attachment: ${err.message}`);
-                    } finally {
-                        attachmentDownload(`Attachment Downloaded to ${filePath}`);
+            try {
+                if (message.attachments.size > 0) {
+                    const mediaDirPath = path.join(__dirname, "..", "..", "data", "media");
+                    if (!fs.existsSync(mediaDirPath)) {
+                        fs.mkdirSync(mediaDirPath, { recursive: true });
                     }
-                });
-            }
 
-            if (Math.random() * 100 < replyChannel.chance) {
-                await replyToUser(message, authorUsername);
+                    for (const attachment of message.attachments.values()) {
+                        const fileExtension = path.extname(attachment.name);
+                        const sanitizedFilename = attachment.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+                        const fileName = `${authorUsername}-${new Date().toISOString().split('T')[0]}-${path.basename(sanitizedFilename, fileExtension)}${fileExtension}`;
+                        const filePath = path.join(mediaDirPath, fileName);
 
-                replyChannel.chance = 6;
-                settings.replyChannels = replyChannels;
-
-                db.run(updateChannels, [6, replyChannel.id], function (err) {
-                    if (err) {
-                        Error(
-                            `Error resetting replyChannel chance for server ${serverId}: ${err.message}`
-                        );
+                        try {
+                            attachmentDownload(`Downloaded attachment to ${filePath}`);
+                            await downloadAttachment(attachment.url, filePath);
+                        } catch (err) {
+                            Error(`Error downloading attachment ${attachment.name}: ${err.message}`);
+                        }
                     }
-                });
+                }
+            } catch (err) {
+                Error(`Error processing attachments: ${err.message}`);
             }
 
-            db.close();
+            if (!message.author.bot || !message.webhookId) {
+                if (replyChannel) {
+                    messageCreate(`${(replyChannel.chance + '%').green} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
+                    replyToUser(message);
+                } else {
+                    return messageCreate(`${'0%'.red} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
+                }
+            }
         } catch (error) {
-            Error(`Error executing ${module.exports.name} event: ${error.message}`);
+            Error(`Error executing ${module.exports.name}:\n${error.stack}`);
+            sendEmail(module.exports.name, error.stack);
         }
     },
 };

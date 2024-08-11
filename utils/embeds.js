@@ -1,29 +1,231 @@
 const { EmbedBuilder } = require('discord.js');
 const { codeblock } = require('./markdown');
 const { format } = require('./ansi');
-const { COLORS, ICONS, TEXT } = require('./constants');
+const { COINS, COLORS, ICONS, LINKS, TEXT, TWITCHTEST } = require('./constants');
 
-module.exports.DetailsEmbed = function(userTag, userId, guildName, highestRole, badges, createdTimestamp, joinedTimestamp, avatarURL, bannerURL) {
-    const embed = new EmbedBuilder()
+const fs = require('fs');
+const path = require('path');
+
+module.exports.Reminder = function(message) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.done)
+        .setDescription(`${ICONS.checkmark} **${message}**`)
+};
+
+module.exports.StarboardMessage = function(messageAuthor, authorAvatar, messageContent, reactionCount, messageLink) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setAuthor({
+            name: messageAuthor,
+            iconURL: authorAvatar
+        })
+        .setDescription(
+            `${messageContent}\n\n` +
+            `⭐ ${reactionCount}\n\n` +
+            `-# [Go to message](${messageLink})`
+        )
+};
+
+module.exports.DoneEmbed = function(message) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.done)
+        .setDescription(`${ICONS.checkmark} **${message}**`)
+}
+
+module.exports.EmbedTest = function(URL) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.test)
+        .setTitle(`This is a title`)
+        .setDescription(`This is a description\n` + `With multiple lines`)
+        .addFields(
+            {
+                name: 'Inline',
+                value: 'Value',
+                inline: true
+            },
+
+            {
+                name: 'Inline',
+                value: null,
+                inline: true
+            }
+        )
+        .addFields(
+            {
+                name: 'This is a regular field',
+                value: 'With a value',
+                inline: false
+            },
+
+            {
+                name: 'This is another regular field',
+                value: 'With a value',
+                inline: false
+            }
+        )
+        .setImage(URL)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: `This is a footer, with an iconURL`
+        })
+}
+
+module.exports.OutageEmbed = function(authorAvatar, timestamp, description) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.outage)
+        .setAuthor({
+            name: `dyLn`,
+            iconURL: authorAvatar
+        })
+        .setTitle(`Outage Report - <t:${timestamp}:F>`)
+        .setDescription(description)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+}
+
+module.exports.UpdateEmbed = function(authorAvatar, timestamp, description) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.blurple)
+        .setAuthor({
+            name: `dyLn`,
+            iconURL: authorAvatar
+        })
+        .setTitle(`Update Report - <t:${timestamp}:F>`)
+        .setDescription(description)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+}
+
+module.exports.LiveHelpTitle = function() {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`How to automatically notify this channel when you go live:`)
+}
+
+module.exports.LiveHelpStep1 = function() {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`1. Link your Twitch account to Discord:`)
+        .setDescription(`> ${ICONS.gear} User Settings → ${ICONS.chain} Connections → ${ICONS.twitch} Twitch`)
+        .setImage(TWITCHTEST.LinkTwitch)
+}
+
+module.exports.LiveHelpStep2 = function() {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`2. Receive the Linked Role on this server:`)
+        .setDescription(`> ${ICONS.down} Server Header (*Top Left*) → ${ICONS.chain} Linked Roles → ${ICONS.twitch} Twitch`)
+        .setImage(TWITCHTEST.LinkRole)
+}
+
+module.exports.LiveHelpStep3 = function() {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`3. Done!`)
+        .setDescription(`**Please note that I have to manually give <@${TEXT.appid}> your Twitch username.*`)
+}
+
+module.exports.JSONEmbed = function(fields) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`\`\`\`json\n${fields}\n\`\`\``)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+};
+
+module.exports.DetailedHelpEmbed = function(title, description, message) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`${title}\n\n` + `${description}\n` + `${message}`)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+};
+
+module.exports.HelpEmbed = function(title, description, message) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`${title}\n\n` + `${description}\n\n` + `${message}`)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+};
+
+module.exports.FileEmbed = function(fileSize, timeTook) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`Size: ${fileSize}MB • Took ${timeTook}s`)
+};
+
+module.exports.CodeEmbed = function(output) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`\`\`\`\n${output}\n\`\`\``)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand + ' • CodeX'
+        });
+};
+
+module.exports.InspireEmbed = function(URL) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setImage(URL)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand + ' • InspiroBot'
+        })
+};
+
+module.exports.LiveEmbed = function(streamInfo) {
+    return new EmbedBuilder()
+        .setColor(COLORS.twitch)
+        .setAuthor({
+            name: `${streamInfo.username} is live!`
+        })
+        .setThumbnail(streamInfo.avatarURL)
+        .setTitle(streamInfo.title)
+        .setURL(`https://twitch.tv/${streamInfo.username}`)
+        .addFields(
+            { name: 'Game', value: streamInfo.category, inline: true },
+            { name: 'Viewers', value: streamInfo.viewers.toString(), inline: true },
+        )
+        .setImage(streamInfo.thumbnailURL)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand + ' • Twitch'
+        })
+};
+
+module.exports.UserEmbed = function(userTag, userId, highestRole, badges, createdTimestamp, joinedTimestamp, avatarURL, bannerURL) {
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(
-            `${ICONS.member} **@${userTag}**\n\` ${userId} \`\n`
+            `${ICONS.user} **@${userTag}**\n\` ${userId} \`\n`
         )
         .addFields(
             {
                 name: `${ICONS.calendar} **Dates**`,
-                value: `**Joined Discord**: ${createdTimestamp}\n` + `**Joined ${guildName}**: ${joinedTimestamp}\n`
+                value: `**Joined Discord**: ${createdTimestamp}\n` + `**Joined server**: ${joinedTimestamp}\n`
             },
         )
         .addFields(
             {
-                name: `${ICONS.members} **Highest Role**`,
+                name: `${ICONS.users} **Highest Role**`,
                 value: `\` ${highestRole} \``,
                 inline: true
             },
 
             {
-                name: `${ICONS.members} **Badges**`,
+                name: `${ICONS.users} **Badges**`,
                 value: badges,
                 inline: true
             },
@@ -31,75 +233,122 @@ module.exports.DetailsEmbed = function(userTag, userId, guildName, highestRole, 
         .setThumbnail(avatarURL)
         .setImage(bannerURL)
         .setFooter({
-            iconURL: ICONS.avatarURL,
-            text: TEXT.footer
+            iconURL: LINKS.brand,
+            text: TEXT.brand
         })
-
-    return embed;
 };
 
-module.exports.NotificationEmbed = function(title, message) {
-    const embed = new EmbedBuilder()
+module.exports.ServerEmbed = function(guildName, guildId, roles, userCount, emojiCount, stickerCount, guildDescription, guildIcon, guildBanner, guildOwner, formattedGuildCreatedAt, features, channels) {
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(
-            `${title}\n\n` +
-            message
+            `${ICONS.home} **${guildName}** \` ${guildId} \`\n` +
+            `${ICONS.users} \` ${userCount} \` ${ICONS.user} \` ${roles} \`\n` +
+            `${ICONS.emoji} \` ${emojiCount} \` ${ICONS.sticker} \` ${stickerCount} \`\n` +
+            `${ICONS.crown} ${guildOwner}\n` +
+            `${guildDescription}\n`
         )
-        .setFooter({
-            iconURL: ICONS.avatarURL,
-            text: 'AutoResponse'
-        })
-
-    return embed;
-};
-
-module.exports.PruneEmbed = function(title, users) {
-    const embed = new EmbedBuilder()
-        .setColor(COLORS.default)
-        .setDescription(
-            `**${title}**\n\n` +
-            users
+        .addFields(
+            {
+                name: ' ',
+                value: `${ICONS.calendar} **Server Created**: ${formattedGuildCreatedAt}\n`
+            },
         )
+        .addFields(
+            {
+                name: `${ICONS.hashtag} **Channels**`,
+                value: channels
+            },
+        )
+        .addFields(
+            {
+                name: `${ICONS.home} **Features**`,
+                value: features
+            },
+        )
+        .setThumbnail(guildIcon)
+        .setImage(guildBanner)
         .setFooter({
-            iconURL: ICONS.avatarURL,
-            text: TEXT.footer
+            iconURL: LINKS.brand,
+            text: TEXT.brand
         })
-
-    return embed;
 };
 
 module.exports.MediaEmbed = function(URL) {
-    const embed = new EmbedBuilder()
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setImage(URL)
         .setFooter({
-            iconURL: ICONS.avatarURL,
-            text: TEXT.footer
+            iconURL: LINKS.brand,
+            text: TEXT.brand
         })
-
-    return embed;
 };
 
 module.exports.PingEmbed = function(ws, rest, wscolor) {
-    const embed = new EmbedBuilder()
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.globe} **Pong!**\n` + codeblock("ansi", [`rest\t\t${format(`${rest}ms`, "m")}`, `websocket   ${format(`${ws}ms`, wscolor)}`]))
+        .setDescription(`
+            ${ICONS.globe} **Pong!**\n` + 
+            codeblock("ansi",
+                [
+                    `REST\t\t${format(`${rest}ms`, "m")}`,
+                    `WebSocket   ${format(`${ws}ms`, wscolor)}`
+                ]
+            )
+        )
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+};
 
-    return embed;
+module.exports.PolicyEmbed = function() {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`-# For more information about the privacy policy, please refer to the [Privacy Policy](https://dylandover.dev/privacypolicy).`)
+};
+
+module.exports.LoadingPingEmbed = function() {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`
+            ${ICONS.globe} **Pong!**\n` +
+            `\`\`\`ansi\n` +
+            `REST API\tLoading...\n` +
+            `WebSocket   Loading...\n` +
+            `\`\`\``
+        )
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
 };
 
 module.exports.CoinflipEmbed = function(result) {
     let emoji;
 
     if (result === 'Heads') {
-        emoji = ICONS.heads;
+        emoji = COINS.heads;
     } else if (result === 'Tails') {
-        emoji = ICONS.tails;
+        emoji = COINS.tails;
     }
 
-    const embed = new EmbedBuilder()
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(`# ${emoji} ${result}`)
+};
+
+module.exports.BallEmbed = function(author, question, result) {
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setDescription(`# 🎱 ${result}`);
+    
+    if (question) {
+        embed.setAuthor({
+            name: `${author.tag}: ${question}`,
+            iconURL: author.displayAvatarURL()
+        });
+    }
 
     return embed;
 };
@@ -112,64 +361,63 @@ module.exports.Leaderboard = function(title, description, fields) {
         .map(word => capitalize(word))
         .join(' ');
 
-    const embed = new EmbedBuilder()
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setTitle(`${ICONS.trophy} ${formattedTitle}`)
         .setDescription(description)
         .addFields(fields)
-
-    return embed;
 };
 
-module.exports.StatsEmbed = function(serverCount, shardCount, uptime) {
-    const embed = new EmbedBuilder()
+module.exports.StatsEmbed = function(serverCount, installCount, shardCount, uptime, memoryUsage, slashCommandsCount, cpuUsage, totalSessions, remainingSessions) {
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(
-            `${ICONS.home} **Server Count**: \` ${serverCount} \`\n` +
-            `${ICONS.shard} **Shard Count**: \` ${shardCount} \`\n` +
-            `${ICONS.clock} **Uptime**: \` ${uptime} \`\n` +
-            `${ICONS.github} **Version**: \` ${TEXT.version} \``
-        )
+            `${ICONS.shard}` +          ` \` Shard Count        \` \` ${shardCount} \`\n` +
+            `${ICONS.home}` +           ` \` Server Count       \` \` ${serverCount} \`\n` +
+            `${ICONS.user}` +           ` \` Installation Count \` \` ${installCount} \`\n` +
+            `${ICONS.wrench}` +         ` \` Session Limit Info \` \` ${remainingSessions} / ${totalSessions} \`\n` +
+            `${ICONS.SlashCommand}` +   ` \` Slash Commands     \` \` ${slashCommandsCount} \`\n` +
+            `${ICONS.clock}` +          ` \` Uptime             \` \` ${uptime} \`\n\n` +
 
-    return embed;
+            `${ICONS.cpu}` +            ` \` CPU Usage          \` \` ${cpuUsage}% \`\n` +
+            `${ICONS.ram}` +            ` \` Memory Usage       \` \` ${memoryUsage} MB \`\n\n`
+        )
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
 };
 
 module.exports.RestartEmbed = function(message) {
-    const embed = new EmbedBuilder()
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(`${ICONS.restart} **${message}**`)
-
-    return embed;
 };
 
-module.exports.LoadingEmbed = function(title) {
-    const embed = new EmbedBuilder()
+module.exports.LoadingEmbed = function(title, message) {
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.loading} **${title}**`)
-
-    return embed;
+        .setDescription(`${ICONS.loading} **${title}**\n` + message)
 };
 
 module.exports.SuccessEmbed = function(title, message) {
-    const embed = new EmbedBuilder()
+    return embed = new EmbedBuilder()
         .setColor(COLORS.done)
         .setDescription(`${ICONS.checkmark} **${title}**\n` + `${message}`)
-
-    return embed;
 };
 
-module.exports.InfoEmbed = function(fields) {
-    const embed = new EmbedBuilder()
+module.exports.InfoEmbed = function(info) {
+    return embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(fields)
-
-    return embed;
+        .setDescription(info)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
 };
 
 module.exports.ErrorEmbed = function(title, message) {
-    const embed = new EmbedBuilder()
+    return embed = new EmbedBuilder()
         .setColor(COLORS.error)
-        .setDescription(`${ICONS.xmark} **${title}**\n` + `${message}`)
-
-    return embed;
+        .setDescription(`${ICONS.x} **${title}**\n` + `\`\`\`\n${message}\n\`\`\``)
 };

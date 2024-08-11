@@ -1,6 +1,6 @@
 const { INTENTS } = require('./intents');
 const { PARTIALS } = require('./partials');
-const { DiscordJS, Invalid, Error } = require('../utils/logging');
+const { DiscordJS, Invalid, Error, Valid } = require('../utils/logging');
 
 const Discord = require('discord.js');
 const { version: DJSVersion } = Discord;
@@ -52,9 +52,9 @@ const implementedEvents = new Set(verifiedEvents);
 
 const missingClientEvents = allClientEvents.filter(event => !implementedEvents.has(event));
 
-// Valid(verifiedEvents.join('\n'));
-// Valid(INTENTS.join('\n'));
-// Valid(PARTIALS.join('\n'));
+Valid(verifiedEvents.join('\n'));
+Valid(INTENTS.join('\n'));
+Valid(PARTIALS.join('\n'));
 
 if (missingEvents.length > 0) {
     Invalid(missingEvents.join('\n'));
