@@ -52,28 +52,18 @@ const implementedEvents = new Set(verifiedEvents);
 
 const missingClientEvents = allClientEvents.filter(event => !implementedEvents.has(event));
 
-Valid(verifiedEvents.join('\n'));
-Valid(INTENTS.join('\n'));
-Valid(PARTIALS.join('\n'));
-
 if (missingEvents.length > 0) {
     Invalid(missingEvents.join('\n'));
-}
-
-if (invalidEvents.length > 0) {
-    Invalid(invalidEvents.join('\n'));
-}
-
-if (missingClientEvents.length > 0) {
-    Invalid(missingClientEvents.join('\n'));
-}
-
-if (missingEvents.length > 0) {
     missingEvents.forEach(file => Invalid(file));
 }
 
 if (invalidEvents.length > 0) {
+    Invalid(invalidEvents.join('\n'));
     invalidEvents.forEach(file => Invalid(file));
+}
+
+if (missingClientEvents.length > 0) {
+    Invalid(missingClientEvents.join('\n'));
 }
 
 module.exports = client;

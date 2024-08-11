@@ -141,19 +141,10 @@ module.exports = {
                         } else {
                             message.react('❔');
                         }
-                    } else if (messageContent === 'ar.restart') {
-                        await message.delete();
-                        await message.client.destroy();
-                        process.exit(0);
                     }
                 }
             } catch (error) {
                 Error(`Error processing owner commands:\n${error.stack}`);
-            }
-
-            if (!serverId || !channelId) {
-                Debug('Message received in a DM, skipping guild/channel-specific logic');
-                return;
             }
 
             const db = initializeDatabase(serverId);
@@ -163,25 +154,16 @@ module.exports = {
             const optOutList = await getOptOutList();
 
             if (optOutList.includes(authorUsername)) {
-                Debug('User is opted out');
-                return;
+                return messageCreate(`${'OptOut'.red} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
             const cooldownTimeRemaining = await getCooldownTimeRemaining(serverId, channelId);
             if (cooldownTimeRemaining > 0) {
-                Info(`Replies are paused for another ${Math.ceil(cooldownTimeRemaining / 60000)} minutes.`);
+                return messageCreate(`${'Cooldown'.red} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
             let chance = replyChannel ? replyChannel.chance : 0;
-            chance += 1;
             if (replyChannel) replyChannel.chance = chance;
-
-            const updateChannels = `UPDATE replyChannels SET chance = ? WHERE id = ?`;
-            db.run(updateChannels, [chance, replyChannel ? replyChannel.id : null], function (err) {
-                if (err) {
-                    Error(`Error updating replyChannel chance for server ${serverId}: ${err.message}`);
-                }
-            });
 
             if (message.embeds.length > 0) {
                 messageContent += ' EMBED '.bgYellow.black;
@@ -195,10 +177,10 @@ module.exports = {
             }
 
             if (!message.inGuild()) {
-                messageCreate(`${`DM`.magenta} - ${authorUsername.cyan} - ${messageContent.white}`);
+                return messageCreate(`${`DM`.magenta} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            if (message.author && message.author.system) {
+            if (message.author.system) {
                 return messageCreate(`${` SYSTEM `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
@@ -206,7 +188,7 @@ module.exports = {
                 return messageCreate(`${` APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            if (authorFlags && authorFlags.has('VerifiedBot')) {
+            if (message.author.bot && authorFlags && authorFlags.has('VerifiedBot')) {
                 return messageCreate(`${` ✓ APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
@@ -236,17 +218,40 @@ module.exports = {
                     }
                 }
             } catch (err) {
-                Error(`Error processing attachments: ${err.message}`);
+                Error(`Error downloading attachments: ${err.message}`);
             }
 
-            if (!message.author.bot || !message.webhookId) {
+            if (!message.author.bot || !message.webhookId && replyChannel) {
                 if (replyChannel) {
-                    messageCreate(`${(replyChannel.chance + '%').green} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
-                    replyToUser(message);
+                    const randomChance = Math.random() * 100;
+            
+                    if (randomChance <= chance) {
+                        replyToUser(message);
+            
+                        replyChannel.chance = 6;
+            
+                        const updateChannels = `UPDATE replyChannels SET chance = ? WHERE id = ?`;
+                        db.run(updateChannels, [replyChannel.chance, replyChannel.id], function (err) {
+                            if (err) {
+                                Error(`Error updating replyChannel chance for server ${serverId}: ${err.message}`);
+                            }
+                        });
+                    } else {
+                        chance = Math.min(chance + 1, 100);
+            
+                        const updateChannels = `UPDATE replyChannels SET chance = ? WHERE id = ?`;
+                        db.run(updateChannels, [chance, replyChannel.id], function (err) {
+                            if (err) {
+                                Error(`Error updating replyChannel chance for server ${serverId}: ${err.message}`);
+                            }
+                        });
+            
+                        messageCreate(`${(chance + '%').green} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
+                    }
                 } else {
                     return messageCreate(`${'0%'.red} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
                 }
-            }
+            }            
         } catch (error) {
             Error(`Error executing ${module.exports.name}:\n${error.stack}`);
             sendEmail(module.exports.name, error.stack);

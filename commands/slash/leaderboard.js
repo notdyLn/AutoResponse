@@ -78,7 +78,7 @@ module.exports = {
 
 async function loadLeaderboard(season) {
     return new Promise((resolve, reject) => {
-        const dbPath = path.join(__dirname, "..", "data", "leaderboards.db");
+        const dbPath = path.join(__dirname, "..", "..", "data", "leaderboards.db");
         const db = new sqlite3.Database(
             dbPath,
             sqlite3.OPEN_READONLY,

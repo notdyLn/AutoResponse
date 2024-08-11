@@ -1,5 +1,5 @@
 module.exports.TEXT = Object.freeze({
-    brand: 'dyLcore Canary',
+    brand: 'AutoResponse • dyLcore',
     appid: '1187423057531379784',
     ownerid: '458854676557856790'
 });
