@@ -1,5 +1,4 @@
-const { TEXT } = require('../../utils/constants');
-const { messageUpdate, Error, Debug } = require('../../utils/logging');
+const { messageUpdate, Error } = require('../../utils/logging');
 const { sendEmail } = require('../../utils/sendEmail');
 
 module.exports = {

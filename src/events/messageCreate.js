@@ -1,4 +1,4 @@
-const { attachmentDownload, messageCreate, Error, interactionCreate, Info, Debug } = require("../../utils/logging");
+const { attachmentDownload, messageCreate, Error, interactionCreate, Debug } = require("../../utils/logging");
 const { sendEmail } = require('../../utils/sendEmail');
 
 const fs = require("fs");
@@ -116,17 +116,27 @@ module.exports = {
         try {
             const serverId = message.guild ? message.guild.id : null;
             const serverName = message.guild ? message.guild.name : "Direct Message";
+
             const channelId = message.channel ? message.channel.id : null;
             const channelName = message.channel && message.channel.name ? message.channel.name : "Direct Message";
+            
             const allowedUserId = process.env.OWNERID;
             const commandPrefix = process.env.PREFIX;
 
             let authorFlags;
-            if (message.author) {
-                authorFlags = await message.author.fetchFlags();
+            if (!message.webhookId && message.author) {
+                try {
+                    authorFlags = await message.author.fetchFlags();
+                } catch (error) {
+                    Error(`Error fetching author flags:\n${error.stack}`);
+                }
             }
 
-            let authorUsername = message.author ? message.author.username : "Unknown user";
+            let authorUsername = "Unknown User";
+            if (message.author.username) {
+                authorUsername = message.author.username;
+            }
+
             let messageContent = message.content.replace(/[\r\n]+/g, " ");
 
             try {
@@ -134,12 +144,12 @@ module.exports = {
                     if (messageContent.startsWith(commandPrefix)) {
                         const commandName = messageContent.slice(commandPrefix.length).split(' ')[0];
                         const command = messageCommands.get(commandName);
-                        interactionCreate(`${serverName.cyan} - ${('#' + channelName).cyan} - ${authorUsername.cyan} - ${messageContent.magenta}`);
 
                         if (command) {
+                            interactionCreate(`${serverName.cyan} - ${('#' + channelName).cyan} - ${authorUsername.cyan} - ${messageContent.magenta}`);
                             return await command.execute(message);
                         } else {
-                            message.react('❔');
+                            return message.react('❔');
                         }
                     }
                 }
@@ -184,16 +194,16 @@ module.exports = {
                 return messageCreate(`${` SYSTEM `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
+            if (message.webhookId) {
+                return messageCreate(`${` WEBHOOK `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
+            }
+
             if (message.author.bot && !authorFlags.has('VerifiedBot')) {
                 return messageCreate(`${` APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
             if (message.author.bot && authorFlags && authorFlags.has('VerifiedBot')) {
                 return messageCreate(`${` ✓ APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
-            }
-
-            if (message.webhookId) {
-                return messageCreate(`${` WEBHOOK `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
             try {
@@ -222,6 +232,7 @@ module.exports = {
             }
 
             if (!message.author.bot || !message.webhookId && replyChannel) {
+                Debug('Not a bot or a webhook and is a reply channel.');
                 if (replyChannel) {
                     const randomChance = Math.random() * 100;
             
