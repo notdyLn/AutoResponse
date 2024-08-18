@@ -1,13 +1,13 @@
-const { PermissionFlagsBits, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder } = require('discord.js');
 const { ErrorEmbed, StatsEmbed } = require('../../utils/embeds');
-const { CommandError, Debug } = require('../../utils/logging');
+const { CommandError, Error } = require('../../utils/logging');
 const { fetchCommandCount } = require('../../utils/registerCommands');
 
 const axios = require('axios');
 
 const command = new SlashCommandBuilder()
     .setName('stats')
-    .setDescription("Get the stats of the bot.")
+    .setDescription(`Get information about AutoResponse`)
     .setDMPermission(true)
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages);
 
@@ -69,11 +69,10 @@ module.exports = {
                         Authorization: `Bot ${botToken}`
                     }
                 });
-                installCount = response.body.approximate_user_install_count || 'N/A';
-            } catch (fetchError) {
-                console.error(`Failed to fetch installation count: ${fetchError.message}`);
-            } finally {
-                Debug(installCount);
+
+                installCount = response.data.approximate_user_install_count || 'N/A';
+            } catch (error) {
+                Error(`Failed to fetch installation count: ${fetchError.message}`);
             }
 
             const statsEmbed = StatsEmbed(
@@ -82,8 +81,10 @@ module.exports = {
                 shardsCount,
                 uptimeFormatted,
                 ramUsageMB,
+                slashCommandsCount,
                 totalCpuPercent,
-                slashCommandsCount
+                'N/A',
+                'N/A'
             );
 
             await interaction.editReply({ embeds: [statsEmbed], ephemeral: true });

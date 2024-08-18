@@ -1,15 +1,66 @@
 const { EmbedBuilder } = require('discord.js');
 const { codeblock } = require('./markdown');
 const { format } = require('./ansi');
-const { COINS, COLORS, ICONS, LINKS, TEXT, TWITCHTEST } = require('./constants');
+const { COINS, COLORS, LINKS, TEXT, EMOJIS } = require('./constants');
 
-const fs = require('fs');
-const path = require('path');
+module.exports.messageDelete = function(message) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`Message Deleted in <#${message.channel.id}>`)
+        .setDescription(`**\` ${message.author ? message.author.tag : 'Unknown'} \` - \` ${message.content ? message.content : 'Unknown'} \`**`)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+        .setTimestamp()
+};
+
+module.exports.messageUpdate = function(oldMessage, newMessage) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`Message Updated in <#${newMessage.channel.id}>`)
+        .setDescription(
+            `### Old Message:\n` +
+            `**\` ${oldMessage.author ? oldMessage.author.tag : 'Unknown'} \` - \` ${oldMessage.content ? oldMessage.content : 'Unknown'} \`**\n` +
+            `### New Message:\n` +
+            `**\` ${newMessage.author ? newMessage.author.tag : 'Unknown'} \` - \` ${newMessage.content ? newMessage.content : 'Unknown'} \`**\n\n` +
+            `-# [\` Go to message \`](${newMessage.url})`
+        )
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+        .setTimestamp()
+};
+
+module.exports.guildMemberUpdateMedia = function(change, member, URL) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`${member.username} changed their ${change}`)
+        .setImage(URL)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+        .setTimestamp()
+};
+
+module.exports.guildMemberUpdateName = function(change, username, oldMemberName, newMemberName) {
+    return embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`${username} changed their ${change}`)
+        .setDescription(`**\` ${oldMemberName} \` → \` ${newMemberName} \`**`)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+        .setTimestamp()
+};
 
 module.exports.Reminder = function(message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.done)
-        .setDescription(`${ICONS.checkmark} **${message}**`)
+        .setDescription(`${EMOJIS.ico_checkmark} **${message}**`)
 };
 
 module.exports.StarboardMessage = function(messageAuthor, authorAvatar, messageContent, reactionCount, messageLink) {
@@ -29,7 +80,7 @@ module.exports.StarboardMessage = function(messageAuthor, authorAvatar, messageC
 module.exports.DoneEmbed = function(message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.done)
-        .setDescription(`${ICONS.checkmark} **${message}**`)
+        .setDescription(`${EMOJIS.ico_checkmark} **${message}**`)
 }
 
 module.exports.EmbedTest = function(URL) {
@@ -98,35 +149,6 @@ module.exports.UpdateEmbed = function(authorAvatar, timestamp, description) {
             iconURL: LINKS.brand,
             text: TEXT.brand
         })
-}
-
-module.exports.LiveHelpTitle = function() {
-    return embed = new EmbedBuilder()
-        .setColor(COLORS.default)
-        .setTitle(`How to automatically notify this channel when you go live:`)
-}
-
-module.exports.LiveHelpStep1 = function() {
-    return embed = new EmbedBuilder()
-        .setColor(COLORS.default)
-        .setTitle(`1. Link your Twitch account to Discord:`)
-        .setDescription(`> ${ICONS.gear} User Settings → ${ICONS.chain} Connections → ${ICONS.twitch} Twitch`)
-        .setImage(TWITCHTEST.LinkTwitch)
-}
-
-module.exports.LiveHelpStep2 = function() {
-    return embed = new EmbedBuilder()
-        .setColor(COLORS.default)
-        .setTitle(`2. Receive the Linked Role on this server:`)
-        .setDescription(`> ${ICONS.down} Server Header (*Top Left*) → ${ICONS.chain} Linked Roles → ${ICONS.twitch} Twitch`)
-        .setImage(TWITCHTEST.LinkRole)
-}
-
-module.exports.LiveHelpStep3 = function() {
-    return embed = new EmbedBuilder()
-        .setColor(COLORS.default)
-        .setTitle(`3. Done!`)
-        .setDescription(`**Please note that I have to manually give <@${TEXT.appid}> your Twitch username.*`)
 }
 
 module.exports.JSONEmbed = function(fields) {
@@ -209,23 +231,23 @@ module.exports.UserEmbed = function(userTag, userId, highestRole, badges, create
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(
-            `${ICONS.user} **@${userTag}**\n\` ${userId} \`\n`
+            `${EMOJIS.ico_user} **@${userTag}**\n\` ${userId} \`\n`
         )
         .addFields(
             {
-                name: `${ICONS.calendar} **Dates**`,
+                name: `${EMOJIS.ico_calendar} **Dates**`,
                 value: `**Joined Discord**: ${createdTimestamp}\n` + `**Joined server**: ${joinedTimestamp}\n`
             },
         )
         .addFields(
             {
-                name: `${ICONS.users} **Highest Role**`,
+                name: `${EMOJIS.ico_users} **Highest Role**`,
                 value: `\` ${highestRole} \``,
                 inline: true
             },
 
             {
-                name: `${ICONS.users} **Badges**`,
+                name: `${EMOJIS.ico_users} **Badges**`,
                 value: badges,
                 inline: true
             },
@@ -242,27 +264,27 @@ module.exports.ServerEmbed = function(guildName, guildId, roles, userCount, emoj
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(
-            `${ICONS.home} **${guildName}** \` ${guildId} \`\n` +
-            `${ICONS.users} \` ${userCount} \` ${ICONS.user} \` ${roles} \`\n` +
-            `${ICONS.emoji} \` ${emojiCount} \` ${ICONS.sticker} \` ${stickerCount} \`\n` +
-            `${ICONS.crown} ${guildOwner}\n` +
+            `${EMOJIS.ico_home} **${guildName}** \` ${guildId} \`\n` +
+            `${EMOJIS.ico_users} \` ${userCount} \` ${EMOJIS.ico_user} \` ${roles} \`\n` +
+            `${EMOJIS.ico_emoji} \` ${emojiCount} \` ${EMOJIS.ico_sticker} \` ${stickerCount} \`\n` +
+            `${EMOJIS.ico_crown} ${guildOwner}\n` +
             `${guildDescription}\n`
         )
         .addFields(
             {
                 name: ' ',
-                value: `${ICONS.calendar} **Server Created**: ${formattedGuildCreatedAt}\n`
+                value: `${EMOJIS.ico_calendar} **Server Created**: ${formattedGuildCreatedAt}\n`
             },
         )
         .addFields(
             {
-                name: `${ICONS.hashtag} **Channels**`,
+                name: `${EMOJIS.ico_hashtag} **Channels**`,
                 value: channels
             },
         )
         .addFields(
             {
-                name: `${ICONS.home} **Features**`,
+                name: `${EMOJIS.ico_home} **Features**`,
                 value: features
             },
         )
@@ -288,7 +310,7 @@ module.exports.PingEmbed = function(ws, rest, wscolor) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(`
-            ${ICONS.globe} **Pong!**\n` + 
+            ${EMOJIS.ico_globe} **Pong!**\n` + 
             codeblock("ansi",
                 [
                     `REST\t\t${format(`${rest}ms`, "m")}`,
@@ -312,7 +334,7 @@ module.exports.LoadingPingEmbed = function() {
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(`
-            ${ICONS.globe} **Pong!**\n` +
+            ${EMOJIS.globe} **Pong!**\n` +
             `\`\`\`ansi\n` +
             `REST API\tLoading...\n` +
             `WebSocket   Loading...\n` +
@@ -363,7 +385,7 @@ module.exports.Leaderboard = function(title, description, fields) {
 
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setTitle(`${ICONS.trophy} ${formattedTitle}`)
+        .setTitle(`${EMOJIS.trophy} ${formattedTitle}`)
         .setDescription(description)
         .addFields(fields)
 };
@@ -372,38 +394,39 @@ module.exports.StatsEmbed = function(serverCount, installCount, shardCount, upti
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
         .setDescription(
-            `${ICONS.shard}` +          ` \` Shard Count        \` \` ${shardCount} \`\n` +
-            `${ICONS.home}` +           ` \` Server Count       \` \` ${serverCount} \`\n` +
-            `${ICONS.user}` +           ` \` Installation Count \` \` ${installCount} \`\n` +
-            `${ICONS.wrench}` +         ` \` Session Limit Info \` \` ${remainingSessions} / ${totalSessions} \`\n` +
-            `${ICONS.SlashCommand}` +   ` \` Slash Commands     \` \` ${slashCommandsCount} \`\n` +
-            `${ICONS.clock}` +          ` \` Uptime             \` \` ${uptime} \`\n\n` +
+            `${EMOJIS.ico_shard}` +          ` \` Shard Count        \` \` ${shardCount} \`\n` +
+            `${EMOJIS.ico_home}` +           ` \` Server Count       \` \` ${serverCount} \`\n` +
+            `${EMOJIS.ico_user}` +           ` \` Installation Count \` \` ${installCount} \`\n` +
+            `${EMOJIS.ico_wrench}` +         ` \` Session Limit Info \` \` ${remainingSessions} / ${totalSessions} \`\n` +
+            `${EMOJIS.ico_SlashCommand}` +   ` \` Slash Commands     \` \` ${slashCommandsCount} \`\n` +
+            `${EMOJIS.ico_clock}` +          ` \` Uptime             \` \` ${uptime} \`\n\n` +
 
-            `${ICONS.cpu}` +            ` \` CPU Usage          \` \` ${cpuUsage}% \`\n` +
-            `${ICONS.ram}` +            ` \` Memory Usage       \` \` ${memoryUsage} MB \`\n\n`
+            `${EMOJIS.ico_cpu}` +            ` \` CPU Usage          \` \` ${cpuUsage}% \`\n` +
+            `${EMOJIS.ico_ram}` +            ` \` Memory Usage       \` \` ${memoryUsage} MB \`\n\n`
         )
         .setFooter({
             iconURL: LINKS.brand,
             text: TEXT.brand
         })
+        .setTimestamp()
 };
 
 module.exports.RestartEmbed = function(message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.restart} **${message}**`)
+        .setDescription(`${EMOJIS.ico_restart} **${message}**`)
 };
 
 module.exports.LoadingEmbed = function(title, message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setDescription(`${ICONS.loading} **${title}**\n` + message)
+        .setDescription(`${EMOJIS.ico_loading} **${title}**\n` + message)
 };
 
 module.exports.SuccessEmbed = function(title, message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.done)
-        .setDescription(`${ICONS.checkmark} **${title}**\n` + `${message}`)
+        .setDescription(`${EMOJIS.ico_checkmark} **${title}**\n` + `${message}`)
 };
 
 module.exports.InfoEmbed = function(info) {
@@ -419,5 +442,5 @@ module.exports.InfoEmbed = function(info) {
 module.exports.ErrorEmbed = function(title, message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.error)
-        .setDescription(`${ICONS.x} **${title}**\n` + `\`\`\`\n${message}\n\`\`\``)
+        .setDescription(`${EMOJIS.ico_x} **${title}**\n` + `\`\`\`\n${message}\n\`\`\``)
 };

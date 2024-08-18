@@ -1,7 +1,12 @@
 module.exports.TEXT = Object.freeze({
     brand: 'AutoResponse • dyLcore',
-    appid: '1187423057531379784',
+    appid: '1141116585742966794',
     ownerid: '458854676557856790'
+});
+
+module.exports.PATHS = Object.freeze({
+    avatar: 'assets/avatar.gif',
+    banner: 'assets/banner.png'
 });
 
 module.exports.DEVICE = Object.freeze({
@@ -10,126 +15,157 @@ module.exports.DEVICE = Object.freeze({
     default: '@discordjs/ws 1.0.2'
 });
 
-// node_modules/@discordjs/ws/dist/index.js
-module.exports.DEVICE = Object.freeze({
-    mobile: 'Discord iOS',
-    desktop: '@discordjs/ws 1.1.0',
-    default: 'Discord iOS'
-});
-
-module.exports.BRANDICONS = Object.freeze({
-    brand:                  '<:Brand:1264435874511196200>'
-});
-
-module.exports.BADGES = Object.freeze({
-    restart:                '<:restart:1253333233181917256>',
-    Nitro:                  '<:Nitro:1263671433146404944>',
-    ActiveDeveloper:        '<:ActiveDeveloper:1263671932113653831>',
-    HypesquadBrilliance:    '<:HypesquadBrilliance:1263671872034439210>',
-    HypesquadBravery:       '<:HypesquadBravery:1263671909179068547>',
-    HypesquadBalance:       '<:HypesquadBalance:1263671887909621832>',
-    DiscordStaff:           '<:DiscordStaff:1263671446413246585>',
-    VerifiedApp:            '<:VerifiedApp:1263671407175405578>',
-    HTTPInteractions:       '<:HTTPInteractions:1263671385536860242>',
-    BugHunter:              '<:BugHunter:1263671285624606833>',
-    BugHunterGold:          '<:BugHunterGold:1263671264195903541>',
-    ModeratorAlumni:        '<:ModeratorAlumni:1263671196415823973>',
-});
-
-module.exports.FEATURES = Object.freeze({
-    automod:                '<:automod:1263670752327110697>',
-    community:              '<:community:1263670680013242425>',
-    Soundboard:             '<:soundboard:1263670738083123242>',
-    AnnoucementChannel:     '<:AnnoucementChannel:1263670691383873583>',
-    ServerGuide:            '<:server_guide:1263670667765616745>',
-    partnered:              '<:Partnered:1258643389247787128>',
-    VerifiedServer:         '<:VerifiedServer:1263669254264328314>',
-});
-
 module.exports.LINKS = Object.freeze({
     server:     'https://discord.gg/36tkJQPkT9',
     brand:      'https://cdn.discordapp.com/avatars/1263625778071863317/a_ce916b3ff5ea4089df7d093f25764612.gif?size=4096',
-    github:     'https://github.com/notdyln/dyLcore-Canary',
+    github:     'https://github.com/notdyln/AutoResponse',
 });
 
-module.exports.COINS = Object.freeze({
-    heads:                  '<:coin_heads:1263670895642153050>',
-    tails:                  '<:coin_tails:1263670844434022472>',
+module.exports.BRANDICONS = Object.freeze({
+    brand:                  '<:Brand:1264435874511196200>',
+    canary:                 '<:BrandCanary:1264435839509991514>'
 });
 
-module.exports.ICONS = Object.freeze({
-    boost:                  '<:ico_boost:1263672069506203691>',
-    bot:                    '<:ico_bot:1263669086915657738>',
-    brand:                  '<:ico_brand:1263670279318798397>',
-    brand_canary:           '<:ico_brand_canary:1263670238940237826>',
-    calendar:               '<:ico_calendar:1263672046483935323>',
-    chain:                  '<:ico_chain:1263670822934020258>',
-    checkmark:              '<:ico_checkmark:1263672249098178691>',
-    clock:                  '<:ico_clock:1263671991085568101>',
-    cloud:                  '<:ico_cloud:1263672013168443412>',
-    cpu:                    '<:ico_cpu:1265162290580426774>',
-    crown:                  '<:ico_crown:1263669061850501155>',
-    developer:              '<:ico_developer:1263672194802782273>',
-    discord:                '<:ico_discord:1263671114664509524>',
-    down:                   '<:ico_down:1263670771335827521>',
-    emoji:                  '<:ico_emoji:1263670642654314538>',
-    exclamation:            '<:ico_exclamation:1263671323926986915>',
-    gear:                   '<:ico_gear:1263670808287514736>',
-    github:                 '<:ico_github:1263671731042783303>',
-    globe:                  '<:ico_globe:1263672224716689561>',
-    hashtag:                '<:ico_hashtag:1263670655941873694>',
-    helper:                 '<:ico_helper:1263671765511438336>',
-    home:                   '<:ico_home:1263672143112048701>',
-    information:            '<:ico_information:1263672163437772892>',
-    loading:                '<:ico_loading:1263668966203723810>',
-    megaphone:              '<:ico_megaphone:1263669001121435731>',
-    message:                '<:ico_message:1263671129772654592>',
-    moon:                   '<:ico_moon:1263669044913901610>',
-    nitro:                  '<:ico_nitro:1263671952724332584>',
-    partnered:              '<:ico_partnered:1263669265949528158>',
-    question:               '<:ico_question:1263671095249207357>',
-    ram:                    '<:ico_ram:1264292013017137196>',
-    restart:                '<:ico_restart:1263671700348997644>',
-    shard:                  '<:ico_shard:1265160402346704897>',
-    shield:                 '<:ico_shield:1263672100862955561>',
-    SlashCommand:           '<:ico_SlashCommand:1263671306013114409>',
-    speaker:                '<:ico_speaker:1263672118252404858>',
-    sticker:                '<:ico_sticker:1263670631405453324>',
-    sun:                    '<:ico_sun:1263668918220754995>',
-    thermometer:            '<:ico_thermometer:1263671971187654699>',
-    trophy:                 '<:ico_trophy:1263669028321497150>',
-    trusted:                '<:ico_trusted:1263671815700615243>',
-    twitch:                 '<:ico_twitch:1263670787357937727>',
-    upvote:                 '<:ico_upvote:1263671067839561731>',
-    user:                   '<:ico_user:1263669105370595451>',
-    users:                  '<:ico_users:1263669127017402408>',
-    wrench:                 '<:ico_wrench:1263671340779700417>',
-    x:                      '<:ico_x:1263669161507295324>',
+
+module.exports.EMOJIS = Object.freeze({
+    "ActiveDeveloper": "<:ActiveDeveloper:1274739194870239306>",
+    "AnnouncementChannel": "<:AnnouncementChannel:1274739195616825446>",
+    "automod": "<:automod:1274739196283584523>",
+    "blank": "<:blank:1274739203053457452>",
+    "Brand": "<:Brand:1274739204026269786>",
+    "BrandCanary": "<:BrandCanary:1274739204794089472>",
+    "BugHunter": "<:BugHunter:1274739205708451851>",
+    "BugHunterGold": "<:BugHunterGold:1274739206521880667>",
+    "coin_heads": "<:coin_heads:1274739206928863345>",
+    "coin_tails": "<:coin_tails:1274739208334082129>",
+    "Community": "<:Community:1274739209235599452>",
+    "DiscordStaff": "<:DiscordStaff:1274739209621471285>",
+    "HTTPInteractions": "<:HTTPInteractions:1274739210619846717>",
+    "HypesquadBalance": "<:HypesquadBalance:1274739211244802069>",
+    "HypesquadBravery": "<:HypesquadBravery:1274739212049973360>",
+    "HypesquadBrilliance": "<:HypesquadBrilliance:1274739212968792145>",
+    "ico_boost": "<:ico_boost:1274739213664911502>",
+    "ico_bot": "<:ico_bot:1274739214394589194>",
+    "ico_brand": "<:ico_brand:1274739215074197514>",
+    "ico_brand_canary": "<:ico_brand_canary:1274739215774646353>",
+    "ico_calendar": "<:ico_calendar:1274739216601055362>",
+    "ico_chain": "<:ico_chain:1274739217041199167>",
+    "ico_checkmark": "<:ico_checkmark:1274739218429644811>",
+    "ico_clock": "<:ico_clock:1274739219008327741>",
+    "ico_cloud": "<:ico_cloud:1274739220136591483>",
+    "ico_cpu": "<:ico_cpu:1274739221214662748>",
+    "ico_crown": "<:ico_crown:1274739221831352412>",
+    "ico_developer": "<:ico_developer:1274739222250655809>",
+    "ico_discord": "<:ico_discord:1274739223269871649>",
+    "ico_down": "<:ico_down:1274739223756279911>",
+    "ico_emoji": "<:ico_emoji:1274739224788209816>",
+    "ico_exclamation": "<:ico_exclamation:1274739225501237289>",
+    "ico_gear": "<:ico_gear:1274739226273120316>",
+    "ico_github": "<:ico_github:1274739227267170356>",
+    "ico_globe": "<:ico_globe:1274739228332527637>",
+    "ico_hashtag": "<:ico_hashtag:1274739233935855668>",
+    "ico_helper": "<:ico_helper:1274739234846281862>",
+    "ico_home": "<:ico_home:1274739235504656537>",
+    "ico_information": "<:ico_information:1274739236318347367>",
+    "ico_loading": "<:ico_loading:1274739236989435934>",
+    "ico_megaphone": "<:ico_megaphone:1274739237656461383>",
+    "ico_message": "<:ico_message:1274739238314971137>",
+    "ico_moon": "<:ico_moon:1274739238784598059>",
+    "ico_nitro": "<:ico_nitro:1274739239828848683>",
+    "ico_partnered": "<:ico_partnered:1274739240806383678>",
+    "ico_question": "<:ico_question:1274739241577873612>",
+    "ico_ram": "<:ico_ram:1274739242362212433>",
+    "ico_restart": "<:ico_restart:1274739243201335348>",
+    "ico_shard": "<:ico_shard:1274739243993927760>",
+    "ico_shield": "<:ico_shield:1274739244765679626>",
+    "ico_SlashCommand": "<:ico_SlashCommand:1274739245218791456>",
+    "ico_speaker": "<:ico_speaker:1274739246682472479>",
+    "ico_sticker": "<:ico_sticker:1274739247534051368>",
+    "ico_sun": "<:ico_sun:1274739248159002647>",
+    "ico_thermometer": "<:ico_thermometer:1274739249056452739>",
+    "ico_trophy": "<:ico_trophy:1274739249706700841>",
+    "ico_trusted": "<:ico_trusted:1274739250365075549>",
+    "ico_twitch": "<:ico_twitch:1274739251493208186>",
+    "ico_upvote": "<:ico_upvote:1274739252609028138>",
+    "ico_user": "<:ico_user:1274739253204615241>",
+    "ico_users": "<:ico_users:1274739254097874986>",
+    "ico_wrench": "<:ico_wrench:1274739254471430219>",
+    "ico_x": "<:ico_x:1274739256233033728>",
+    "left": "<:left:1274739256891539487>",
+    "logo_brand": "<:logo_brand:1274739257541398682>",
+    "logo_brand_canary": "<:logo_brand_canary:1274739258774519829>",
+    "ModeratorAlumni": "<:ModeratorAlumni:1274739259647201330>",
+    "Nitro": "<:Nitro:1274739260108312742>",
+    "Partnered": "<:Partnered:1274739261144567809>",
+    "restart": "<:restart:1274739261895217152>",
+    "right": "<:right:1274739262583078967>",
+    "ServerGuide": "<:ServerGuide:1274739263602163752>",
+    "Soundboard": "<:Soundboard:1274739264588087426>",
+    "VerifiedApp": "<:VerifiedApp:1274739265305182209>",
+    "VerifiedServer": "<:VerifiedServer:1274739266131333180>"
 });
 
 module.exports.COLORS = Object.freeze({
-    default:        '#2b2d31',
-    error:          '#cc0000',
-    done:           '#00cc00',
-    ready:          '#00cc00'
+    default: '#2b2d31',
+    blurple: '#5865F2',
+    error: '#cc0000',
+    done: '#00cc00',
+    ready: '#00cc00',
+    test: '#ffffff',
+    twitch: '#9146FF',
+    outage: '#cb2b31',
 });
 
-module.exports.RANKS = Object.freeze({
-    owner:              '<:ico_crown:1248154976748830761>',
-    helper:             '<:ico_helper:1248167000753176587>',
-    programmer:         '<:ico_developer:1248156057839206410>',
-    s1:                 '<:ico_trophy:1248155287416733767>',
-    s2:                 '<:ico_trophy:1248155287416733767>'
-});
-
-module.exports.BLOCK = Object.freeze({
-    reset:          '[0m',
-    grey:           '[30m',
-    red:            '[31m',
-    green:          '[32m',
-    yellow:         '[33m',
-    blue:           '[34m',
-    pink:           '[35m',
-    cyan:           '[36m',
-    white:          '[37m',
+module.exports.REXTESTERLANGUAGES = Object.freeze({
+    "csharp": 1,
+    "vb.net": 2,
+    "fsharp": 3,
+    "java": 4,
+    "python2": 5,
+    "cpp": 6,
+    "c": 7,
+    "php": 8,
+    "pascal": 9,
+    "objectivec": 10,
+    "haskell": 11,
+    "ruby": 12,
+    "perl": 13,
+    "lua": 14,
+    "nasm": 15,
+    "sqlserver": 16,
+    "javascript": 17,
+    "lisp": 18,
+    "prolog": 19,
+    "go": 20,
+    "scala": 21,
+    "scheme": 22,
+    "node": 23,
+    "python3": 24,
+    "octave": 25,
+    "r": 26,
+    "tcl": 27,
+    "mysql": 33,
+    "postgresql": 34,
+    "oracle": 35,
+    "swift": 37,
+    "bash": 38,
+    "ada": 39,
+    "erlang": 40,
+    "elixir": 41,
+    "ocaml": 42,
+    "kotlin": 43,
+    "brainfuck": 44,
+    "fortran": 45,
+    "rust": 46,
+    "clojure": 47,
+    "dart": 48
+,
+    "elixir": 41,
+    "ocaml": 42,
+    "kotlin": 43,
+    "brainfuck": 44,
+    "fortran": 45,
+    "rust": 46,
+    "clojure": 47,
+    "dart": 48
 });

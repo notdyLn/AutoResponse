@@ -1,12 +1,12 @@
 {
   "dependencies": {
-    "axios": "^1.7.3",
+    "axios": "^1.7.4",
     "colors": "^1.4.0",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
-    "electron": "^31.3.1",
+    "electron": "^31.4.0",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.5.2",
+    "mongoose": "^8.5.3",
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.14",
