@@ -123,19 +123,8 @@ module.exports = {
             const allowedUserId = process.env.OWNERID;
             const commandPrefix = process.env.PREFIX;
 
-            let authorFlags;
-            if (!message.webhookId && message.author) {
-                try {
-                    authorFlags = await message.author.fetchFlags();
-                } catch (error) {
-                    Error(`Error fetching author flags:\n${error.stack}`);
-                }
-            }
-
-            let authorUsername = "Unknown User";
-            if (message.author.username) {
-                authorUsername = message.author.username;
-            }
+            let authorFlags = message.author?.flags;
+            let authorUsername = message.author ? message.author.username : "Unknown User";
 
             let messageContent = message.content.replace(/[\r\n]+/g, " ");
 
@@ -194,16 +183,16 @@ module.exports = {
                 return messageCreate(`${` SYSTEM `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            if (message.webhookId) {
-                return messageCreate(`${` WEBHOOK `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
+            if (message.author.bot && authorFlags.has('VerifiedBot')) {
+                return messageCreate(`${` ✓ APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
             if (message.author.bot && !authorFlags.has('VerifiedBot')) {
                 return messageCreate(`${` APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            if (message.author.bot && authorFlags && authorFlags.has('VerifiedBot')) {
-                return messageCreate(`${` ✓ APP `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
+            if (message.webhookId > 0) {
+                return messageCreate(`${` WEBHOOK `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
             try {
@@ -232,7 +221,6 @@ module.exports = {
             }
 
             if (!message.author.bot || !message.webhookId && replyChannel) {
-                Debug('Not a bot or a webhook and is a reply channel.');
                 if (replyChannel) {
                     const randomChance = Math.random() * 100;
             

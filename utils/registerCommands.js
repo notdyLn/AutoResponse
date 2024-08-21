@@ -44,9 +44,27 @@ const registerCommands = async (client) => {
     const rest = new REST({ version: '10' }).setToken(client.token);
 
     try {
-        await rest.put(Routes.applicationCommands(client.user.id), {
+        const registeredCommands = await rest.put(Routes.applicationCommands(client.user.id), {
             body: commands,
         });
+
+        const commandsWithIds = {};
+        registeredCommands.forEach((cmd) => {
+            commandsWithIds[cmd.name] = {
+                id: cmd.id,
+                ...cmd,
+            };
+        });
+
+        const commandsFilePath = path.join(__dirname, '..', 'data', 'bot', 'commands.json');
+        fs.mkdirSync(path.dirname(commandsFilePath), { recursive: true });
+
+        try {
+            fs.writeFileSync(commandsFilePath, JSON.stringify(commandsWithIds, null, 2));
+            Done('Commands data with IDs successfully written to commands.json');
+        } catch (error) {
+            Error('Failed to write commands data to commands.json:', error);
+        }
 
         const commandsCount = await fetchCommandCount(client);
         Done(`Successfully registered application commands. Total commands: ${commandsCount}`);

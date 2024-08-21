@@ -29,7 +29,11 @@ module.exports = {
             await updateEmojis();
             const emojiUpdatesEmbed = DoneEmbed(`Finished emoji updates to the client.`);
 
-            return await updateMessage.edit({ embeds: [commandUpdatesEmbed, libraryUpdatesEmbed, emojiUpdatesEmbed], allowedMentions: { repliedUser: false }});
+            await updateMessage.edit({ embeds: [commandUpdatesEmbed, libraryUpdatesEmbed, emojiUpdatesEmbed], allowedMentions: { repliedUser: false }});
+            
+            // Restart Client
+            message.client.destroy();
+            return process.exit(0);
         } catch (error) {
             message.react('❌');
             return Error(`Error executing ${module.exports.name}:\n${error.stack}`);

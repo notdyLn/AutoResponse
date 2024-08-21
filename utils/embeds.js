@@ -227,37 +227,43 @@ module.exports.LiveEmbed = function(streamInfo) {
         })
 };
 
-module.exports.UserEmbed = function(userTag, userId, highestRole, badges, createdTimestamp, joinedTimestamp, avatarURL, bannerURL) {
-    return embed = new EmbedBuilder()
-        .setColor(COLORS.default)
-        .setDescription(
-            `${EMOJIS.ico_user} **@${userTag}**\n\` ${userId} \`\n`
-        )
-        .addFields(
-            {
+module.exports.UserEmbed = function(userTag, userId, highestRole, highestRolePermissions, badges, createdTimestamp, joinedTimestamp, avatarURL, bannerURL) {
+    try {
+        return embed = new EmbedBuilder()
+            .setColor(COLORS.default)
+            .setDescription(
+                `${EMOJIS.ico_user} **@${userTag}**\n\` ${userId} \`\n`
+            )
+            .addFields({
                 name: `${EMOJIS.ico_calendar} **Dates**`,
                 value: `**Joined Discord**: ${createdTimestamp}\n` + `**Joined server**: ${joinedTimestamp}\n`
-            },
-        )
-        .addFields(
-            {
-                name: `${EMOJIS.ico_users} **Highest Role**`,
-                value: `\` ${highestRole} \``,
-                inline: true
-            },
-
-            {
-                name: `${EMOJIS.ico_users} **Badges**`,
-                value: badges,
-                inline: true
-            },
-        )
-        .setThumbnail(avatarURL)
-        .setImage(bannerURL)
-        .setFooter({
-            iconURL: LINKS.brand,
-            text: TEXT.brand
-        })
+            })
+            .addFields(
+                {
+                    name: `${EMOJIS.ico_users} **Highest Role**`,
+                    value: `\` ${highestRole} \``,
+                    inline: true
+                },
+                {
+                    name: `${EMOJIS.ico_users} **Badges**`,
+                    value: badges,
+                    inline: true
+                },
+            )
+            .addFields({
+                name: `${EMOJIS.ico_user} **Role Permissions**`,
+                value: highestRolePermissions,
+                inline: false
+            })
+            .setThumbnail(avatarURL)
+            .setImage(bannerURL)
+            .setFooter({
+                iconURL: LINKS.brand,
+                text: TEXT.brand
+            })
+    } catch (error) {
+        return console.log(error.stack);
+    }
 };
 
 module.exports.ServerEmbed = function(guildName, guildId, roles, userCount, emojiCount, stickerCount, guildDescription, guildIcon, guildBanner, guildOwner, formattedGuildCreatedAt, features, channels) {

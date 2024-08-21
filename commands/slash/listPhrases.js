@@ -38,13 +38,13 @@ module.exports = {
                 if (rows.length === 0) {
                     Info(`No phrases found for server ${serverId}`);
                     const noPhrasesEmbed = ErrorEmbed("No Phrases", "No phrases have been added yet.");
-                    return interaction.reply({ embeds: [noPhrasesEmbed], ephemeral: true });
+                    return interaction.reply({ embeds: [noPhrasesEmbed] });
                 }
 
                 const phrasesList = rows.map(row => row.phrase).join("\n- ");
                 Info(`Retrieved phrases for server ${serverId}`);
                 const infoEmbed = InfoEmbed(`- ${phrasesList}`);
-                interaction.reply({ embeds: [infoEmbed], ephemeral: true });
+                interaction.reply({ embeds: [infoEmbed] });
             });
         } catch (error) {
             Error(`Error executing ${interaction.commandName}: ${error.message}`);
