@@ -25,11 +25,10 @@ module.exports = {
                     interactionCreate(`${server.cyan} - ${('#' + channel).cyan} - ${username.cyan} - /${commandName.magenta} ${commandContent.magenta}`);
                     await command.execute(interaction);
                 } catch (error) {
-                    Error(`Error executing slash command ${commandName}:\n${error.stack}`);
-                    
+                    Error(`Error executing slash command ${commandName}: ${error.stack}`);
                     sendEmail(commandName, error.stack);
 
-                    const errorEmbed = ErrorEmbed(`Error executing slash command ${commandName}`, error.message);
+                    const errorEmbed = ErrorEmbed(`Error executing slash command ${commandName}:\n${error.message}`);
 
                     if (interaction.deferred || interaction.replied) {
                         await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
@@ -46,11 +45,10 @@ module.exports = {
                     interactionCreate(`${server.cyan} - ${('#' + channel).cyan} - ${username.cyan} - ${commandName.magenta}`);
                     await command.execute(interaction);
                 } catch (error) {
-                    Error(`Error executing context menu command ${commandName}:\n${error.stack}`);
-                    
+                    Error(`Error executing context menu command ${commandName}: ${error.stack}`);
                     sendEmail(commandName, error.stack);
 
-                    const errorEmbed = ErrorEmbed(`Error executing context menu command ${commandName}`, error.message);
+                    const errorEmbed = ErrorEmbed(`Error executing context menu command ${commandName}:\n${error.message}`);
 
                     if (interaction.deferred || interaction.replied) {
                         await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
@@ -63,7 +61,7 @@ module.exports = {
             Error(`Error executing ${module.exports.name}: ${error.stack}`);
             sendEmail(module.exports.name, error.stack);
 
-            const errorEmbed = ErrorEmbed('Error executing interactionCreate', error.message);
+            const errorEmbed = ErrorEmbed('Error executing interactionCreate:\n${error.message}');
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });

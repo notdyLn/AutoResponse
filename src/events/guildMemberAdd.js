@@ -1,5 +1,5 @@
 const { guildMemberAdd, Debug, Error } = require('../../utils/logging');
-const { ICONS } = require('../../utils/constants');
+const { EMOJIS } = require('../../utils/constants');
 
 module.exports = {
     name: 'guildMemberAdd',
@@ -17,9 +17,9 @@ module.exports = {
             guildMemberAdd(`${guildName.cyan} - ${member.user.tag.cyan} Joined ${pending}`);
 
             const warningFlags = {
-                'Quarantined': ICONS.exclamation,
-                'RestrictedCollaborator': ICONS.exclamation,
-                'Spammer': ICONS.exclamation
+                'Quarantined': EMOJIS.ico_exclamation,
+                'RestrictedCollaborator': EMOJIS.ico_exclamation,
+                'Spammer': EMOJIS.ico_exclamation
             };
 
             const messageListener = async (message) => {

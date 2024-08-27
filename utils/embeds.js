@@ -448,5 +448,5 @@ module.exports.InfoEmbed = function(info) {
 module.exports.ErrorEmbed = function(title, message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.error)
-        .setDescription(`${EMOJIS.ico_x} **${title}**\n` + `\`\`\`\n${message}\n\`\`\``)
+        .setDescription(`${EMOJIS.ico_x} ${message}`)
 };

@@ -44,7 +44,7 @@ module.exports = {
 
                 if (row.count > 0) {
                     Info(`"${phrase.cyan}" already exists`);
-                    const alreadyAddedEmbed = ErrorEmbed("Error", `\`\`\`"${phrase}" is already a phrase.\`\`\``);
+                    const alreadyAddedEmbed = ErrorEmbed(`"${phrase}" is already a phrase.`);
                     interaction.reply({ embeds: [alreadyAddedEmbed], ephemeral: true });
                 } else {
                     const insertPhraseQuery = `INSERT INTO phrases (phrase) VALUES (?)`;
@@ -52,7 +52,7 @@ module.exports = {
                     db.run(insertPhraseQuery, [phrase], function (err) {
                         if (err) {
                             Error(`Error adding phrase for server ${serverId}: ${err.message}`);
-                            const errorEmbed = ErrorEmbed("Error", "Failed to add the phrase to the database.");
+                            const errorEmbed = ErrorEmbed("Failed to add the phrase to the database.");
                             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         }
 
@@ -63,9 +63,9 @@ module.exports = {
                 }
             });
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

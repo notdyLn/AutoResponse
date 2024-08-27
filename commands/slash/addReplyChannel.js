@@ -46,7 +46,7 @@ module.exports = {
                 db.run(`INSERT INTO replyChannels (id, chance) VALUES (?, ?)`, [selectedChannelId, 6],
                     function (err) {
                         if (err) {
-                            const errorEmbed = ErrorEmbed("Error", "Failed to update the database.");
+                            const errorEmbed = ErrorEmbed("Failed to update the database.");
                             Error(`Error updating database for server ${serverId}: ${err.message}`);
                             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                         }
@@ -56,13 +56,13 @@ module.exports = {
                     }
                 );
             } else {
-                const errorEmbed = ErrorEmbed("Error", `<#${selectedChannel.id}> is already a reply channel.`);
+                const errorEmbed = ErrorEmbed(`<#${selectedChannel.id}> is already a reply channel.`);
                 await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             }
         } catch (error) {
             Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

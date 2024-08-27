@@ -46,7 +46,7 @@ module.exports = {
                 [serverId, channel.id],
                 (error) => {
                     if (error) {
-                        const errorEmbed = ErrorEmbed(`Error removing cooldown for server ${serverId}:`, error);
+                        const errorEmbed = ErrorEmbed(`Error removing cooldown for server ${serverId}:\n${error.message}`);
                         Error(`Error removing cooldown for server ${serverId}: ${error.message}`);
                         
                         if (interaction.deferred || interaction.replied) {
@@ -61,9 +61,9 @@ module.exports = {
                 }
             );
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

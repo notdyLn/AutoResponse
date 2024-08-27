@@ -27,9 +27,9 @@ module.exports = {
             const successEmbed = SuccessEmbed(`Renamed`, `Changed name to \` ${userName} \``);
             await interaction.editReply({ embeds: [successEmbed], ephemeral: true });
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

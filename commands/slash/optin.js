@@ -59,7 +59,7 @@ module.exports = {
 
             getOptOutList((optOutList) => {
                 if (!optOutList.includes(userTag)) {
-                    const errorEmbed = ErrorEmbed("Error", `You are already opted in to receive replies.\nUse **/optout** to stop receiving replies.`);
+                    const errorEmbed = ErrorEmbed(`You are already opted in to receive replies.\nUse **/optout** to stop receiving replies.`);
                     return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 }
 
@@ -68,15 +68,15 @@ module.exports = {
                         const successEmbed = SuccessEmbed("Opted In Successfully", `You have opted in to receive replies.\nUse **/optout** to stop receiving replies.`);
                         interaction.reply({ embeds: [successEmbed], ephemeral: true });
                     } else {
-                        const errorEmbed = ErrorEmbed("Error", `Failed to opt in. Please try again later.`);
+                        const errorEmbed = ErrorEmbed(`Failed to opt in. Please try again later.`);
                         interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                     }
                 });
             });
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

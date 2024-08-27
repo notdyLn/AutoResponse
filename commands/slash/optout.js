@@ -68,13 +68,13 @@ module.exports = {
                 const successEmbed = SuccessEmbed("Opted Out Successfully", `You have opted out of receiving replies.\nUse **/optin** to start receiving replies again.`);
                 await interaction.reply({ embeds: [successEmbed], ephemeral: true });
             } else {
-                const errorEmbed = ErrorEmbed("Error", `You are already opted out of receiving replies.\nUse **/optin** to start receiving replies again.`);
+                const errorEmbed = ErrorEmbed(`You are already opted out of receiving replies.\nUse **/optin** to start receiving replies again.`);
                 await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             }
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

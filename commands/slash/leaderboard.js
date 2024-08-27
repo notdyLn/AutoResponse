@@ -26,7 +26,7 @@ module.exports = {
             const leaderboard = await loadLeaderboard(season);
 
             if (leaderboard.length === 0) {
-                const emptyEmbed = ErrorEmbed(`Error`, `Leaderboard is empty.`);
+                const emptyEmbed = ErrorEmbed(`Leaderboard is empty.`);
                 return interaction.reply({ embeds: [emptyEmbed], ephemeral: true });
             }
 
@@ -64,9 +64,9 @@ module.exports = {
             const leaderboardEmbed = Leaderboard(`Leaderboard - ${season}`, description, leaderboardFields);
             await interaction.reply({ embeds: [leaderboardEmbed], ephemeral: true });
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

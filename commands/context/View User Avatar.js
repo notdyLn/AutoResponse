@@ -22,7 +22,7 @@ module.exports = {
             const avatarURL = targetUser.avatarURL({ size: 4096 });
 
             if (!avatarURL) {
-                const errorEmbed = ErrorEmbed("Error", `Could not retrieve ${targetUser}'s avatar`);
+                const errorEmbed = ErrorEmbed(`Could not retrieve ${targetUser}'s avatar`);
 
                 if (interaction.deferred || interaction.replied) {
                     return await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
@@ -36,7 +36,7 @@ module.exports = {
         } catch (error) {
             CommandError(interaction.commandName, error.stack);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.stack);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });

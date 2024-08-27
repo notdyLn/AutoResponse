@@ -48,7 +48,7 @@ module.exports = {
             const minutes = interaction.options.getInteger("minutes");
 
             if (isNaN(minutes) || minutes <= 0) {
-                const errorEmbed = ErrorEmbed('Error executing /pausereplies', 'Please provide a valid number of minutes.');
+                const errorEmbed = ErrorEmbed('Please provide a valid number of minutes.');
                 if (interaction.deferred || interaction.replied) {
                     await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
                 } else {
@@ -62,8 +62,8 @@ module.exports = {
                 [serverId, channel.id, timeRemaining],
                 (error) => {
                     if (error) {
-                        const errorEmbed = ErrorEmbed('Error setting cooldown for server ${serverId}:', error);
-                        Error(`Error setting cooldown for server ${serverId}: ${error.message}`);
+                        const errorEmbed = ErrorEmbed(`Error setting cooldown for server ${serverId}:\n${error.message}`);
+                        Error(`Error setting cooldown for server ${serverId}: ${error.stack}`);
 
                         if (interaction.deferred || interaction.replied) {
                             interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
@@ -77,9 +77,9 @@ module.exports = {
                 }
             );
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

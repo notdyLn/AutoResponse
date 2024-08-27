@@ -31,13 +31,13 @@ module.exports = {
             db.all(getPhrasesQuery, [], (err, rows) => {
                 if (err) {
                     Error(`Error retrieving phrases for server ${serverId}: ${err.message}`);
-                    const errorEmbed = ErrorEmbed("Error", "Failed to retrieve phrases from the database.");
+                    const errorEmbed = ErrorEmbed("Failed to retrieve phrases from the database.");
                     return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 }
 
                 if (rows.length === 0) {
                     Info(`No phrases found for server ${serverId}`);
-                    const noPhrasesEmbed = ErrorEmbed("No Phrases", "No phrases have been added yet.");
+                    const noPhrasesEmbed = ErrorEmbed("No phrases have been added yet.");
                     return interaction.reply({ embeds: [noPhrasesEmbed] });
                 }
 
@@ -47,9 +47,9 @@ module.exports = {
                 interaction.reply({ embeds: [infoEmbed] });
             });
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

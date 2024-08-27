@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { UserEmbed, ErrorEmbed } = require("../../utils/embeds");
-const { Error, CommandError } = require("../../utils/logging");
+const { Debug, Error, CommandError } = require("../../utils/logging");
 const { EMOJIS } = require("../../utils/constants");
 
 const command = new SlashCommandBuilder()
@@ -26,6 +26,7 @@ module.exports = {
         try {
             const userId = interaction.options.getString('userid');
             const userOption = interaction.options.getUser('user');
+
             let targetUser;
 
             if (!userId && !userOption) {
@@ -33,9 +34,9 @@ module.exports = {
             }
 
             if (userOption) {
-                targetUser = userOption;
+                targetUser = await interaction.client.users.fetch(userOption.id, { force: true });
             } else if (userId) {
-                targetUser = await interaction.client.users.fetch(userId);
+                targetUser = await interaction.client.users.fetch(userId, { force: true });
             }
 
             const userTag = targetUser.tag;
@@ -93,7 +94,7 @@ module.exports = {
         } catch (error) {
             CommandError(interaction.commandName, error.stack);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });

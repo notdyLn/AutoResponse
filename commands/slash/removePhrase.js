@@ -37,7 +37,7 @@ module.exports = {
             db.run(deletePhraseQuery, [phraseToRemove], function (err) {
                 if (err) {
                     Error(`Error removing phrase for server ${serverId}: ${err.message}`);
-                    const errorEmbed = ErrorEmbed("Error", "Failed to remove the phrase from the database.");
+                    const errorEmbed = ErrorEmbed("Failed to remove the phrase from the database.");
                     return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
                 }
 
@@ -46,9 +46,9 @@ module.exports = {
                 interaction.reply({ embeds: [successEmbed], ephemeral: true });
             });
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {

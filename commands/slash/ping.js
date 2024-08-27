@@ -19,7 +19,7 @@ module.exports = {
             const wsping = interaction.client.ws.ping;
 
             if (wsping < 1) {
-                const waitEmbed = ErrorEmbed('Error retrieving ping', 'A ping is being determined. Please wait a minute.');
+                const waitEmbed = ErrorEmbed('A ping is being determined. Please wait a minute.');
                 await interaction.editReply({ embeds: [waitEmbed], ephemeral: true });
             } else {
                 let color;
@@ -35,9 +35,9 @@ module.exports = {
                 await interaction.editReply({ embeds: [pingEmbed], ephemeral: true });
             }
         } catch (error) {
-            Error(`Error executing ${interaction.commandName}: ${error.message}`);
+            Error(`Error executing ${interaction.commandName}: ${error.stack}`);
 
-            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}`, error.message);
+            const errorEmbed = ErrorEmbed(`Error executing ${interaction.commandName}:\n${error.message}`);
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
             } else {
