@@ -4,15 +4,12 @@ const { registerCommands } = require('../../utils/registerCommands');
 const getLeaderboards = require("../../utils/getLeaderboards");
 const getSettings = require("../../utils/getSettings");
 
-const setPresence = require("../../utils/setPresence");
-
 module.exports = {
     name: "ready",
     async execute(client) {
         try {
             await registerCommands(client);
-
-            setPresence(client);
+            
             getLeaderboards();
 
             client.guilds.cache.forEach(async (guild) => {

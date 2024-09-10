@@ -1,5 +1,6 @@
-const { attachmentDownload, messageCreate, Error, interactionCreate, Debug } = require("../../utils/logging");
+const { attachmentDownload, messageCreate, Error, interactionCreate, Info, Done } = require("../../utils/logging");
 const { sendEmail } = require('../../utils/sendEmail');
+const { analyzeImage } = require('../../utils/analyzeImage');
 
 const fs = require("fs");
 const path = require("path");
@@ -195,8 +196,8 @@ module.exports = {
                 return messageCreate(`${` WEBHOOK `.bgBlue.white} - ${serverName.cyan} - ${"#".cyan + channelName.cyan} - ${authorUsername.cyan} - ${messageContent.white}`);
             }
 
-            try {
-                if (message.attachments.size > 0) {
+            if (message.attachments.size > 0) {
+                try {
                     const mediaDirPath = path.join(__dirname, "..", "..", "data", "media");
                     if (!fs.existsSync(mediaDirPath)) {
                         fs.mkdirSync(mediaDirPath, { recursive: true });
@@ -205,19 +206,21 @@ module.exports = {
                     for (const attachment of message.attachments.values()) {
                         const fileExtension = path.extname(attachment.name);
                         const sanitizedFilename = attachment.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-                        const fileName = `${authorUsername}-${new Date().toISOString().split('T')[0]}-${path.basename(sanitizedFilename, fileExtension)}${fileExtension}`;
+                        const fileName = `${message.author.username}-${new Date().toISOString().split('T')[0]}-${path.basename(sanitizedFilename, fileExtension)}${fileExtension}`;
                         const filePath = path.join(mediaDirPath, fileName);
 
                         try {
-                            attachmentDownload(`Downloaded attachment to ${filePath}`);
+                            attachmentDownload(`Downloading attachment to ${filePath}`);
                             await downloadAttachment(attachment.url, filePath);
+                            const analysisResult = await analyzeImage(filePath);
+                            messageCreate(`Image analysis result: ${analysisResult}`);
                         } catch (err) {
-                            Error(`Error downloading attachment ${attachment.name}: ${err.message}`);
+                            Error(`Error processing attachment: ${err.stack}`);
                         }
                     }
+                } catch (error) {
+                    Error(`Error processing attachments:\n${error.stack}`);
                 }
-            } catch (err) {
-                Error(`Error downloading attachments: ${err.message}`);
             }
 
             if (!message.author.bot || !message.webhookId && replyChannel) {

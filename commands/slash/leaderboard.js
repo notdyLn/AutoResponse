@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { ErrorEmbed, Leaderboard } = require("../../utils/embeds");
-const { Error, Debug } = require("../../utils/logging");
-const { RANKS } = require("../../utils/constants");
+const { Error } = require("../../utils/logging");
+const { RANKS, EMOJIS } = require("../../utils/constants");
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
@@ -40,11 +40,11 @@ module.exports = {
                 const medal = index < 3 ? medals[index] : `**${index + 1}th**`;
 
                 const groups = entry.groups ? entry.groups.split(",").map((group) => group.trim()) : [];
-                const owner = groups.includes("Owner") ? RANKS.owner : "";
-                const programmer = groups.includes("Programmer") ? RANKS.programmer : "";
-                const helper = groups.includes("Helper") ? RANKS.helper : "";
-                const s1winner = groups.includes("Season 1 Winner") ? RANKS.s1 : "";
-                const s2winner = groups.includes("Season 2 Winner") ? RANKS.s2 : "";
+                const owner = groups.includes("Owner") ? EMOJIS.ActiveDeveloper : "";
+                const programmer = groups.includes("Programmer") ? EMOJIS.ico_wrench : "";
+                const helper = groups.includes("Helper") ? EMOJIS.ico_helper : "";
+                const s1winner = groups.includes("Season 1 Winner") ? EMOJIS.ico_trophy : "";
+                const s2winner = groups.includes("Season 2 Winner") ? EMOJIS.ico_trophy : "";
 
                 return {
                     name: `${medal} - ${entry.username} ${owner} ${programmer} ${helper} ${s1winner}`,

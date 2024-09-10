@@ -27,9 +27,9 @@ module.exports = {
                     let emoji;
                     if (userFlags.length > 0) {
                         const userFlag = userFlags.find(flag => warningFlags[flag]);
-                        emoji = userFlag ? warningFlags[userFlag] : ICONS.trusted;
+                        emoji = userFlag ? warningFlags[userFlag] : EMOJIS.ico_trusted;
                     } else {
-                        emoji = ICONS.trusted;
+                        emoji = EMOJIS.ico_trusted;
                     }
                     await message.react(emoji);
 

@@ -35,7 +35,7 @@ module.exports = async (client) => {
                     count = row.rowCount !== null ? row.rowCount : 0;
                 }
                 
-                const activityLabels = countingReplies ? ["Replies", "Being worked on..."] : ["Members", "Other activity..."];
+                const activityLabels = countingReplies ? ["Replies", "Being worked on..."] : ["Participants", "Other activity..."];
                 
                 const activities = [
                     `${count} ${activityLabels[activityIndex]}`

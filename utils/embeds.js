@@ -3,6 +3,21 @@ const { codeblock } = require('./markdown');
 const { format } = require('./ansi');
 const { COINS, COLORS, LINKS, TEXT, EMOJIS } = require('./constants');
 
+module.exports.inviteCreate = function(invite) {
+
+    const embed = new EmbedBuilder()
+        .setColor(COLORS.default)
+        .setTitle(`Invite Created`)
+        // .setDescription(`**Link** - ${inviteURL}\n**Channel** - ${channelMention}`)
+        .setFooter({
+            iconURL: LINKS.brand,
+            text: TEXT.brand
+        })
+        .setTimestamp();
+
+    return embed;
+};
+
 module.exports.messageDelete = function(message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
@@ -391,7 +406,7 @@ module.exports.Leaderboard = function(title, description, fields) {
 
     return embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setTitle(`${EMOJIS.trophy} ${formattedTitle}`)
+        .setTitle(`${EMOJIS.ico_information} ${formattedTitle}`)
         .setDescription(description)
         .addFields(fields)
 };

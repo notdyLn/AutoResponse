@@ -2,6 +2,8 @@ const { INTENTS } = require('./intents');
 const { PARTIALS } = require('./partials');
 const { DiscordJS, Invalid, Error, Valid } = require('../utils/logging');
 
+const setPresence = require('../utils/setPresence');
+
 const Discord = require('discord.js');
 const { version: DJSVersion } = Discord;
 
@@ -65,5 +67,9 @@ if (invalidEvents.length > 0) {
 if (missingClientEvents.length > 0) {
     Invalid(missingClientEvents.join('\n'));
 }
+
+setInterval(() => {
+    setPresence(client);
+}, 15000);
 
 module.exports = client;
