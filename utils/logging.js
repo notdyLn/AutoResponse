@@ -41,6 +41,12 @@ function info(m, c) {
     console.log(`${time.grey}\t${c(m)}`);
 }
 
+module.exports.Google = function(m) {
+    const time = new Date().toLocaleTimeString();
+    console.log(`${time.grey}\t${m.cyan}`);
+    dbOutput('Google Cloud Vision', m);
+}
+
 module.exports.ServerLog = function(m) {
     const time = new Date().toLocaleTimeString();
     console.log(`${time.grey}\t${'[SERVER]'.cyan} ${m.grey}`);

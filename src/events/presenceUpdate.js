@@ -1,5 +1,7 @@
-const { presenceUpdate, Error, Info } = require('../../utils/logging');
+const { presenceUpdate, Error } = require('../../utils/logging');
 
+const fs = require('fs');
+const path = require('path');
 const lastStatus = new Map();
 
 function activitiesAreEqual(oldActivities, newActivities) {
@@ -24,22 +26,35 @@ function activitiesAreEqual(oldActivities, newActivities) {
 
 module.exports = {
     name: 'presenceUpdate',
-    execute(oldPresence, newPresence) {
+    async execute(oldPresence, newPresence) {
         try {
-            if (newPresence.user.bot) {
-                return;
+            if (newPresence.user.bot) return;
+
+            const username = newPresence.user.username.replace(/[^a-zA-Z0-9_-]/g, '');
+            const userDir = path.join(__dirname, `../../data/users/${username}`);
+            const userJsonPath = path.join(userDir, 'user.json');
+            let userInfo = {};
+
+            if (!fs.existsSync(userDir)) {
+                fs.mkdirSync(userDir, { recursive: true });
             }
 
-            const userId = newPresence.userID;
+            if (fs.existsSync(userJsonPath)) {
+                userInfo = JSON.parse(fs.readFileSync(userJsonPath, 'utf8'));
+            } else {
+                userInfo = {
+                    username: newPresence.user.username,
+                    status: newPresence.status,
+                    activities: []
+                };
+            }
+
             const oldStatus = oldPresence ? oldPresence.status : undefined;
             const newStatus = newPresence.status;
-
             const oldActivity = oldPresence ? oldPresence.activities : undefined;
             const newActivity = newPresence ? newPresence.activities : undefined;
 
             if (oldStatus !== newStatus) {
-                const user = newPresence.user.username;
-
                 let statusSymbol = '⬤';
                 let statusColor = '';
 
@@ -63,14 +78,15 @@ module.exports = {
 
                 let presenceDetails = `${statusSymbol[statusColor]}`;
 
-                if (!lastStatus.has(userId) || lastStatus.get(userId) !== newStatus) {
-                    presenceUpdate(`${presenceDetails} ${user.grey}`);
+                if (!lastStatus.has(username) || lastStatus.get(username) !== newStatus) {
+                    presenceUpdate(`${presenceDetails} ${username.grey}`);
+                    lastStatus.set(username, newStatus);
+                }
 
-                    lastStatus.set(userId, newStatus);
-                } 
-            } else if (!activitiesAreEqual(oldActivity, newActivity)) {
-                const user = newPresence.user.username;
+                userInfo.status = newStatus;
+            }
 
+            if (!activitiesAreEqual(oldActivity, newActivity)) {
                 if (newActivity && newActivity.length > 0) {
                     let activityName = '';
                     let activityDetails = '';
@@ -83,28 +99,37 @@ module.exports = {
                             }
                             
                             if (activity.details) {
-                                activityDetails = `- ${activity.details} ` || '';
+                                activityDetails = `- ${activity.details} `;
                             }
 
                             if (activity.state) {
-                                activityState = `- ${activity.state}` || '';
+                                activityState = `- ${activity.state}`;
                             }
-                            
+
                             break;
                         } else {
-                            activityState = `- ${activity.state}` || '';
+                            activityState = `- ${activity.state}`;
                         }
                     }
 
                     const activityText = `${activityName}${activityDetails}${activityState}`.trim();
 
-                    if (activityText && (!lastStatus.has(userId) || lastStatus.get(userId) !== activityText)) {
-                        presenceUpdate(`${user} ${activityText}`);
+                    if (activityText && (!lastStatus.has(username) || lastStatus.get(username) !== activityText)) {
+                        presenceUpdate(`${username} ${activityText}`);
+                        lastStatus.set(username, activityText);
+                    }
 
-                        lastStatus.set(userId, activityText);
-                    }  
+                    userInfo.activities = newActivity.map(act => ({
+                        name: act.name,
+                        type: act.type,
+                        details: act.details,
+                        state: act.state
+                    }));
                 }
             }
+
+            fs.writeFileSync(userJsonPath, JSON.stringify(userInfo, null, 2));
+
         } catch (error) {
             Error(`Error executing ${module.exports.name}: ${error.message}`);
         }

@@ -212,8 +212,7 @@ module.exports = {
                         try {
                             attachmentDownload(`Downloading attachment to ${filePath}`);
                             await downloadAttachment(attachment.url, filePath);
-                            const analysisResult = await analyzeImage(filePath);
-                            messageCreate(`Image analysis result: ${analysisResult}`);
+                            await analyzeImage(filePath);
                         } catch (err) {
                             Error(`Error processing attachment: ${err.stack}`);
                         }
