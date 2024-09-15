@@ -3,15 +3,14 @@ const { codeblock } = require('./markdown');
 const { format } = require('./ansi');
 const { COINS, COLORS, LINKS, TEXT, EMOJIS } = require('./constants');
 
-module.exports.inviteCreate = function(invite) {
-
+module.exports.OCR = function(ocr, image) {
     const embed = new EmbedBuilder()
         .setColor(COLORS.default)
-        .setTitle(`Invite Created`)
-        // .setDescription(`**Link** - ${inviteURL}\n**Channel** - ${channelMention}`)
+        .setDescription(`\`\`\`\n${ocr}\n\`\`\` `)
+        .setThumbnail(image)
         .setFooter({
-            iconURL: LINKS.brand,
-            text: TEXT.brand
+            iconURL: LINKS.google,
+            text: `${TEXT.brand} • Google Cloud Vision`
         })
         .setTimestamp();
 
@@ -460,7 +459,7 @@ module.exports.InfoEmbed = function(info) {
         })
 };
 
-module.exports.ErrorEmbed = function(title, message) {
+module.exports.ErrorEmbed = function(message) {
     return embed = new EmbedBuilder()
         .setColor(COLORS.error)
         .setDescription(`${EMOJIS.ico_x} ${message}`)

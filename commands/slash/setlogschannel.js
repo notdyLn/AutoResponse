@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require('discord.js');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const { Info, Error } = require('../../utils/logging');
@@ -7,7 +7,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('setlogschannel')
         .setDescription('Set a channel to log client events')
-        .setDMPermission(false)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
         .addChannelOption(option => option
             .setName('channel')

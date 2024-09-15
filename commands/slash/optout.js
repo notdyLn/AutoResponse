@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require("discord.js");
 const { ErrorEmbed, SuccessEmbed } = require("../../utils/embeds");
 const { Error, Debug } = require("../../utils/logging");
 const sqlite3 = require("sqlite3").verbose();
@@ -54,7 +54,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("optout")
         .setDescription("Opt out of receiving replies")
-        .setDMPermission(false)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {
         try {

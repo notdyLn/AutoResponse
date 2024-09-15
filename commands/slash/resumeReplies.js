@@ -1,4 +1,4 @@
-const { ChannelType, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { ChannelType, SlashCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require("discord.js");
 const { ErrorEmbed, SuccessEmbed } = require("../../utils/embeds");
 const { Error, Info } = require("../../utils/logging");
 
@@ -32,7 +32,8 @@ module.exports = {
             .setRequired(true)
             .addChannelTypes(ChannelType.GuildText)
         )
-        .setDMPermission(false)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
         try {

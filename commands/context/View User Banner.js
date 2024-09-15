@@ -1,19 +1,14 @@
-const { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require("discord.js");
 const { MediaEmbed, ErrorEmbed } = require("../../utils/embeds");
 const { CommandError } = require("../../utils/logging");
 
-const command = new ContextMenuCommandBuilder()
-    .setName("View User Banner")
-    .setType(ApplicationCommandType.User)
-    .setDMPermission(true)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
-
-command.integration_types = [
-    1
-];
-
 module.exports = {
-    data: command,
+    data: new ContextMenuCommandBuilder()
+        .setName("View User Banner")
+        .setType(ApplicationCommandType.User)
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction) {
         await interaction.deferReply();
 

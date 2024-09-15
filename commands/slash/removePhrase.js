@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require("discord.js");
 const { ErrorEmbed, SuccessEmbed } = require("../../utils/embeds");
 const { Error, Info } = require("../../utils/logging");
 const sqlite3 = require("sqlite3").verbose();
@@ -24,7 +24,8 @@ module.exports = {
             .setDescription("The phrase to remove")
             .setRequired(true)
         )
-        .setDMPermission(false)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
         try {

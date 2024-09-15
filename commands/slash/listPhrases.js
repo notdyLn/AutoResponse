@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require("discord.js");
 const { ErrorEmbed, SuccessEmbed, InfoEmbed } = require("../../utils/embeds");
 const { Error, Info } = require("../../utils/logging");
 const sqlite3 = require("sqlite3").verbose();
@@ -19,7 +19,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("listphrases")
         .setDescription("List all phrases")
-        .setDMPermission(false)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction) {
         try {

@@ -4,6 +4,8 @@ node_modules
 package-lock.json
 .bat
 
+/temp
+
 # commands
 commands/prune.js
 commands/notifyTest.js

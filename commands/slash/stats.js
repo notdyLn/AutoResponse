@@ -1,22 +1,17 @@
-const { PermissionFlagsBits, SlashCommandBuilder } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType, ApplicationIntegrationType } = require('discord.js');
 const { ErrorEmbed, StatsEmbed } = require('../../utils/embeds');
 const { CommandError, Error } = require('../../utils/logging');
 const { fetchCommandCount } = require('../../utils/registerCommands');
 
 const axios = require('axios');
 
-const command = new SlashCommandBuilder()
+module.exports = {
+    data: new SlashCommandBuilder()
     .setName('stats')
     .setDescription(`Get information about AutoResponse`)
-    .setDMPermission(true)
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages);
-
-command.integration_types = [
-    1
-];
-
-module.exports = {
-    data: command,
+    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {
         await interaction.deferReply();
 

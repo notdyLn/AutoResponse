@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require("discord.js");
 const { ErrorEmbed, Leaderboard } = require("../../utils/embeds");
 const { Error } = require("../../utils/logging");
 const { RANKS, EMOJIS } = require("../../utils/constants");
@@ -18,7 +18,8 @@ module.exports = {
                 { name: "Season 1", value: "season1" }
             )
         )
-        .setDMPermission(false)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {
         try {

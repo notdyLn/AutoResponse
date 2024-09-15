@@ -43,7 +43,7 @@ function info(m, c) {
 
 module.exports.Google = function(m) {
     const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${m.cyan}`);
+    console.log(`${time.grey}\t${m.magenta}`);
     dbOutput('Google Cloud Vision', m);
 }
 
@@ -89,8 +89,18 @@ module.exports.Info = function(m) {
     dbOutput('Info', m);
 };
 
+module.exports.WarnNoDB = function(m) {
+    const time = new Date().toLocaleTimeString();
+    console.log(`${time.yellow}\t${m.yellow}`);
+};
+
 module.exports.Debug = function(m) {
     console.log(m.grey);
+};
+
+module.exports.DebugNoDB = function(m) {
+    const time = new Date().toLocaleTimeString();
+    console.log(`${time.gray}\t${m.gray}`);
 };
 
 module.exports.Valid = function(m) {

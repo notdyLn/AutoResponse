@@ -1,4 +1,4 @@
-const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType, ApplicationIntegrationType } = require("discord.js");
 const { ErrorEmbed, LoadingEmbed, SuccessEmbed } = require("../../utils/embeds");
 const { Error } = require("../../utils/logging");
 
@@ -11,7 +11,8 @@ module.exports = {
             .setDescription("The name of AutoResponse")
             .setRequired(true)
         )
-        .setDMPermission(false)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute(interaction) {
         try {

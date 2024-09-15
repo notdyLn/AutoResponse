@@ -1,19 +1,14 @@
-const { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits, InteractionContextType, ApplicationIntegrationType } = require('discord.js');
 const { ErrorEmbed, JSONEmbed } = require('../../utils/embeds');
 const { CommandError } = require('../../utils/logging');
 
-const command = new ContextMenuCommandBuilder()
-    .setName("View User JSON")
-    .setType(ApplicationCommandType.User)
-    .setDMPermission(true)
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages);
-
-command.integration_types = [
-    1
-];
-
 module.exports = {
-    data: command,
+    data: new ContextMenuCommandBuilder()
+        .setName("View User JSON")
+        .setType(ApplicationCommandType.User)
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 

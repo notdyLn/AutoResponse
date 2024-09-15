@@ -22,7 +22,7 @@ module.exports = {
 
             return;
         } catch (error) {
-            Error(`Error executing ${module.exports.name} event: ${error.message}`);
+            Error(`Error executing ${module.exports.name} event:\n${error.stack}`);
         }
     },
 };

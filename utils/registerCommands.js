@@ -18,6 +18,7 @@ const fetchCommandCount = async (client) => {
 
 const updateCommands = () => {
     const commands = [];
+    const output = {};
 
     const commandFolders = ['slash', 'context'];
     commandFolders.forEach(folder => {
@@ -26,15 +27,29 @@ const updateCommands = () => {
             .readdirSync(commandFolderPath)
             .filter(file => file.endsWith('.js'));
 
+        if (!output[folder]) {
+            output[folder] = [];
+        }
+
         for (const file of commandFiles) {
             const commandPath = path.join(commandFolderPath, file);
             const command = require(commandPath);
 
             if (command.data && command.execute) {
                 commands.push(command.data.toJSON());
+
+                output[folder].push(command.data.name);
             }
         }
     });
+
+    for (const [type, commandList] of Object.entries(output)) {
+        Debug(`${type}\t┓`);
+        commandList.forEach((command, index) => {
+            const prefix = (index === commandList.length - 1) ? '┗' : '┣';
+            Debug(`\t${prefix} ${command}`);
+        });
+    }
 
     return commands;
 };

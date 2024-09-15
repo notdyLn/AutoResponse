@@ -1,4 +1,4 @@
-const { PermissionFlagsBits, SlashCommandBuilder } = require('discord.js');
+const { PermissionFlagsBits, SlashCommandBuilder, InteractionContextType, ApplicationIntegrationType } = require('discord.js');
 const { PingEmbed, LoadingEmbed, ErrorEmbed } = require('../../utils/embeds');
 const { BLOCK } = require('../../utils/constants');
 const { End, Error, Info, Warn } = require('../../utils/logging');
@@ -7,7 +7,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Check latency')
-        .setDMPermission(true)
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
     async execute(interaction) {    
         const start = Date.now();
