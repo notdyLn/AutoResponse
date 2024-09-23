@@ -1,6 +1,5 @@
 const { attachmentDownload, messageCreate, Error, interactionCreate } = require("../../utils/logging");
 const { sendEmail } = require('../../utils/sendEmail');
-const { analyzeLabels } = require('../../utils/analyzeImage');
 
 const fs = require("fs");
 const path = require("path");
@@ -212,7 +211,6 @@ module.exports = {
                         try {
                             attachmentDownload(`Downloading attachment to ${filePath}`);
                             await downloadAttachment(attachment.url, filePath);
-                            await analyzeLabels(filePath);
                         } catch (err) {
                             Error(`Error processing attachment: ${err.stack}`);
                         }

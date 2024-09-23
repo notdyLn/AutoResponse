@@ -41,25 +41,26 @@ function info(m, c) {
     console.log(`${time.grey}\t${c(m)}`);
 }
 
+// Server
+
+module.exports.ServerError = function(m) {
+    console.log(`${`[SERVER]`.red}\t${m.red}`);
+}
+
+module.exports.ServerLog = function(m) {
+    console.log(`${`[SERVER]`.magenta}\t${m.grey}`);
+}
+
+module.exports.ServerDone = function(m) {
+    console.log(`${`[SERVER]`.magenta}\t${m.green}`);
+}
+
+// Custom
+
 module.exports.Google = function(m) {
     const time = new Date().toLocaleTimeString();
     console.log(`${time.grey}\t${m.magenta}`);
     dbOutput('Google Cloud Vision', m);
-}
-
-module.exports.ServerLog = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${'[SERVER]'.cyan} ${m.grey}`);
-}
-
-module.exports.ServerError = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.red}\t${'[SERVER]'.red} ${m.red}`);
-}
-
-module.exports.ServerValid = function(m) {
-    const time = new Date().toLocaleTimeString();
-    console.log(`${time.grey}\t${'[SERVER]'.green} ${m.green}`);
 }
 
 module.exports.Live = function(m) {

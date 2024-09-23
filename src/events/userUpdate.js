@@ -1,5 +1,4 @@
 const { userUpdate } = require('../../utils/logging');
-const { analyzeImage } = require('../../utils/analyzeImage');
 
 const fs = require('fs');
 const path = require('path');
@@ -34,13 +33,11 @@ module.exports = {
         if (oldUser.avatar !== newUser.avatar) {
             changes.push(`${oldUser.username} updated their avatar`);
             await downloadImage(newUser.avatarURL({ size: 4096 }), path.join(imageDir, 'avatar.png'));
-            userInfo.avatarLabels = await analyzeImage(path.join(imageDir, 'avatar.png'));
         }
 
         if (oldUser.banner !== newUser.banner) {
             changes.push(`${oldUser.username} updated their banner`);
             await downloadImage(newUser.bannerURL(), path.join(imageDir, 'banner.png'));
-            userInfo.bannerLabels = await analyzeImage(path.join(imageDir, 'banner.png'));
         }
 
         if (oldUser.displayName !== newUser.displayName) {

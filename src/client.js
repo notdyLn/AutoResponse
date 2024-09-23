@@ -1,6 +1,7 @@
 const { INTENTS } = require('./intents');
 const { PARTIALS } = require('./partials');
 const { DiscordJS, Invalid, Error, Warn, WarnNoDB } = require('../utils/logging');
+const startServer = require('../utils/server');
 
 const setPresence = require('../utils/setPresence');
 
@@ -16,6 +17,8 @@ const client = new Discord.Client({
     intents: INTENTS,
     partials: PARTIALS,
 });
+
+startServer(client);
 
 DiscordJS(`DiscordJS v${DJSVersion}`);
 client.login(process.env.TOKEN);
@@ -51,13 +54,14 @@ for (const file of eventFiles) {
             WarnNoDB(`Disabled event: ${event.name}`);
             continue;
         }
+        
         if (event.name && typeof event.execute === 'function') {
             verifiedEvents.push(event.name);
             client.on(event.name, async (...args) => {
                 try {
                     await event.execute(...args);
                 } catch (error) {
-                    Error(`Error executing event ${event.name}: ${error.stack}`);
+                    Error(`Error executing event ${event.name}:\n${error.stack}`);
                 }
             });
         } else {

@@ -6,6 +6,5 @@ package-lock.json
 
 /temp
 
-# commands
-commands/prune.js
-commands/notifyTest.js
+/pages
+/utils/server.js
